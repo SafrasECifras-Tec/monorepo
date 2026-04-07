@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/components/AuthProvider";
 
-export const runtime = "edge";
+// NOTE: do NOT set `runtime = "edge"` in the root layout.
+// It forces ALL child routes to edge runtime in dev mode, causing
+// RSC manifest errors with pnpm. Individual pages/routes that need
+// edge (for Cloudflare Pages) declare their own `runtime = "edge"`.
 
 export const metadata: Metadata = {
   title: "Sócios do Agro",
