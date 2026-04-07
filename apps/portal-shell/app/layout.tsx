@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "Sócios do Agro",
   description: "Plataforma integrada Safras & Cifras",
   icons: {
-    icon: "/logo-safras-cifras.png",
+    icon: "/favicon.svg",
     apple: "/logo-safras-cifras.png",
   },
 };
