@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { Loader2 } from "lucide-react";
@@ -17,7 +17,16 @@ function GoogleIcon() {
   );
 }
 
+// Next.js 15 requires useSearchParams() to be inside a Suspense boundary for production builds
 export default function AuthPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black" />}>
+      <AuthForm />
+    </Suspense>
+  );
+}
+
+function AuthForm() {
   const [supabase] = useState(() => createSupabaseBrowserClient());
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
