@@ -3,13 +3,17 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
       "env": [
         "VITE_SUPABASE_URL",
         "VITE_SUPABASE_PUBLISHABLE_KEY",
         "VITE_SUPABASE_PROJECT_ID",
         "VITE_GOOGLE_CLIENT_ID",
-        "GEMINI_API_KEY"
+        "GEMINI_API_KEY",
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "NEXT_PUBLIC_GEF_URL",
+        "NEXT_PUBLIC_PLT_URL"
       ]
     },
     "dev": {
