@@ -83,21 +83,17 @@ jobs:
         continue-on-error: true
         run: npx turbo-ignore portal-shell --fallback=HEAD^1
 
-      - name: Build portal-shell
-        if: steps.portal-check.outcome == 'failure'
-        run: pnpm turbo run build --filter=portal-shell
-        env:
-          # Reutiliza os mesmos secrets do Supabase (mesma instância, nomes diferentes)
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
-          # URLs de produção dos módulos — hardcoded (são públicas)
-          NEXT_PUBLIC_GEF_URL: https://socios-gef.tecnologia-231.workers.dev
-          NEXT_PUBLIC_PLT_URL: https://socios-plt.tecnologia-231.workers.dev
-
-      - name: Package portal-shell for Cloudflare Pages
+      # @cloudflare/next-on-pages runs its own `vercel build` → `next build`
+      # internally, so we skip the separate turbo build and pass env vars here.
+      - name: Build & Package portal-shell for Cloudflare Pages
         if: steps.portal-check.outcome == 'failure'
         working-directory: apps/portal-shell
         run: npx @cloudflare/next-on-pages@1
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          NEXT_PUBLIC_GEF_URL: https://socios-gef.tecnologia-231.workers.dev
+          NEXT_PUBLIC_PLT_URL: https://socios-plt.tecnologia-231.workers.dev
 
       - name: Deploy portal-shell → Cloudflare Pages
         if: steps.portal-check.outcome == 'failure'
