@@ -12,6 +12,7 @@
     "deploy": "vite build && wrangler deploy"
   },
   "dependencies": {
+    "@socios/utils": "workspace:*",
     "@base-ui/react": "^1.3.0",
     "@google/genai": "^1.29.0",
     "@radix-ui/react-popover": "^1.1.15",

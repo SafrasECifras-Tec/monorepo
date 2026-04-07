@@ -169,7 +169,14 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AuthProvider>
+        <AuthProvider
+          allowedDomain="safrasecifras.com.br"
+          onSignIn={() => {
+            sessionStorage.removeItem("calcir_cliente_id");
+            sessionStorage.removeItem("calcir_analise_id");
+            window.location.replace("/clientes");
+          }}
+        >
           <CalcirProvider>
             <AppRoutes />
           </CalcirProvider>
