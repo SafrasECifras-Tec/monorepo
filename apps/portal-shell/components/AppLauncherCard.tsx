@@ -62,7 +62,8 @@ export function AppLauncherCard({
         refresh_token: session.refresh_token,
         expires_in: String(remainingSecs),
         token_type: "bearer",
-        type: "magiclink",
+        // no "type" — avoids triggering SIGNED_IN during Supabase module init
+        // (before React mounts), which caused useState null crash in PLT
       });
 
       return `${base}#${hashParams.toString()}`;
