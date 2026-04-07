@@ -1,0 +1,99 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      # ── Setup ─────────────────────────────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # necessário para turbo-ignore comparar HEAD^1
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.8.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ── PLT: Planejamento Tributário ───────────────────────────────────────
+      # turbo-ignore sai com código 1 quando há mudanças (deploy necessário)
+      # sai com código 0 quando nada mudou (pula os próximos steps)
+      - name: Detect PLT changes
+        id: plt-check
+        continue-on-error: true
+        run: npx turbo-ignore planejamento-tributario --fallback=HEAD^1
+
+      - name: Build PLT
+        if: steps.plt-check.outcome == 'failure'
+        run: pnpm turbo run build --filter=planejamento-tributario
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
+
+      - name: Deploy PLT → Cloudflare Workers
+        if: steps.plt-check.outcome == 'failure'
+        working-directory: apps/planejamento-tributario
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+      # ── GEF: Gestão Estratégica de Fazenda ────────────────────────────────
+      - name: Detect GEF changes
+        id: gef-check
+        continue-on-error: true
+        run: npx turbo-ignore gef --fallback=HEAD^1
+
+      - name: Build GEF
+        if: steps.gef-check.outcome == 'failure'
+        run: pnpm turbo run build --filter=gef
+        env:
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      # O @cloudflare/vite-plugin gera dist/wrangler.json com assets.directory: "."
+      # Por isso o deploy aponta para esse config em vez do wrangler.jsonc da raiz
+      - name: Deploy GEF → Cloudflare Workers
+        if: steps.gef-check.outcome == 'failure'
+        working-directory: apps/gef
+        run: npx wrangler deploy --config dist/wrangler.json
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+      # ── Sumário ────────────────────────────────────────────────────────────
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Deploy Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.plt-check.outcome }}" == "failure" ]; then
+            echo "- **PLT**: 🚀 deploiado" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **PLT**: ⏭️ sem mudanças, pulado" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ "${{ steps.gef-check.outcome }}" == "failure" ]; then
+            echo "- **GEF**: 🚀 deploiado" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **GEF**: ⏭️ sem mudanças, pulado" >> $GITHUB_STEP_SUMMARY
+          fi
