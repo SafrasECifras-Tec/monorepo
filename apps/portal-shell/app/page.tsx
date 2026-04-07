@@ -1,18 +1,13 @@
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getServerTenantId } from "@/lib/tenant.server";
-import {
-  BarChart3,
-  Calculator,
-  Landmark,
-  ShieldCheck,
-} from "lucide-react";
+import { BarChart3, Calculator, Landmark, ShieldCheck } from "lucide-react";
 
 export const runtime = "edge";
 import type { Fazenda } from "@socios/database";
-import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
 import { AppLauncherCard } from "@/components/AppLauncherCard";
+import { UserMenu } from "@/components/UserMenu";
 
 const GEF_URL =
   process.env.NODE_ENV === "development"
@@ -40,83 +35,82 @@ export default async function LaunchpadPage() {
   const currentTenantId = await getServerTenantId();
 
   return (
-    <div className="min-h-screen w-full flex">
-      <Sidebar user={user} />
+    <div className="min-h-screen w-full flex flex-col">
+      <Header
+        user={user}
+        fazendas={fazendas ?? []}
+        currentTenantId={currentTenantId}
+      />
 
-      <div className="flex-1 flex flex-col min-w-0">
-        <Header
-          user={user}
-          fazendas={fazendas ?? []}
-          currentTenantId={currentTenantId}
-        />
-
-        <main className="flex-1 p-6 lg:p-8">
-          <div className="max-w-5xl mx-auto">
-            {/* Page header */}
-            <div className="mb-10">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground mb-1.5">
-                Plataforma
-              </p>
-              <h1 className="text-2xl font-extrabold tracking-tight text-foreground">
-                Módulos
-              </h1>
-              <p className="text-sm text-muted-foreground mt-1.5 max-w-lg">
-                Acesse os módulos da plataforma Sócios do Agro. Selecione uma
-                fazenda acima para contextualizá-los automaticamente.
-              </p>
-            </div>
-
-            {/* Module grid — 2×2 */}
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-2">
-              <AppLauncherCard
-                tag="Gestão"
-                title="Gestão Estratégica de Fazendas"
-                description="Análise econômico-financeira, DRE, fluxo de caixa, estoque e indicadores de desempenho da fazenda."
-                icon={<BarChart3 className="h-5 w-5" />}
-                accentGradient="from-teal-600 to-cyan-500"
-                accentColor="text-teal-600"
-                href={GEF_URL}
-                currentTenantId={currentTenantId}
-                ssoType="google"
-              />
-
-              <AppLauncherCard
-                tag="Contábil"
-                title="Planejamento Tributário"
-                description="Simulações tributárias, comparativos de regimes e planejamento fiscal para produtores rurais PF e PJ."
-                icon={<Calculator className="h-5 w-5" />}
-                accentGradient="from-emerald-700 to-green-500"
-                accentColor="text-emerald-700"
-                href={PLT_URL}
-                currentTenantId={currentTenantId}
-                ssoType="supabase"
-              />
-
-              <AppLauncherCard
-                tag="Patrimonial"
-                title="Gestão Patrimonial"
-                description="Controle de ativos, inventário patrimonial, depreciação e valorização dos bens da propriedade rural."
-                icon={<Landmark className="h-5 w-5" />}
-                accentGradient="from-amber-600 to-yellow-500"
-                accentColor="text-amber-600"
-                currentTenantId={currentTenantId}
-                locked
-              />
-
-              <AppLauncherCard
-                tag="Governança"
-                title="Governança Corporativa"
-                description="Estrutura societária, compliance, gestão de riscos e boas práticas de governança para o agronegócio."
-                icon={<ShieldCheck className="h-5 w-5" />}
-                accentGradient="from-violet-600 to-purple-500"
-                accentColor="text-violet-600"
-                currentTenantId={currentTenantId}
-                locked
-              />
-            </div>
+      <main className="flex-1 p-6 lg:p-10">
+        <div className="max-w-5xl mx-auto">
+          {/* Page header */}
+          <div className="mb-10">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground mb-1.5">
+              Plataforma
+            </p>
+            <h1 className="text-2xl font-extrabold tracking-tight text-foreground">
+              Módulos
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1.5 max-w-lg">
+              Acesse os módulos da plataforma Sócios do Agro. Selecione uma
+              fazenda acima para contextualizá-los automaticamente.
+            </p>
           </div>
-        </main>
-      </div>
+
+          {/* Module grid — 2×2 */}
+          <div className="grid gap-5 sm:grid-cols-2">
+            <AppLauncherCard
+              tag="GEF"
+              title="Gestão Estratégica de Fazendas"
+              description="Análise econômico-financeira, DRE, fluxo de caixa, estoque e indicadores de desempenho da fazenda."
+              icon={<BarChart3 className="h-5 w-5" />}
+              accentGradient="from-teal-600 to-cyan-500"
+              accentColor="text-teal-600"
+              href={GEF_URL}
+              currentTenantId={currentTenantId}
+              ssoType="google"
+            />
+
+            <AppLauncherCard
+              tag="Contábil"
+              title="Planejamento Tributário"
+              description="Simulações tributárias, comparativos de regimes e planejamento fiscal para produtores rurais PF e PJ."
+              icon={<Calculator className="h-5 w-5" />}
+              accentGradient="from-emerald-700 to-green-500"
+              accentColor="text-emerald-700"
+              href={PLT_URL}
+              currentTenantId={currentTenantId}
+              ssoType="supabase"
+            />
+
+            <AppLauncherCard
+              tag="Patrimonial"
+              title="Gestão Patrimonial"
+              description="Controle de ativos, inventário patrimonial, depreciação e valorização dos bens da propriedade rural."
+              icon={<Landmark className="h-5 w-5" />}
+              accentGradient="from-amber-600 to-yellow-500"
+              accentColor="text-amber-600"
+              currentTenantId={currentTenantId}
+              locked
+            />
+
+            <AppLauncherCard
+              tag="Governança"
+              title="Governança"
+              description="Estrutura societária, compliance, gestão de riscos e boas práticas de governança para o agronegócio."
+              icon={<ShieldCheck className="h-5 w-5" />}
+              accentGradient="from-violet-600 to-purple-500"
+              accentColor="text-violet-600"
+              currentTenantId={currentTenantId}
+              locked
+            />
+          </div>
+        </div>
+      </main>
+
+      {/* Floating user menu — bottom-right */}
+      <UserMenu user={user} />
     </div>
   );
 }
