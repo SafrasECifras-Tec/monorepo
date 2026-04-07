@@ -1,31 +1,57 @@
-# Planejamento Tributário - S&C
+# Planejamento Tributário — Safras & Cifras
 
-## Tecnologias
+App de planejamento tributário para produtores rurais brasileiros. Permite que consultores da Safras & Cifras modelam cenários de IRPF, IRPJ, IBS/CBS e outros tributos rurais para seus clientes.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Stack
 
-## Desenvolvimento local
+- **React 18** + **Vite 6** + **TypeScript 5.8**
+- **Tailwind CSS v3** + **shadcn/ui** (Radix UI)
+- **Supabase** (auth + banco de dados com RLS)
+- **React Router v6**
+- **React Query v5**
+- **Cloudflare Workers** (deploy)
 
-Requisito: Node.js & npm instalados.
+## Pré-requisitos
 
-```sh
-# Clonar o repositório
-git clone <YOUR_GIT_URL>
+- Node.js >= 18
+- pnpm >= 10.8.0 (gerenciado pelo monorepo)
 
-# Entrar na pasta do projeto
-cd <YOUR_PROJECT_NAME>
+## Variáveis de ambiente
 
-# Instalar dependências
-npm install
+Crie `apps/planejamento-tributario/.env` com:
 
-# Iniciar o servidor de desenvolvimento
-npm run dev
+```env
+VITE_SUPABASE_URL=https://<project>.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=<anon-key>
+VITE_SUPABASE_PROJECT_ID=<project-id>
+```
+
+## Desenvolvimento
+
+A partir da **raiz do monorepo**:
+
+```bash
+pnpm dev --filter=planejamento-tributario   # inicia na porta 8080
+pnpm build --filter=planejamento-tributario
+pnpm test --filter=planejamento-tributario
+pnpm lint --filter=planejamento-tributario
 ```
 
 ## Deploy
 
-O projeto é hospedado via Cloudflare Workers.
+Deploy automático via GitHub Actions a cada push na `main` que afete este app.
+
+Deploy manual:
+
+```bash
+pnpm build --filter=planejamento-tributario
+cd apps/planejamento-tributario && npx wrangler deploy
+```
+
+**URL de produção:** `https://planejamento-tributario.tecnologia-231.workers.dev`
+
+## Autenticação
+
+- Email/senha via Supabase Auth
+- Google OAuth restrito ao domínio `@safrasecifras.com.br`
+- Roles: `consultor` (acesso total) e `cliente` (acesso restrito ao próprio dado)
