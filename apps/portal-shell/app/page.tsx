@@ -62,6 +62,7 @@ export default async function LaunchpadPage() {
 
             {/* App launcher grid */}
             <div className="grid gap-5 sm:grid-cols-2">
+              {/* GEF usa Google OAuth próprio — o navegador reutiliza a sessão Google nativa */}
               <AppLauncherCard
                 name="GEF"
                 fullName="Gestão Estratégica de Fazendas"
@@ -69,7 +70,9 @@ export default async function LaunchpadPage() {
                 href={GEF_URL}
                 currentTenantId={currentTenantId}
                 colorScheme="teal"
+                ssoType="google"
               />
+              {/* PLT usa Supabase — passa tokens no hash para login automático */}
               <AppLauncherCard
                 name="PLT"
                 fullName="Planejamento Tributário Rural"
@@ -77,6 +80,7 @@ export default async function LaunchpadPage() {
                 href={PLT_URL}
                 currentTenantId={currentTenantId}
                 colorScheme="green"
+                ssoType="supabase"
               />
             </div>
           </div>

@@ -1,8 +1,21 @@
+"use client";
+
 import { ExternalLink } from "lucide-react";
 import { buildAppUrl } from "@/lib/tenant";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/components/AuthProvider";
 
 type ColorScheme = "green" | "teal";
+
+/**
+ * "supabase" → appends #access_token=… hash so the Supabase JS client in the
+ *              target app picks up the session automatically on page load.
+ *              (Supabase detectSessionInUrl: true is the default.)
+ *
+ * "google"   → no hash needed; Google's own browser session handles SSO
+ *              natively when the user clicks "Sign in with Google" in the app.
+ */
+type SsoType = "supabase" | "google";
 
 interface AppLauncherCardProps {
   name: string;
@@ -11,6 +24,8 @@ interface AppLauncherCardProps {
   href: string;
   currentTenantId: string | null;
   colorScheme: ColorScheme;
+  /** Controls the SSO strategy when opening the app in a new tab. */
+  ssoType?: SsoType;
 }
 
 const colorMap: Record<ColorScheme, string> = {
@@ -18,7 +33,6 @@ const colorMap: Record<ColorScheme, string> = {
   teal: "from-[hsl(194_58%_36%)] to-[hsl(194_58%_46%)]",
 };
 
-// Server Component — no client-side hooks needed; links are plain <a> tags
 export function AppLauncherCard({
   name,
   fullName,
@@ -26,12 +40,51 @@ export function AppLauncherCard({
   href,
   currentTenantId,
   colorScheme,
+  ssoType,
 }: AppLauncherCardProps) {
-  const resolvedUrl = buildAppUrl(href, currentTenantId);
+  const { session } = useAuth();
+
+  /**
+   * Builds the final URL to open in the new tab:
+   *
+   * 1. Applies fazenda_id as a query param (for tenant context).
+   * 2. For ssoType="supabase": appends the current Supabase session tokens
+   *    in the URL hash. The target app's Supabase client reads the hash on
+   *    initialization and calls setSession() — user is instantly logged in.
+   *
+   * Note: URL fragments (#) are never sent to servers (HTTP spec), so the
+   * tokens stay in the browser only. On custom domain migration, remove
+   * this hash entirely — shared cookies will handle SSO natively.
+   */
+  function buildLaunchUrl(): string {
+    const base = buildAppUrl(href, currentTenantId);
+
+    if (
+      ssoType === "supabase" &&
+      session?.access_token &&
+      session?.refresh_token
+    ) {
+      const remainingSecs = session.expires_at
+        ? Math.max(0, Math.floor(session.expires_at - Date.now() / 1000))
+        : (session.expires_in ?? 3600);
+
+      const hashParams = new URLSearchParams({
+        access_token: session.access_token,
+        refresh_token: session.refresh_token,
+        expires_in: String(remainingSecs),
+        token_type: "bearer",
+        type: "magiclink", // triggers SIGNED_IN in onAuthStateChange
+      });
+
+      return `${base}#${hashParams.toString()}`;
+    }
+
+    return base;
+  }
 
   return (
     <a
-      href={resolvedUrl}
+      href={buildLaunchUrl()}
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
