@@ -1,0 +1,441 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 14% 96%;
+    --foreground: 220 25% 14%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 14%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 14%;
+
+    --primary: 151 56% 28%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 13% 93%;
+    --secondary-foreground: 220 25% 14%;
+
+    --muted: 220 13% 94%;
+    --muted-foreground: 220 10% 44%;
+
+    --accent: 220 14% 92%;
+    --accent-foreground: 151 56% 22%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+
+    --success: 150 55% 34%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --border: 220 13% 88%;
+    --input: 220 13% 90%;
+    --ring: 151 56% 28%;
+
+    --radius: 1.2rem;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 25% 14%;
+    --sidebar-primary: 151 56% 28%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 94%;
+    --sidebar-accent-foreground: 151 50% 18%;
+    --sidebar-border: 220 13% 90%;
+    --sidebar-ring: 151 56% 28%;
+    --sidebar-muted: 220 10% 50%;
+
+    --panel: 0 0% 100%;
+    --panel-soft: 220 14% 97%;
+    --panel-strong: 220 13% 93%;
+    --panel-dark: 213 23% 24%;
+    --panel-dark-foreground: 0 0% 100%;
+
+    --chart-1: 151 56% 28%;
+    --chart-2: 14 72% 56%;
+    --chart-3: 40 86% 56%;
+    --chart-4: 194 58% 46%;
+    --chart-5: 267 48% 58%;
+  }
+
+  .dark {
+    --background: 200 20% 6%;
+    --foreground: 150 10% 95%;
+
+    --card: 200 18% 9%;
+    --card-foreground: 150 10% 95%;
+
+    --popover: 200 18% 9%;
+    --popover-foreground: 150 10% 95%;
+
+    --primary: 152 55% 38%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 200 12% 14%;
+    --secondary-foreground: 150 10% 95%;
+
+    --muted: 200 12% 14%;
+    --muted-foreground: 200 10% 55%;
+
+    --accent: 152 30% 14%;
+    --accent-foreground: 152 40% 80%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 98%;
+
+    --success: 152 55% 40%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --border: 200 10% 16%;
+    --input: 200 10% 16%;
+    --ring: 152 55% 38%;
+
+    --sidebar-background: 200 18% 7%;
+    --sidebar-foreground: 150 10% 90%;
+    --sidebar-primary: 152 55% 38%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 152 20% 12%;
+    --sidebar-accent-foreground: 152 40% 80%;
+    --sidebar-border: 200 10% 14%;
+    --sidebar-ring: 152 55% 38%;
+    --sidebar-muted: 200 10% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-image:
+      radial-gradient(circle at top left, hsl(var(--primary) / 0.05), transparent 28%),
+      radial-gradient(circle at 85% 12%, hsl(var(--chart-3) / 0.06), transparent 22%),
+      linear-gradient(180deg, hsl(var(--background)), hsl(220 13% 95%));
+    min-height: 100vh;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .section-header {
+    @apply relative flex items-center gap-4 rounded-[2rem] border border-border/70 bg-card/70 px-5 py-4 shadow-card backdrop-blur-xl;
+  }
+  .section-header .section-icon {
+    @apply h-12 w-12 rounded-[1.35rem] flex items-center justify-center shrink-0 shadow-card;
+    background: linear-gradient(145deg, hsl(var(--primary)), hsl(160 46% 36%));
+  }
+  .section-header .section-icon svg {
+    @apply h-5 w-5 text-white;
+  }
+  .section-header h1 {
+    @apply text-[1.25rem] font-extrabold tracking-tight text-foreground leading-tight;
+  }
+  .section-header p {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .metric-pill {
+    @apply relative flex min-h-[8.75rem] flex-col justify-between overflow-hidden rounded-[2rem] border border-border/70 bg-card/80 p-5 shadow-card backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-float hover:border-primary/20;
+    background-image: linear-gradient(180deg, hsl(var(--panel)) 0%, hsl(var(--panel-soft)) 100%);
+  }
+  .metric-pill-accent {
+    @apply relative flex min-h-[8.75rem] flex-col justify-between overflow-hidden rounded-[2rem] border p-5 shadow-float transition-all duration-300 hover:-translate-y-1.5;
+    border-color: hsl(var(--primary) / 0.14);
+    background:
+      radial-gradient(circle at top right, hsl(0 0% 100% / 0.12), transparent 28%),
+      linear-gradient(145deg, hsl(var(--panel-dark)) 0%, hsl(var(--primary)) 100%);
+    color: hsl(var(--panel-dark-foreground));
+  }
+  .metric-pill-negative {
+    @apply relative flex min-h-[8.75rem] flex-col justify-between overflow-hidden rounded-[2rem] border p-5 transition-all duration-300 hover:-translate-y-1;
+    border-color: hsl(var(--destructive) / 0.22);
+    background: hsl(var(--destructive) / 0.04);
+  }
+  .metric-pill-negative .metric-label {
+    @apply text-[10px] font-semibold uppercase tracking-[0.22em];
+    color: hsl(var(--destructive) / 0.65);
+  }
+  .metric-pill-negative .metric-value {
+    @apply text-[1.85rem] font-extrabold leading-none tabular-nums tracking-[-0.04em];
+    color: hsl(var(--destructive));
+  }
+  .metric-pill-negative .metric-sub {
+    @apply text-[11px] leading-relaxed;
+    color: hsl(var(--destructive) / 0.55);
+  }
+  .metric-pill .metric-label, .metric-pill-accent .metric-label {
+    @apply text-[10px] font-semibold uppercase tracking-[0.22em];
+  }
+  .metric-pill .metric-label {
+    @apply text-muted-foreground;
+  }
+  .metric-pill-accent .metric-label {
+    color: hsl(145 60% 84%);
+  }
+  .metric-pill .metric-value {
+    @apply text-[1.85rem] font-extrabold leading-none tabular-nums tracking-[-0.04em];
+  }
+  .metric-pill-accent .metric-value {
+    @apply text-[1.85rem] font-extrabold leading-none tabular-nums tracking-[-0.04em] text-white;
+  }
+  .metric-pill .metric-sub {
+    @apply text-[11px] leading-relaxed text-muted-foreground;
+  }
+  .metric-pill-accent .metric-sub {
+    color: hsl(145 64% 84%);
+    @apply text-[11px] leading-relaxed;
+  }
+
+  .data-panel {
+    @apply overflow-hidden rounded-[2rem] border border-border/70 bg-card/80 shadow-card backdrop-blur-sm;
+    background-image: linear-gradient(180deg, hsl(var(--panel)) 0%, hsl(var(--panel-soft)) 100%);
+  }
+  .data-panel-header {
+    @apply flex items-center justify-between gap-3 px-5 py-4 border-b border-border/50;
+    background: linear-gradient(180deg, hsl(var(--panel-soft)), transparent);
+  }
+  .data-panel-header h3 {
+    @apply text-sm font-bold tracking-tight text-foreground;
+  }
+  .data-panel-body {
+    @apply p-0;
+  }
+
+  .config-bar {
+    @apply rounded-[1.75rem] border border-primary/15 p-4 shadow-soft;
+    background: linear-gradient(135deg, hsl(var(--panel-soft)), hsl(var(--panel-strong)));
+  }
+  .dark .config-bar {
+    background: linear-gradient(135deg, hsl(152 20% 10%), hsl(152 15% 12%));
+  }
+
+  .table-modern {
+    @apply border-0 bg-transparent p-0;
+  }
+  .table-modern table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .table-modern thead tr {
+    background: linear-gradient(180deg, hsl(var(--muted)) 0%, hsl(var(--accent)) 100%);
+  }
+  .table-modern thead th:first-child {
+    border-top-left-radius: 0;
+  }
+  .table-modern thead th:last-child {
+    border-top-right-radius: 0;
+  }
+  .table-modern th {
+    @apply border-b border-border/50 bg-transparent text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground;
+  }
+  .table-modern td {
+    @apply border-b border-border/35 text-[13px] leading-relaxed;
+  }
+  .table-modern tbody tr:last-child td {
+    @apply border-b-0;
+  }
+  .table-modern .row-total {
+    @apply border-t-2 border-primary/15 font-bold;
+    background: linear-gradient(90deg, hsl(var(--primary) / 0.08), transparent);
+  }
+
+  .chart-container {
+    @apply overflow-hidden rounded-[2rem] border border-border/70 bg-card/80 shadow-card backdrop-blur-sm;
+    background-image: linear-gradient(180deg, hsl(var(--panel)) 0%, hsl(var(--panel-soft)) 100%);
+  }
+  .chart-header {
+    @apply px-5 py-4 border-b border-border/30;
+  }
+  .chart-header h3 {
+    @apply text-sm font-bold text-foreground;
+  }
+  .chart-header p {
+    @apply text-[10px] text-muted-foreground mt-0.5;
+  }
+  .chart-body {
+    @apply p-4;
+  }
+
+  .stat-chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold border;
+  }
+  .stat-chip-success {
+    @apply stat-chip bg-success/10 text-success border-success/20;
+  }
+  .stat-chip-destructive {
+    @apply stat-chip bg-destructive/10 text-destructive border-destructive/20;
+  }
+  .stat-chip-warning {
+    @apply stat-chip bg-destructive/10 text-destructive border-destructive/20;
+  }
+
+  .gradient-primary {
+    background: linear-gradient(145deg, hsl(var(--primary)), hsl(160 46% 36%));
+  }
+  .gradient-gold {
+    background: linear-gradient(145deg, hsl(var(--chart-3)), hsl(34 82% 62%));
+  }
+  .gradient-card {
+    background: linear-gradient(145deg, hsl(var(--panel-dark)), hsl(var(--primary)) 82%);
+  }
+  .text-currency {
+    @apply font-mono tabular-nums text-right;
+  }
+  .label-uppercase {
+    @apply text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground;
+  }
+  .glass-card {
+    background: hsl(var(--card) / 0.62);
+    backdrop-filter: blur(18px);
+    border: 1px solid hsl(var(--border) / 0.8);
+    box-shadow: 0 12px 34px -18px hsl(151 56% 28% / 0.28);
+  }
+  .dark .glass-card {
+    background: hsl(200 18% 9% / 0.7);
+  }
+
+  /* Legacy .page-header */
+  .page-header {
+    @apply mb-6;
+  }
+  .page-header h1 {
+    @apply text-[1.4rem] font-extrabold tracking-tight text-foreground;
+  }
+  .page-header p {
+    @apply text-sm text-muted-foreground mt-1;
+  }
+
+  /* Legacy .kpi-card */
+  .kpi-card {
+    @apply metric-pill;
+  }
+  .kpi-card-gradient {
+    @apply metric-pill-accent;
+  }
+
+  .page-shell {
+    @apply space-y-6;
+  }
+
+  .hero-board {
+    @apply grid gap-4 rounded-[2rem] border border-border/70 bg-card/75 p-4 shadow-card backdrop-blur-xl lg:grid-cols-[1.4fr_0.9fr];
+  }
+
+  .hero-copy {
+    @apply rounded-[1.6rem] border border-border/60 bg-background/70 p-5 shadow-soft;
+  }
+
+  .hero-copy-title {
+    @apply text-xl font-extrabold tracking-tight text-foreground;
+  }
+
+  .hero-copy-subtitle {
+    @apply mt-2 text-sm leading-relaxed text-muted-foreground;
+  }
+
+  .hero-insight {
+    @apply flex flex-col justify-between rounded-[1.6rem] border border-primary/15 p-5 shadow-soft;
+    background: linear-gradient(145deg, hsl(var(--panel-dark)) 0%, hsl(var(--primary)) 100%);
+  }
+
+  .hero-insight-label {
+    @apply text-[10px] font-semibold uppercase tracking-[0.22em] text-white/70;
+  }
+
+  .hero-insight-value {
+    @apply mt-3 text-[2rem] font-black tracking-[-0.05em] text-white;
+  }
+
+  .hero-insight-sub {
+    @apply mt-2 text-xs leading-relaxed;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .table-shell {
+    @apply overflow-hidden rounded-[2rem] border border-border/70 bg-card/80 shadow-card backdrop-blur-sm;
+  }
+
+  .table-shell-header {
+    @apply flex flex-col gap-4 border-b border-border/50 px-5 py-5;
+    background: linear-gradient(180deg, hsl(var(--panel-soft)), transparent);
+  }
+
+  .table-shell-meta {
+    @apply flex flex-wrap items-center gap-2 text-[11px] text-muted-foreground;
+  }
+
+  .table-shell-body {
+    @apply p-3;
+  }
+
+  .control-pill {
+    @apply inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/80 px-3 py-1.5 text-xs font-semibold text-foreground shadow-soft;
+  }
+
+  .control-pill-muted {
+    @apply control-pill text-muted-foreground;
+  }
+
+  .dashboard-grid {
+    @apply grid gap-4 xl:grid-cols-[1.2fr_0.8fr];
+  }
+
+  .chart-switch {
+    @apply inline-flex items-center gap-1 rounded-full border border-border/60 bg-background/80 p-1 shadow-soft;
+  }
+
+  .chart-switch button {
+    @apply flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-all duration-200 hover:text-foreground;
+  }
+
+  .chart-switch button[data-active="true"] {
+    @apply bg-card text-foreground shadow-soft;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(150 10% 80%);
+  border-radius: 100px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(151 22% 58%);
+}
+[data-sidebar] ::-webkit-scrollbar-track {
+  background: transparent;
+}
+[data-sidebar] ::-webkit-scrollbar-thumb {
+  background: hsl(150 10% 85%);
+}
+[data-sidebar] ::-webkit-scrollbar-thumb:hover {
+  background: hsl(152 30% 50%);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(151 16% 76%) transparent;
+}

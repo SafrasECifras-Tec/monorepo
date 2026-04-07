@@ -1,0 +1,10 @@
+project_id = "wuzdnvbwceykibwgjusj"
+
+[functions.sync-connectere]
+verify_jwt = false
+
+[functions.create-client-user]
+verify_jwt = false
+
+[functions.sync-aegro]
+verify_jwt = false

@@ -1,0 +1,11 @@
+{
+  "extends": "@socios/tsconfig/vite-react.json",
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "allowJs": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}

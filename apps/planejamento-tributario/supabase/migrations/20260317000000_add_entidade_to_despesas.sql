@@ -1,0 +1,1 @@
+ALTER TABLE despesas ADD COLUMN IF NOT EXISTS entidade text DEFAULT 'PJ';
