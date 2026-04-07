@@ -102,7 +102,7 @@ jobs:
       - name: Deploy portal-shell → Cloudflare Pages
         if: steps.portal-check.outcome == 'failure'
         working-directory: apps/portal-shell
-        run: npx wrangler pages deploy .vercel/output/static --project-name socios-portal-shell
+        run: npx wrangler pages deploy .vercel/output/static --project-name monorepo-e2b
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: 2312b6bac3bbc53c1a38e7bd3ff08fe8
@@ -124,7 +124,7 @@ jobs:
             echo "- **GEF**: ⏭️ sem mudanças, pulado" >> $GITHUB_STEP_SUMMARY
           fi
           if [ "${{ steps.portal-check.outcome }}" == "failure" ]; then
-            echo "- **Portal**: 🚀 deploiado → https://socios-portal-shell.pages.dev" >> $GITHUB_STEP_SUMMARY
+            echo "- **Portal**: 🚀 deploiado → https://monorepo-e2b.pages.dev" >> $GITHUB_STEP_SUMMARY
           else
             echo "- **Portal**: ⏭️ sem mudanças, pulado" >> $GITHUB_STEP_SUMMARY
           fi
