@@ -48,11 +48,8 @@ export function AppLauncherCard({
     if (!href) return "#";
     const base = buildAppUrl(href, currentTenantId);
 
-    if (
-      ssoType === "supabase" &&
-      session?.access_token &&
-      session?.refresh_token
-    ) {
+    // PLT: inject Supabase session via hash — client reads it on init
+    if (ssoType === "supabase" && session?.access_token && session?.refresh_token) {
       const remainingSecs = session.expires_at
         ? Math.max(0, Math.floor(session.expires_at - Date.now() / 1000))
         : (session.expires_in ?? 3600);
@@ -62,10 +59,21 @@ export function AppLauncherCard({
         refresh_token: session.refresh_token,
         expires_in: String(remainingSecs),
         token_type: "bearer",
-        // no "type" — avoids triggering SIGNED_IN during Supabase module init
-        // (before React mounts), which caused useState null crash in PLT
+        // no "type" — avoids triggering SIGNED_IN during module init before React mounts
       });
 
+      return `${base}#${hashParams.toString()}`;
+    }
+
+    // GEF: inject portal user info via hash — GEF's AuthContext reads it on init
+    // and auto-logs in without requiring a Google OAuth click
+    if (ssoType === "google" && session?.user?.email) {
+      const { email, user_metadata } = session.user;
+      const hashParams = new URLSearchParams({ portal_email: email });
+      const name = user_metadata?.full_name ?? user_metadata?.name ?? email;
+      if (name) hashParams.set("portal_name", name);
+      const picture = user_metadata?.avatar_url ?? user_metadata?.picture ?? "";
+      if (picture) hashParams.set("portal_picture", picture);
       return `${base}#${hashParams.toString()}`;
     }
 

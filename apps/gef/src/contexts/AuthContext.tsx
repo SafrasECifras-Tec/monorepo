@@ -31,6 +31,29 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(() => {
+    // 1. Check URL hash for portal SSO params (portal_email, portal_name, portal_picture)
+    //    The Sócios do Agro portal injects these when opening GEF so the user
+    //    doesn't need to click "Sign in with Google" again.
+    try {
+      const params = new URLSearchParams(window.location.hash.slice(1));
+      const email = params.get('portal_email');
+      if (email && email.endsWith(`@${ALLOWED_DOMAIN}`)) {
+        const authUser: AuthUser = {
+          email,
+          name: params.get('portal_name') ?? email,
+          picture: params.get('portal_picture') ?? '',
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(authUser));
+        // Remove SSO params from URL without a page reload
+        window.history.replaceState(
+          null, '',
+          window.location.pathname + window.location.search
+        );
+        return authUser;
+      }
+    } catch { /* ignore — falls through to localStorage */ }
+
+    // 2. Restore from localStorage (normal flow)
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       return stored ? JSON.parse(stored) : null;
