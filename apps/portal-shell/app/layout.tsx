@@ -10,6 +10,10 @@ import { AuthProvider } from "@/components/AuthProvider";
 export const metadata: Metadata = {
   title: "Sócios do Agro",
   description: "Plataforma integrada Safras & Cifras",
+  icons: {
+    icon: "/logo-safras-cifras.png",
+    apple: "/logo-safras-cifras.png",
+  },
 };
 
 export default function RootLayout({
