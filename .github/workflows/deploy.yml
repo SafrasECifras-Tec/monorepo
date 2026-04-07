@@ -53,7 +53,7 @@ jobs:
       - name: Deploy PLT → Cloudflare Workers
         if: steps.plt-check.outcome == 'failure'
         working-directory: apps/planejamento-tributario
-        run: npx wrangler deploy
+        run: npx wrangler deploy --name socios-plt
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
@@ -73,7 +73,7 @@ jobs:
       - name: Deploy GEF → Cloudflare Workers
         if: steps.gef-check.outcome == 'failure'
         working-directory: apps/gef
-        run: npx wrangler deploy --config dist/wrangler.json
+        run: npx wrangler deploy --config dist/wrangler.json --name socios-gef
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
@@ -91,8 +91,8 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
           # URLs de produção dos módulos — hardcoded (são públicas)
-          NEXT_PUBLIC_GEF_URL: https://gef.tecnologia-231.workers.dev
-          NEXT_PUBLIC_PLT_URL: https://planejamento-tributario.tecnologia-231.workers.dev
+          NEXT_PUBLIC_GEF_URL: https://socios-gef.tecnologia-231.workers.dev
+          NEXT_PUBLIC_PLT_URL: https://socios-plt.tecnologia-231.workers.dev
 
       - name: Package portal-shell for Cloudflare Pages
         if: steps.portal-check.outcome == 'failure'
@@ -102,7 +102,7 @@ jobs:
       - name: Deploy portal-shell → Cloudflare Pages
         if: steps.portal-check.outcome == 'failure'
         working-directory: apps/portal-shell
-        run: npx wrangler pages deploy .vercel/output/static --project-name monorepo-e2b
+        run: npx wrangler pages deploy .vercel/output/static --project-name sociosdoagro
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: 2312b6bac3bbc53c1a38e7bd3ff08fe8
@@ -114,17 +114,17 @@ jobs:
           echo "## Deploy Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           if [ "${{ steps.plt-check.outcome }}" == "failure" ]; then
-            echo "- **PLT**: 🚀 deploiado → https://planejamento-tributario.tecnologia-231.workers.dev" >> $GITHUB_STEP_SUMMARY
+            echo "- **PLT**: 🚀 deploiado → https://socios-plt.tecnologia-231.workers.dev" >> $GITHUB_STEP_SUMMARY
           else
             echo "- **PLT**: ⏭️ sem mudanças, pulado" >> $GITHUB_STEP_SUMMARY
           fi
           if [ "${{ steps.gef-check.outcome }}" == "failure" ]; then
-            echo "- **GEF**: 🚀 deploiado → https://gef.tecnologia-231.workers.dev" >> $GITHUB_STEP_SUMMARY
+            echo "- **GEF**: 🚀 deploiado → https://socios-gef.tecnologia-231.workers.dev" >> $GITHUB_STEP_SUMMARY
           else
             echo "- **GEF**: ⏭️ sem mudanças, pulado" >> $GITHUB_STEP_SUMMARY
           fi
           if [ "${{ steps.portal-check.outcome }}" == "failure" ]; then
-            echo "- **Portal**: 🚀 deploiado → https://monorepo-e2b.pages.dev" >> $GITHUB_STEP_SUMMARY
+            echo "- **Portal**: 🚀 deploiado → https://sociosdoagro.pages.dev" >> $GITHUB_STEP_SUMMARY
           else
             echo "- **Portal**: ⏭️ sem mudanças, pulado" >> $GITHUB_STEP_SUMMARY
           fi
