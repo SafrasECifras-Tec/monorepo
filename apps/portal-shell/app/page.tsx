@@ -69,7 +69,7 @@ export default async function LaunchpadPage() {
               accentColor="text-teal-600"
               href={GEF_URL}
               currentTenantId={currentTenantId}
-              ssoType="google"
+              ssoType="supabase"
             />
 
             <AppLauncherCard

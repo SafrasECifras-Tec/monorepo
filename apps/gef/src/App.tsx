@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from 'react';
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import { useState, useEffect } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { DREDashboard } from '@/modules/dre/DREDashboard';
@@ -18,12 +17,9 @@ import { SettingsProvider } from '@/contexts/SettingsContext';
 import { ImportDataProvider } from '@/contexts/ImportDataContext';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { ClientProvider } from '@/contexts/ClientContext';
-import { LoginPage } from '@/pages/LoginPage';
 import { Toaster } from 'sonner';
 
-const GOOGLE_CLIENT_ID =
-  import.meta.env.VITE_GOOGLE_CLIENT_ID ||
-  '359561013239-44d1m7harmo5dglpitl895gstgjv1efe.apps.googleusercontent.com';
+const PORTAL_URL = (import.meta as any).env?.VITE_PORTAL_URL ?? 'http://localhost:4000';
 
 function EstoqueModule() {
   const estoqueData = useEstoqueData();
@@ -39,11 +35,21 @@ function EstoqueModule() {
 }
 
 function AppContent() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const [activeModule, setActiveModule] = useState('cashflow');
 
-  if (!user) {
-    return <LoginPage />;
+  useEffect(() => {
+    if (!loading && !user) {
+      window.location.href = PORTAL_URL;
+    }
+  }, [loading, user]);
+
+  if (loading || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="h-6 w-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
   }
 
   const renderModule = () => {
@@ -85,13 +91,11 @@ function AppContent() {
 
 export default function App() {
   return (
-    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      <AuthProvider>
-        <TooltipProvider delayDuration={0}>
-          <AppContent />
-        </TooltipProvider>
-        <Toaster position="top-right" />
-      </AuthProvider>
-    </GoogleOAuthProvider>
+    <AuthProvider>
+      <TooltipProvider delayDuration={0}>
+        <AppContent />
+      </TooltipProvider>
+      <Toaster position="top-right" />
+    </AuthProvider>
   );
 }
