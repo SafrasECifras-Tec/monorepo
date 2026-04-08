@@ -24,6 +24,7 @@ import { EmptyDataState } from '@/components/ui/EmptyDataState';
 import { DREInicioTab } from './components/DREInicioTab';
 import { DREVBPTab } from './components/DREVBPTab';
 import { DRECustoTab } from './components/DRECustoTab';
+import { DREAnalisesTab } from './components/DREAnalisesTab';
 
 // ── Formatters ───────────────────────────────────────────────────────────────
 
@@ -40,11 +41,12 @@ const fmtNum = (v: number) => v.toLocaleString('pt-BR');
 // ── Shared tab config ────────────────────────────────────────────────────────
 
 const DRE_TABS = [
-  { id: 'inicio', label: 'Início' },
-  { id: 'vbp', label: 'VBP' },
-  { id: 'custo', label: 'Custo' },
+  { id: 'inicio',   label: 'Início' },
+  { id: 'analises', label: 'Análises' },
+  { id: 'vbp',      label: 'VBP' },
+  { id: 'custo',    label: 'Custo' },
   { id: 'culturas', label: 'Por Cultura' },
-  { id: 'historico', label: 'Histórico' },
+  { id: 'historico',label: 'Histórico' },
 ];
 
 // ── Sub-components ───────────────────────────────────────────────────────────
@@ -57,14 +59,14 @@ function KpiCard({ label, value, sub, trend, delay = 0 }: {
   const down = trend && trend.value < 0;
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay }}>
-      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-card transition-all duration-300 h-full">
-        <span className="text-[14px] font-semibold text-muted-foreground uppercase tracking-wider">{label}</span>
-        <span className="text-[24px] font-black text-foreground leading-tight">{value}</span>
-        {sub && <span className="text-xs text-muted-foreground">{sub}</span>}
+      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-md transition-all duration-300 h-full">
+        <span className="text-[14px] font-semibold text-slate-500 uppercase tracking-wider">{label}</span>
+        <span className="text-[24px] font-black text-slate-800 leading-tight">{value}</span>
+        {sub && <span className="text-xs text-slate-400">{sub}</span>}
         {trend && (
           <div className={cn(
             'flex items-center gap-1 text-xs font-semibold mt-auto',
-            up ? 'text-primary' : down ? 'text-destructive' : 'text-muted-foreground'
+            up ? 'text-emerald-600' : down ? 'text-red-500' : 'text-slate-400'
           )}>
             {up ? <ArrowUpRight className="h-3.5 w-3.5" /> : down ? <ArrowDownRight className="h-3.5 w-3.5" /> : <Minus className="h-3.5 w-3.5" />}
             {trend.value > 0 ? '+' : ''}{trend.value.toFixed(1)}% {trend.label}
@@ -80,15 +82,15 @@ function CulturaCard({ cultura, idx, ...rest }: { cultura: any; idx: number; [k:
   const down = cultura.variacaoMargem < 0;
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 * idx }}>
-      <GlassCard className="p-5 hover:shadow-card transition-all duration-300">
+      <GlassCard className="p-5 hover:shadow-md transition-all duration-300">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <span className="text-2xl">{cultura.emoji}</span>
-            <span className="font-bold text-foreground text-base">{cultura.nome}</span>
+            <span className="font-bold text-slate-800 text-base">{cultura.nome}</span>
           </div>
           <div className={cn(
             'flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full',
-            up ? 'bg-primary/10 text-primary' : down ? 'bg-destructive/10 text-destructive' : 'bg-muted text-muted-foreground'
+            up ? 'bg-emerald-100 text-emerald-700' : down ? 'bg-red-100 text-red-600' : 'bg-slate-100 text-slate-500'
           )}>
             {up ? <TrendingUp className="h-3 w-3" /> : down ? <TrendingDown className="h-3 w-3" /> : <Minus className="h-3 w-3" />}
             {cultura.variacaoMargem > 0 ? '+' : ''}{cultura.variacaoMargem.toFixed(1)} pp
@@ -104,23 +106,23 @@ function CulturaCard({ cultura, idx, ...rest }: { cultura: any; idx: number; [k:
             { label: 'Margem Líq.', value: `${cultura.margemLiquida.toFixed(1)}%` },
           ].map(item => (
             <div key={item.label} className="flex flex-col gap-0.5">
-              <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">{item.label}</span>
-              <span className="text-sm font-bold text-foreground">{item.value}</span>
+              <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">{item.label}</span>
+              <span className="text-sm font-bold text-slate-700">{item.value}</span>
             </div>
           ))}
         </div>
         <div className="mt-4">
-          <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
+          <div className="flex justify-between text-[10px] text-slate-400 mb-1">
             <span>Margem Líquida</span>
             <span>{cultura.margemLiquida.toFixed(1)}%</span>
           </div>
-          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+          <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${Math.min(cultura.margemLiquida, 100)}%` }}
               transition={{ duration: 0.8, delay: 0.2 * idx }}
               className={cn('h-full rounded-full',
-                cultura.margemLiquida >= 20 ? 'bg-primary' :
+                cultura.margemLiquida >= 20 ? 'bg-emerald-500' :
                 cultura.margemLiquida >= 10 ? 'bg-amber-400' : 'bg-red-400')}
             />
           </div>
@@ -132,20 +134,20 @@ function CulturaCard({ cultura, idx, ...rest }: { cultura: any; idx: number; [k:
 
 function AlertaCard({ alerta, idx, ...rest }: { alerta: AlertaConsultor; idx: number; [k: string]: any }) {
   const config = {
-    alerta:       { bg: 'bg-warning/5 border-warning/20',   icon: AlertTriangle, iconColor: 'text-warning',  dot: 'bg-amber-400' },
-    oportunidade: { bg: 'bg-primary/5 border-primary/20', icon: Lightbulb,   iconColor: 'text-primary', dot: 'bg-primary' },
+    alerta:       { bg: 'bg-amber-50 border-amber-200',   icon: AlertTriangle, iconColor: 'text-amber-500',  dot: 'bg-amber-400' },
+    oportunidade: { bg: 'bg-emerald-50 border-emerald-200', icon: Lightbulb,   iconColor: 'text-emerald-600', dot: 'bg-emerald-500' },
     info:         { bg: 'bg-blue-50 border-blue-200',     icon: Info,          iconColor: 'text-blue-500',   dot: 'bg-blue-400' },
   }[alerta.tipo];
   const Icon = config.icon;
   return (
     <motion.div initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3, delay: 0.08 * idx }}>
       <div className={cn('flex items-start gap-3 p-4 rounded-xl border', config.bg)}>
-        <div className="p-1.5 rounded-lg bg-card/60 shrink-0 mt-0.5">
+        <div className="p-1.5 rounded-lg bg-white/60 shrink-0 mt-0.5">
           <Icon className={cn('h-4 w-4', config.iconColor)} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-bold text-foreground">{alerta.titulo}</p>
-          <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{alerta.descricao}</p>
+          <p className="text-sm font-bold text-slate-800">{alerta.titulo}</p>
+          <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">{alerta.descricao}</p>
         </div>
         <span className={cn('w-2 h-2 rounded-full shrink-0 mt-1.5', config.dot)} />
       </div>
@@ -208,8 +210,8 @@ function HistoricoTab({ dreDataRecord, safras }: { dreDataRecord: Record<string,
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <GlassCard className="p-5">
-          <h3 className="text-sm font-bold text-foreground mb-1">Produção Total por Safra</h3>
-          <p className="text-xs text-muted-foreground mb-4">Em sacas (60kg)</p>
+          <h3 className="text-sm font-bold text-slate-700 mb-1">Produção Total por Safra</h3>
+          <p className="text-xs text-slate-400 mb-4">Em sacas (60kg)</p>
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={historicoPorSafra} margin={{ top: 10, right: 8, left: 0, bottom: 0 }}>
@@ -226,8 +228,8 @@ function HistoricoTab({ dreDataRecord, safras }: { dreDataRecord: Record<string,
         </GlassCard>
 
         <GlassCard className="p-5">
-          <h3 className="text-sm font-bold text-foreground mb-1">Margem Líquida por Safra</h3>
-          <p className="text-xs text-muted-foreground mb-4">Em % sobre receita bruta</p>
+          <h3 className="text-sm font-bold text-slate-700 mb-1">Margem Líquida por Safra</h3>
+          <p className="text-xs text-slate-400 mb-4">Em % sobre receita bruta</p>
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={historicoPorSafra} margin={{ top: 10, right: 8, left: 0, bottom: 0 }}>
@@ -247,13 +249,13 @@ function HistoricoTab({ dreDataRecord, safras }: { dreDataRecord: Record<string,
 
       {/* Tabela comparativa */}
       <GlassCard className="p-5">
-        <h3 className="text-sm font-bold text-foreground mb-4">Comparativo por Safra</h3>
+        <h3 className="text-sm font-bold text-slate-700 mb-4">Comparativo por Safra</h3>
         <div className="overflow-x-auto custom-scrollbar">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border/50">
+              <tr className="border-b border-slate-100">
                 {['Safra', 'Área (ha)', 'Produção (sc)', 'Produtiv. (sc/ha)', 'Receita Bruta', 'Custo Total', 'Result. Líquido', 'Margem'].map(h => (
-                  <th key={h} className="px-3 py-2.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">{h}</th>
+                  <th key={h} className="px-3 py-2.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -261,19 +263,19 @@ function HistoricoTab({ dreDataRecord, safras }: { dreDataRecord: Record<string,
               {[...safras].reverse().map((safra) => {
                 const d = dreDataRecord[safra];
                 return (
-                  <tr key={safra} className="border-b border-border/50 hover:bg-accent/60 transition-colors">
-                    <td className="px-3 py-3 font-bold text-foreground">{safra}</td>
-                    <td className="px-3 py-3 text-muted-foreground">{fmtNum(d.areaTotal)}</td>
-                    <td className="px-3 py-3 text-muted-foreground">{fmtNum(d.producaoTotal)}</td>
-                    <td className="px-3 py-3 text-muted-foreground">{d.produtividadeMedia.toFixed(1)}</td>
-                    <td className="px-3 py-3 text-muted-foreground">{fmtCompact(d.receitaBruta)}</td>
-                    <td className="px-3 py-3 text-muted-foreground">{fmtCompact(d.custoTotal)}</td>
-                    <td className="px-3 py-3 font-semibold text-primary">{fmtCompact(d.resultadoLiquido)}</td>
+                  <tr key={safra} className="border-b border-slate-50 hover:bg-slate-50/60 transition-colors">
+                    <td className="px-3 py-3 font-bold text-slate-800">{safra}</td>
+                    <td className="px-3 py-3 text-slate-600">{fmtNum(d.areaTotal)}</td>
+                    <td className="px-3 py-3 text-slate-600">{fmtNum(d.producaoTotal)}</td>
+                    <td className="px-3 py-3 text-slate-600">{d.produtividadeMedia.toFixed(1)}</td>
+                    <td className="px-3 py-3 text-slate-600">{fmtCompact(d.receitaBruta)}</td>
+                    <td className="px-3 py-3 text-slate-600">{fmtCompact(d.custoTotal)}</td>
+                    <td className="px-3 py-3 font-semibold text-emerald-700">{fmtCompact(d.resultadoLiquido)}</td>
                     <td className="px-3 py-3">
                       <span className={cn('font-bold px-2 py-0.5 rounded-full text-xs',
-                        d.margemLiquida >= 20 ? 'bg-primary/10 text-primary' :
-                        d.margemLiquida >= 12 ? 'bg-warning/10 text-warning' :
-                        'bg-destructive/10 text-destructive'
+                        d.margemLiquida >= 20 ? 'bg-emerald-100 text-emerald-700' :
+                        d.margemLiquida >= 12 ? 'bg-amber-100 text-amber-700' :
+                        'bg-red-100 text-red-700'
                       )}>
                         {d.margemLiquida.toFixed(1)}%
                       </span>
@@ -325,8 +327,8 @@ export function DREDashboard() {
       {/* Header */}
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-foreground tracking-tight">DRE</h1>
-          <p className="text-muted-foreground mt-1">Demonstrativo de Resultado por Safra — Fazenda Santa Fé</p>
+          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">DRE</h1>
+          <p className="text-slate-500 mt-1">Demonstrativo de Resultado por Safra — Fazenda Santa Fé</p>
         </div>
         <ImportButton
           hasData={hasImportedData}
@@ -340,35 +342,36 @@ export function DREDashboard() {
         <TabNav tabs={DRE_TABS} activeTab={activeTab} onChange={setActiveTab} />
         <div className="flex items-end gap-4">
           <div className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium text-muted-foreground">Fazenda:</span>
+            <span className="text-sm font-medium text-slate-600">Fazenda:</span>
             <div className="relative">
               <select value={fazenda} onChange={e => setFazenda(e.target.value as Fazenda)}
-                className="appearance-none bg-card/60 border border-border/60 shadow-soft text-foreground hover:bg-card/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-primary">
+                className="appearance-none bg-white/60 border border-slate-200/60 shadow-sm text-slate-700 hover:bg-white/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500">
                 {FAZENDAS.map(f => <option key={f} value={f}>{f}</option>)}
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
             </div>
           </div>
-          <div className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium text-muted-foreground">Safra:</span>
-            <div className="relative">
-              <select value={safraAtual} onChange={e => setSafraAtual(e.target.value)}
-                className="appearance-none bg-card/60 border border-border/60 shadow-soft text-foreground hover:bg-card/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-primary">
-                {(safras ?? []).map(s => <option key={s} value={s}>{s}</option>)}
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+          {activeTab !== 'analises' && (
+            <div className="flex flex-col gap-1.5">
+              <span className="text-sm font-medium text-slate-600">Safra:</span>
+              <div className="relative">
+                <select value={safraAtual} onChange={e => setSafraAtual(e.target.value)}
+                  className="appearance-none bg-white/60 border border-slate-200/60 shadow-sm text-slate-700 hover:bg-white/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500">
+                  {(safras ?? []).map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
+              </div>
             </div>
-          </div>
-
+          )}
           <div className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium text-muted-foreground">Cultura:</span>
+            <span className="text-sm font-medium text-slate-600">Atividade:</span>
             <div className="relative">
               <select value={selectedCultura} onChange={e => setSelectedCultura(e.target.value)}
-                className="appearance-none bg-card/60 border border-border/60 shadow-soft text-foreground hover:bg-card/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-primary">
-                <option value="Todas">Todas</option>
+                className="appearance-none bg-white/60 border border-slate-200/60 shadow-sm text-slate-700 hover:bg-white/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500">
+                <option value="Todas">{activeTab === 'analises' ? 'Análise Global' : 'Todas'}</option>
                 {culturasOptions.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
             </div>
           </div>
         </div>
@@ -404,12 +407,13 @@ export function DREDashboard() {
               };
               const prevKey = sfs.indexOf(safraAtual) > 0 ? sfs[sfs.indexOf(safraAtual) - 1] : null;
               const prevData = prevKey ? rec[prevKey] : null;
-              return <DREInicioTab data={filtered} prev={prevData} onNavigate={setActiveTab} />;
+              return <DREInicioTab data={filtered} prev={prevData} dreDataRecord={rec} safras={sfs} onNavigate={setActiveTab} />;
             })()}
             {activeTab === 'vbp'       && <DREVBPTab safraAtual={safraAtual} dreDataRecord={dreDataRecord!} safras={safras!} selectedCultura={selectedCultura} />}
             {activeTab === 'custo'     && <DRECustoTab safraAtual={safraAtual} dreDataRecord={dreDataRecord!} safras={safras!} selectedCultura={selectedCultura} />}
             {activeTab === 'culturas'  && <CulturasTab safraAtual={safraAtual} dreDataRecord={dreDataRecord!} selectedCultura={selectedCultura} />}
             {activeTab === 'historico' && <HistoricoTab dreDataRecord={dreDataRecord!} safras={safras!} />}
+            {activeTab === 'analises'  && <DREAnalisesTab dreDataRecord={dreDataRecord!} safras={safras!} selectedCultura={selectedCultura} />}
           </motion.div>
         </AnimatePresence>
       )}

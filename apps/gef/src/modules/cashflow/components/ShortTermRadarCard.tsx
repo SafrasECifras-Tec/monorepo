@@ -30,7 +30,7 @@ export function ShortTermRadarCard({ data, currencyMode, onClickAPagar, onClickA
     >
       <GlassCard className="p-6 flex flex-col h-full">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-bold text-foreground">Radar de Curto Prazo</h2>
+          <h2 className="text-lg font-bold text-slate-800">Radar de Curto Prazo</h2>
           <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded border border-blue-100">Próximos 30 dias</span>
         </div>
 
@@ -39,19 +39,19 @@ export function ShortTermRadarCard({ data, currencyMode, onClickAPagar, onClickA
           <div className="grid grid-cols-2 gap-4">
             <button
               onClick={onClickAPagar}
-              className="p-4 bg-destructive/5 border border-destructive/15 rounded-2xl text-left hover:bg-destructive/10 hover:border-destructive/20 hover:shadow-soft transition-all cursor-pointer group/pagar"
+              className="p-4 bg-red-50/50 border border-red-100 rounded-2xl text-left hover:bg-red-50 hover:border-red-200 hover:shadow-sm transition-all cursor-pointer group/pagar"
             >
-              <span className="text-xs font-bold text-destructive uppercase tracking-wider block mb-1">A Pagar</span>
-              <span className="text-xl font-bold text-foreground">{formatCurrency(data.aPagar, currencyMode)}</span>
-              <p className="text-[10px] text-muted-foreground mt-1 group-hover/pagar:text-destructive transition-colors">{data.aPagarCount} compromissos agendados →</p>
+              <span className="text-xs font-bold text-red-600 uppercase tracking-wider block mb-1">A Pagar</span>
+              <span className="text-xl font-bold text-slate-800">{formatCurrency(data.aPagar, currencyMode)}</span>
+              <p className="text-[10px] text-slate-500 mt-1 group-hover/pagar:text-red-500 transition-colors">{data.aPagarCount} compromissos agendados →</p>
             </button>
             <button
               onClick={onClickAReceber}
-              className="p-4 bg-primary/5 border border-primary/15 rounded-2xl text-left hover:bg-primary/5 hover:border-primary/20 hover:shadow-soft transition-all cursor-pointer group/receber"
+              className="p-4 bg-emerald-50/50 border border-emerald-100 rounded-2xl text-left hover:bg-emerald-50 hover:border-emerald-200 hover:shadow-sm transition-all cursor-pointer group/receber"
             >
-              <span className="text-xs font-bold text-primary uppercase tracking-wider block mb-1">A Receber</span>
-              <span className="text-xl font-bold text-foreground">{formatCurrency(data.aReceber, currencyMode)}</span>
-              <p className="text-[10px] text-muted-foreground mt-1 group-hover/receber:text-primary transition-colors">{data.aReceberCount} recebimentos previstos →</p>
+              <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider block mb-1">A Receber</span>
+              <span className="text-xl font-bold text-slate-800">{formatCurrency(data.aReceber, currencyMode)}</span>
+              <p className="text-[10px] text-slate-500 mt-1 group-hover/receber:text-emerald-600 transition-colors">{data.aReceberCount} recebimentos previstos →</p>
             </button>
           </div>
 
@@ -59,14 +59,14 @@ export function ShortTermRadarCard({ data, currencyMode, onClickAPagar, onClickA
           <div className="space-y-4">
             <div className="flex justify-between items-end">
               <div>
-                <span className="text-sm font-medium text-muted-foreground block">Gap de Liquidez</span>
-                <span className={`text-2xl font-bold ${isDeficit ? 'text-destructive' : 'text-primary'}`}>
+                <span className="text-sm font-medium text-slate-500 block">Gap de Liquidez</span>
+                <span className={`text-2xl font-bold ${isDeficit ? 'text-red-600' : 'text-emerald-600'}`}>
                   {isDeficit ? '-' : '+'}{formatCurrency(Math.abs(gap), currencyMode)}
                 </span>
               </div>
               <div className="text-right">
-                <span className="text-xs font-bold text-muted-foreground uppercase block">Cobertura</span>
-                <span className={`text-sm font-bold ${coverage >= 100 ? 'text-primary' : coverage >= 50 ? 'text-amber-600' : 'text-destructive'}`}>
+                <span className="text-xs font-bold text-slate-400 uppercase block">Cobertura</span>
+                <span className={`text-sm font-bold ${coverage >= 100 ? 'text-emerald-600' : coverage >= 50 ? 'text-amber-600' : 'text-red-600'}`}>
                   {coverage}%
                 </span>
               </div>
@@ -80,21 +80,21 @@ export function ShortTermRadarCard({ data, currencyMode, onClickAPagar, onClickA
                 initial={{ width: 0 }}
                 animate={{ width: `${coverage}%` }}
                 transition={{ duration: 1.5, delay: 1 }}
-                className={`absolute top-0 left-0 h-full rounded-full ${coverage >= 100 ? 'bg-primary' : 'bg-primary'}`}
+                className={`absolute top-0 left-0 h-full rounded-full ${coverage >= 100 ? 'bg-emerald-500' : 'bg-emerald-500'}`}
               />
             </div>
 
             {isDeficit ? (
               <div className="flex items-center gap-2 p-3 bg-amber-50 border border-amber-100 rounded-xl">
                 <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse shrink-0" />
-                <p className="text-xs text-foreground font-medium">
+                <p className="text-xs text-slate-900 font-medium">
                   Atenção: Os recebimentos cobrem apenas <span className="font-bold">{coverage}%</span> dos compromissos. Déficit de <span className="font-bold">{formatCurrency(gap, currencyMode)}</span> nos próximos 30 dias.
                 </p>
               </div>
             ) : (
-              <div className="flex items-center gap-2 p-3 bg-primary/5 border border-primary/15 rounded-xl">
-                <div className="w-2 h-2 bg-primary rounded-full shrink-0" />
-                <p className="text-xs text-foreground font-medium">
+              <div className="flex items-center gap-2 p-3 bg-emerald-50 border border-emerald-100 rounded-xl">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full shrink-0" />
+                <p className="text-xs text-slate-900 font-medium">
                   Recebimentos cobrem 100% dos compromissos com superávit de <span className="font-bold">{formatCurrency(Math.abs(gap), currencyMode)}</span>.
                 </p>
               </div>
@@ -104,7 +104,7 @@ export function ShortTermRadarCard({ data, currencyMode, onClickAPagar, onClickA
           {/* Action Button */}
           <button
             onClick={onClickVerDetalhado}
-            className="w-full py-3 bg-card border border-border text-foreground rounded-xl font-bold text-sm hover:bg-accent hover:border-border transition-all flex items-center justify-center gap-2 mt-2 shadow-soft cursor-pointer"
+            className="w-full py-3 bg-white border border-slate-200 text-slate-700 rounded-xl font-bold text-sm hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2 mt-2 shadow-sm cursor-pointer"
           >
             Ver Fluxo Diário Detalhado
             <ArrowUpRight className="w-4 h-4" />

@@ -3,7 +3,7 @@ import { Pencil } from 'lucide-react';
 import type { CurrencyMode } from '@/lib/formatters';
 
 const formatValue = (value: number, currencyMode: CurrencyMode) => {
-  if (value === 0) return <span className="text-muted-foreground">-</span>;
+  if (value === 0) return <span className="text-[#B0B0B0]">-</span>;
 
   let displayValue = value;
   if (currencyMode === 'SOJA') displayValue = value / 120;
@@ -120,7 +120,7 @@ export function EditableCell({
       <div className="relative w-full">
         <input
           autoFocus
-          className="w-full text-right bg-card border border-border rounded px-1 py-0.5 text-foreground outline-none focus:ring-2 focus:ring-ring font-mono text-sm"
+          className="w-full text-right bg-white border border-slate-300 rounded px-1 py-0.5 text-slate-800 outline-none focus:ring-2 focus:ring-slate-200 font-mono text-sm"
           value={inputValue}
           onChange={handleInputChange}
           onBlur={handleSave}
@@ -135,7 +135,7 @@ export function EditableCell({
           placeholder="Ex: 200 * 150"
         />
         {isExpression && previewResult !== null && (
-          <div className="absolute top-full left-0 mt-1 z-[100] bg-slate-900 text-white text-[10px] px-2 py-1 rounded shadow-elevated font-bold whitespace-nowrap flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
+          <div className="absolute top-full left-0 mt-1 z-[100] bg-slate-900 text-white text-[10px] px-2 py-1 rounded shadow-lg font-bold whitespace-nowrap flex items-center gap-1 animate-in fade-in slide-in-from-top-1">
             <span className="opacity-70">=</span>
             {formatFullValue(previewResult, currencyMode)}
           </div>
@@ -149,8 +149,8 @@ export function EditableCell({
       className="w-full h-full flex items-center justify-end group/cell cursor-pointer"
       onClick={handleEditClick}
     >
-      <Pencil className="h-3 w-3 text-muted-foreground opacity-0 group-hover/cell:opacity-100 mr-1.5 transition-opacity" />
-      <span className="transition-colors border-b border-transparent group-hover/cell:border-border whitespace-nowrap">
+      <Pencil className="h-3 w-3 text-slate-400 opacity-0 group-hover/cell:opacity-100 mr-1.5 transition-opacity" />
+      <span className="transition-colors border-b border-transparent group-hover/cell:border-slate-300 whitespace-nowrap">
         {formatValue(value, currencyMode)}
       </span>
     </div>

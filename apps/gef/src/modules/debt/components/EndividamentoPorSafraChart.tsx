@@ -49,10 +49,10 @@ export function EndividamentoPorSafraChart({ data, currencyMode, sojaPrice = 120
   if (!data.length) return null;
 
   return (
-    <GlassCard className="p-6 flex flex-col hover:shadow-card transition-all duration-300">
+    <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
       <div className="mb-4">
-        <h3 className="text-lg font-bold text-foreground">Endividamento por Safra</h3>
-        <p className="text-sm text-muted-foreground mt-0.5">Composição por categoria</p>
+        <h3 className="text-lg font-bold text-slate-800">Endividamento por Safra</h3>
+        <p className="text-sm text-slate-400 mt-0.5">Composição por categoria</p>
       </div>
 
       <div className="h-[300px] w-full">
@@ -97,7 +97,7 @@ export function EndividamentoPorSafraChart({ data, currencyMode, sojaPrice = 120
               iconType="circle"
               iconSize={8}
               formatter={(value) => (
-                <span className="text-muted-foreground text-xs font-medium">
+                <span className="text-slate-600 text-xs font-medium">
                   {value === 'custeios' ? 'Custeios'
                     : value === 'investimentos' ? 'Investimentos'
                     : 'Investimentos em Dólar'}

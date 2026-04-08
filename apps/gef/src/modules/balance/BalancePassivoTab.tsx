@@ -58,9 +58,9 @@ const PercentChange = ({ prev, curr, label }: { prev: number; curr: number; labe
   const pct = ((curr - prev) / Math.abs(prev)) * 100;
   const isDown = pct < 0; // for passivo, queda é positivo (bom)
   const Icon = isDown ? ArrowDown : ArrowUp;
-  const color = isDown ? 'text-primary' : 'text-destructive';
+  const color = isDown ? 'text-emerald-500' : 'text-red-500';
   return (
-    <div className="flex items-center gap-1.5 mt-2 text-muted-foreground text-xs">
+    <div className="flex items-center gap-1.5 mt-2 text-slate-500 text-xs">
       <Icon className={`h-3 w-3 ${color}`} />
       <span className={`${color} font-medium`}>{Math.abs(pct).toFixed(1)}%</span>
       {label && <span>— {label}</span>}
@@ -131,21 +131,21 @@ const HorizontalBarChart = ({ detailedData, title, subtitle, icon: Icon, classNa
     const groupName = item.group || item.name;
     if (groupName === 'Financeiro') return 'bg-blue-600';
     if (groupName === 'Produtos') return 'bg-purple-600';
-    return 'bg-primary';
+    return 'bg-emerald-600';
   };
 
   return (
-    <GlassCard className={cn("p-6 flex flex-col border-border/60 hover:shadow-card transition-all duration-300", className)}>
+    <GlassCard className={cn("p-6 flex flex-col border-slate-200/60 hover:shadow-md transition-all duration-300", className)}>
       <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-6 gap-4">
         <div className="flex items-center gap-3">
-          <Icon className="h-6 w-6 text-foreground shrink-0" />
+          <Icon className="h-6 w-6 text-slate-800 shrink-0" />
           <div className="flex flex-col text-left">
-            <h3 className="text-lg font-semibold text-foreground">{title}</h3>
-            <p className="text-xs text-muted-foreground italic">{subtitle}</p>
+            <h3 className="text-lg font-semibold text-slate-800">{title}</h3>
+            <p className="text-xs text-slate-500 italic">{subtitle}</p>
           </div>
         </div>
         
-        <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-lg self-start sm:self-auto">
+        <div className="flex items-center gap-1 bg-slate-100/50 p-1 rounded-lg self-start sm:self-auto">
           {[
             { id: 'liquidity', label: 'Liq.' },
             { id: 'value', label: 'Val.' },
@@ -157,8 +157,8 @@ const HorizontalBarChart = ({ detailedData, title, subtitle, icon: Icon, classNa
               className={cn(
                 "px-2 py-1 text-[10px] font-bold uppercase tracking-wider rounded transition-all flex items-center gap-1",
                 sortBy === opt.id 
-                  ? "bg-card text-foreground shadow-soft" 
-                  : "text-muted-foreground hover:text-muted-foreground"
+                  ? "bg-white text-slate-800 shadow-sm" 
+                  : "text-slate-400 hover:text-slate-600"
               )}
             >
               {opt.id === 'name' && sortBy === 'name' ? (sortDirection === 'asc' ? 'A-Z' : 'Z-A') : opt.label}
@@ -173,12 +173,12 @@ const HorizontalBarChart = ({ detailedData, title, subtitle, icon: Icon, classNa
       <div className="flex flex-col flex-1 gap-3 justify-between py-2">
         {sortedData.map((item, index) => (
           <div key={`${sortBy}-${index}`} className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm">
-            <div className="w-20 sm:w-32 flex items-center gap-1 sm:gap-2 text-muted-foreground">
+            <div className="w-20 sm:w-32 flex items-center gap-1 sm:gap-2 text-slate-600">
               <div className="flex-1"></div>
               <span className="truncate text-right" title={item.name}>{item.name}</span>
             </div>
             <div 
-              className="flex-1 bg-muted rounded-sm overflow-hidden flex items-center h-5 sm:h-6"
+              className="flex-1 bg-slate-100 rounded-sm overflow-hidden flex items-center h-5 sm:h-6"
               title={`${item.name}\n${formatCurrency(item.value)}`}
             >
               <motion.div 
@@ -188,7 +188,7 @@ const HorizontalBarChart = ({ detailedData, title, subtitle, icon: Icon, classNa
                 className={cn("h-full rounded-sm", getBarColor(item))}
               />
             </div>
-            <div className="w-24 sm:w-28 shrink-0 text-left text-foreground font-medium text-[10px] sm:text-xs">
+            <div className="w-24 sm:w-28 shrink-0 text-left text-slate-700 font-medium text-[10px] sm:text-xs">
               {formatMi(item.value)} | {item.percent.toFixed(1).replace('.', ',')}%
             </div>
           </div>
@@ -247,9 +247,9 @@ export function BalancePassivoTab({ viewMode = 'Detalhamento', importedTableData
         <React.Fragment key={row.id}>
           <div
             className={cn(
-              "grid items-center py-2.5 px-4 border-b border-border/50 transition-colors hover:bg-muted",
-              isLevel0 ? "bg-accent/80 font-semibold text-foreground" : "",
-              isLevel1 ? "font-medium text-foreground" : "text-muted-foreground text-sm",
+              "grid items-center py-2.5 px-4 border-b border-slate-100 transition-colors hover:bg-slate-100",
+              isLevel0 ? "bg-slate-50/80 font-semibold text-slate-800" : "",
+              isLevel1 ? "font-medium text-slate-700" : "text-slate-600 text-sm",
               hasChildren ? "cursor-pointer" : ""
             )}
             style={gridStyle}
@@ -259,7 +259,7 @@ export function BalancePassivoTab({ viewMode = 'Detalhamento', importedTableData
               <div style={{ width: `${row.level * 24}px` }} className="shrink-0" />
               {hasChildren ? (
                 <button
-                  className="p-0.5 text-muted-foreground hover:text-foreground transition-colors shrink-0 pointer-events-none"
+                  className="p-0.5 text-slate-500 hover:text-slate-800 transition-colors shrink-0 pointer-events-none"
                 >
                   {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
                 </button>
@@ -296,17 +296,17 @@ export function BalancePassivoTab({ viewMode = 'Detalhamento', importedTableData
     return (
       <div key={node.id} className="relative pl-8 py-2">
         {/* Connection line from parent */}
-        <div className="absolute left-0 top-0 bottom-0 w-px bg-muted" style={{ bottom: isLast ? '50%' : '0' }} />
+        <div className="absolute left-0 top-0 bottom-0 w-px bg-slate-200" style={{ bottom: isLast ? '50%' : '0' }} />
         {/* Horizontal line to this node */}
-        <div className="absolute left-0 top-1/2 w-8 h-px bg-muted" />
+        <div className="absolute left-0 top-1/2 w-8 h-px bg-slate-200" />
         
-        <GlassCard className="p-3 inline-flex flex-col gap-1 border-border/60 shadow-soft hover:shadow-card transition-all relative z-10 bg-card/80">
-          <span className="font-semibold text-foreground text-sm">{node.name}</span>
+        <GlassCard className="p-3 inline-flex flex-col gap-1 border-slate-200/60 shadow-sm hover:shadow-md transition-all relative z-10 bg-white/80">
+          <span className="font-semibold text-slate-700 text-sm">{node.name}</span>
           <div className="flex gap-4 text-xs">
             {TABLE_COLUMNS.map((col, i) => (
               <div key={col} className="flex flex-col">
-                <span className="text-muted-foreground">{col}</span>
-                <span className={cn("font-medium", i === node.values.length - 1 ? "text-primary" : "text-muted-foreground")}>
+                <span className="text-slate-400">{col}</span>
+                <span className={cn("font-medium", i === node.values.length - 1 ? "text-emerald-600" : "text-slate-600")}>
                   {formatCurrency(node.values[i])}
                 </span>
               </div>
@@ -324,16 +324,16 @@ export function BalancePassivoTab({ viewMode = 'Detalhamento', importedTableData
   };
 
   const renderTree = () => (
-    <div className="p-4 md:p-6 overflow-auto custom-scrollbar bg-accent/50 rounded-xl border border-border/60">
+    <div className="p-4 md:p-6 overflow-auto custom-scrollbar bg-slate-50/50 rounded-xl border border-slate-200/60">
       {activeTableData.map((rootNode, idx) => (
         <div key={rootNode.id} className="mb-8 last:mb-0">
-          <GlassCard className="p-4 inline-flex flex-col gap-1 border-primary/20 shadow-soft bg-primary/5 relative z-10 mb-2">
-            <span className="font-bold text-primary text-base">{rootNode.name}</span>
+          <GlassCard className="p-4 inline-flex flex-col gap-1 border-emerald-200/60 shadow-sm bg-emerald-50/50 relative z-10 mb-2">
+            <span className="font-bold text-emerald-800 text-base">{rootNode.name}</span>
             <div className="flex gap-6 text-sm">
               {TABLE_COLUMNS.map((col, i) => (
                 <div key={col} className="flex flex-col">
-                  <span className="text-primary/70">{col}</span>
-                  <span className="font-semibold text-primary">{formatCurrency(rootNode.values[i])}</span>
+                  <span className="text-emerald-600/70">{col}</span>
+                  <span className="font-semibold text-emerald-700">{formatCurrency(rootNode.values[i])}</span>
                 </div>
               ))}
             </div>
@@ -349,11 +349,11 @@ export function BalancePassivoTab({ viewMode = 'Detalhamento', importedTableData
   );
 
   const renderTable = (isDetalhamento: boolean = false) => (
-    <GlassCard className={cn("p-4 md:p-6 flex flex-col border-border/60", isDetalhamento ? "h-full" : "h-fit")}>
+    <GlassCard className={cn("p-4 md:p-6 flex flex-col border-slate-200/60", isDetalhamento ? "h-full" : "h-fit")}>
       <div className="flex items-center justify-between mb-4 shrink-0">
-        <h3 className="text-lg font-semibold text-foreground">por Grupo Contábil</h3>
-        <div className="text-sm text-muted-foreground">
-          <span className="inline-block w-3 h-3 rounded-full bg-muted mr-2"></span>
+        <h3 className="text-lg font-semibold text-slate-700">por Grupo Contábil</h3>
+        <div className="text-sm text-slate-500">
+          <span className="inline-block w-3 h-3 rounded-full bg-slate-200 mr-2"></span>
           Valores em R$
         </div>
       </div>
@@ -362,7 +362,7 @@ export function BalancePassivoTab({ viewMode = 'Detalhamento', importedTableData
         <div className="overflow-x-auto flex-1 flex flex-col custom-scrollbar">
           <div className="min-w-[500px] flex flex-col h-full">
             {/* Table Header */}
-            <div className="grid py-3 px-4 bg-muted text-foreground rounded-t-lg font-medium text-sm shrink-0" style={gridStyle}>
+            <div className="grid py-3 px-4 bg-slate-100 text-slate-700 rounded-t-lg font-medium text-sm shrink-0" style={gridStyle}>
               <div>Grupo Contábil</div>
               {TABLE_COLUMNS.map(col => (
                 <div key={col} className="text-right">{col}</div>
@@ -370,12 +370,12 @@ export function BalancePassivoTab({ viewMode = 'Detalhamento', importedTableData
             </div>
 
             {/* Table Body */}
-            <div className={cn("border border-t-0 border-border bg-card/50 flex-1", isDetalhamento ? "overflow-y-auto custom-scrollbar" : "")}>
+            <div className={cn("border border-t-0 border-slate-200 bg-white/50 flex-1", isDetalhamento ? "overflow-y-auto custom-scrollbar" : "")}>
               {renderTableRows(activeTableData)}
             </div>
 
             {/* Table Footer */}
-            <div className="grid py-3 px-4 bg-accent/80 border border-t-0 border-border rounded-b-lg font-bold text-foreground shrink-0" style={gridStyle}>
+            <div className="grid py-3 px-4 bg-slate-50/80 border border-t-0 border-slate-200 rounded-b-lg font-bold text-slate-800 shrink-0" style={gridStyle}>
               <div>Total</div>
               {totals.map((t, i) => (
                 <div key={i} className="text-right">{formatCurrency(t)}</div>
@@ -397,18 +397,18 @@ export function BalancePassivoTab({ viewMode = 'Detalhamento', importedTableData
       {/* Top KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
         {/* Passivo */}
-        <GlassCard className="p-4 md:p-6 flex flex-col justify-between relative overflow-hidden group hover:shadow-elevated transition-all duration-300 border-border/60">
-          <div className="absolute -right-6 -top-6 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all"></div>
+        <GlassCard className="p-4 md:p-6 flex flex-col justify-between relative overflow-hidden group hover:shadow-lg transition-all duration-300 border-slate-200/60">
+          <div className="absolute -right-6 -top-6 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
           
           <div className="flex items-center gap-3 mb-2">
-            <Briefcase className="h-6 w-6 text-foreground" />
+            <Briefcase className="h-6 w-6 text-slate-800" />
             <div className="flex flex-col">
-              <span className="text-foreground font-semibold text-lg">Passivo</span>
+              <span className="text-slate-800 font-semibold text-lg">Passivo</span>
             </div>
           </div>
           
           <div className="flex flex-col items-start mt-4">
-            <span className="text-2xl lg:text-3xl font-bold text-foreground tracking-tight">
+            <span className="text-2xl lg:text-3xl font-bold text-slate-800 tracking-tight">
               {formatCurrency(totalPassivo)}
             </span>
             {prevIdx >= 0 && totalPassivoPrev > 0 && (
@@ -418,18 +418,18 @@ export function BalancePassivoTab({ viewMode = 'Detalhamento', importedTableData
         </GlassCard>
 
         {/* Passivo Circulante */}
-        <GlassCard className="p-4 md:p-6 flex flex-col justify-between relative overflow-hidden group hover:shadow-elevated transition-all duration-300 border-border/60">
-          <div className="absolute -right-6 -top-6 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all"></div>
+        <GlassCard className="p-4 md:p-6 flex flex-col justify-between relative overflow-hidden group hover:shadow-lg transition-all duration-300 border-slate-200/60">
+          <div className="absolute -right-6 -top-6 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
 
           <div className="flex items-center gap-3 mb-2">
-            <Calendar className="h-6 w-6 text-foreground" />
+            <Calendar className="h-6 w-6 text-slate-800" />
             <div className="flex flex-col">
-              <span className="text-foreground font-semibold text-lg">Passivo Circulante</span>
+              <span className="text-slate-800 font-semibold text-lg">Passivo Circulante</span>
             </div>
           </div>
 
           <div className="flex flex-col items-start mt-4">
-            <span className="text-2xl lg:text-3xl font-bold text-foreground tracking-tight">
+            <span className="text-2xl lg:text-3xl font-bold text-slate-800 tracking-tight">
               {formatCurrency(passivoCircTotal)}
             </span>
             {prevIdx >= 0 && passivoCircPrev > 0 && (
@@ -439,18 +439,18 @@ export function BalancePassivoTab({ viewMode = 'Detalhamento', importedTableData
         </GlassCard>
 
         {/* Passivo Não Circulante */}
-        <GlassCard className="p-4 md:p-6 flex flex-col justify-between relative overflow-hidden group hover:shadow-elevated transition-all duration-300 border-border/60">
-          <div className="absolute -right-6 -top-6 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all"></div>
+        <GlassCard className="p-4 md:p-6 flex flex-col justify-between relative overflow-hidden group hover:shadow-lg transition-all duration-300 border-slate-200/60">
+          <div className="absolute -right-6 -top-6 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
 
           <div className="flex items-center gap-3 mb-2">
-            <Hourglass className="h-6 w-6 text-foreground" />
+            <Hourglass className="h-6 w-6 text-slate-800" />
             <div className="flex flex-col">
-              <span className="text-foreground font-semibold text-lg">Passivo Não Circulante</span>
+              <span className="text-slate-800 font-semibold text-lg">Passivo Não Circulante</span>
             </div>
           </div>
 
           <div className="flex flex-col items-start mt-4">
-            <span className="text-2xl lg:text-3xl font-bold text-foreground tracking-tight">
+            <span className="text-2xl lg:text-3xl font-bold text-slate-800 tracking-tight">
               {formatCurrency(passivoNaoCircTotal)}
             </span>
             {prevIdx >= 0 && passivoNaoCircPrev > 0 && (

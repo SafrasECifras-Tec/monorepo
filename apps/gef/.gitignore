@@ -14,4 +14,3 @@ agents.md
 .wrangler
 .dev.vars*
 !.dev.vars.example
-.claude/

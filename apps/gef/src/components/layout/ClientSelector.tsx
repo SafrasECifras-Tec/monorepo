@@ -105,7 +105,7 @@ export function ClientSelector({ isCollapsed = false }: ClientSelectorProps) {
         <button
           onClick={() => setIsOpen(!isOpen)}
           title={activeClient?.name ?? 'Selecionar cliente'}
-          className="p-2 rounded-xl text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-primary transition-all"
+          className="p-2 rounded-xl text-slate-500 hover:bg-white/40 hover:text-emerald-600 transition-all"
         >
           <Users className="h-5 w-5" />
         </button>
@@ -116,27 +116,29 @@ export function ClientSelector({ isCollapsed = false }: ClientSelectorProps) {
   // ── Expanded ─────────────────────────────────────────────────────────────────
 
   return (
-    <div ref={dropdownRef} className="relative px-3 py-2">
+    <div ref={dropdownRef} className="relative px-4 py-2">
       {/* Trigger */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "w-full flex items-center gap-2 px-3 py-2.5 rounded-[1.25rem] transition-all duration-200 text-left",
+          "w-full flex items-center gap-2 px-3 py-2.5 rounded-xl border transition-all duration-200 text-left",
           isOpen
-            ? "bg-sidebar-accent text-sidebar-primary"
-            : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+            ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+            : "bg-white/40 border-white/50 text-slate-700 hover:bg-white/60 hover:border-slate-200"
         )}
       >
-        <Users className="h-4 w-4 shrink-0 text-sidebar-muted" />
-        <span className="flex-1 text-[13px] font-medium truncate">
+        <div className="h-6 w-6 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0">
+          <Users className="h-3.5 w-3.5 text-emerald-600" />
+        </div>
+        <span className="flex-1 text-sm font-medium truncate">
           {activeClient?.name ?? '—'}
         </span>
-        <ChevronDown className={cn("h-3.5 w-3.5 text-sidebar-muted transition-transform duration-200 shrink-0", isOpen && "rotate-180")} />
+        <ChevronDown className={cn("h-4 w-4 text-slate-400 transition-transform duration-200 shrink-0", isOpen && "rotate-180")} />
       </button>
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute left-4 right-4 top-full mt-1 z-50 bg-card rounded-xl shadow-float border border-border/80 overflow-hidden">
+        <div className="absolute left-4 right-4 top-full mt-1 z-50 bg-white rounded-xl shadow-lg border border-slate-200/80 overflow-hidden">
           {/* Lista de clientes */}
           <div className="max-h-56 overflow-y-auto py-1">
             {clients.map((client) => (
@@ -144,7 +146,7 @@ export function ClientSelector({ isCollapsed = false }: ClientSelectorProps) {
                 key={client.id}
                 className={cn(
                   "group flex items-center gap-2 px-3 py-2 transition-colors",
-                  client.id === activeClient?.id ? "bg-primary/5" : "hover:bg-accent"
+                  client.id === activeClient?.id ? "bg-emerald-50" : "hover:bg-slate-50"
                 )}
               >
                 {editingId === client.id ? (
@@ -155,12 +157,12 @@ export function ClientSelector({ isCollapsed = false }: ClientSelectorProps) {
                       value={editingName}
                       onChange={e => setEditingName(e.target.value)}
                       onKeyDown={e => handleKeyDown(e, confirmEdit, cancelEdit)}
-                      className="flex-1 text-sm px-2 py-0.5 rounded-lg border border-primary/30 bg-card outline-none focus:ring-2 focus:ring-primary/20"
+                      className="flex-1 text-sm px-2 py-0.5 rounded-lg border border-emerald-300 bg-white outline-none focus:ring-2 focus:ring-emerald-200"
                     />
-                    <button onClick={confirmEdit} className="p-1 text-primary hover:text-primary/80">
+                    <button onClick={confirmEdit} className="p-1 text-emerald-600 hover:text-emerald-700">
                       <Check className="h-3.5 w-3.5" />
                     </button>
-                    <button onClick={cancelEdit} className="p-1 text-muted-foreground hover:text-foreground">
+                    <button onClick={cancelEdit} className="p-1 text-slate-400 hover:text-slate-600">
                       <X className="h-3.5 w-3.5" />
                     </button>
                   </div>
@@ -172,13 +174,13 @@ export function ClientSelector({ isCollapsed = false }: ClientSelectorProps) {
                       className="flex-1 flex items-center gap-2 text-left min-w-0"
                     >
                       {client.id === activeClient?.id ? (
-                        <Check className="h-3.5 w-3.5 text-primary shrink-0" />
+                        <Check className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
                       ) : (
                         <div className="h-3.5 w-3.5 shrink-0" />
                       )}
                       <span className={cn(
                         "text-sm truncate",
-                        client.id === activeClient?.id ? "font-semibold text-primary" : "text-foreground"
+                        client.id === activeClient?.id ? "font-semibold text-emerald-800" : "text-slate-700"
                       )}>
                         {client.name}
                       </span>
@@ -189,7 +191,7 @@ export function ClientSelector({ isCollapsed = false }: ClientSelectorProps) {
                       <button
                         onClick={() => startEdit(client)}
                         title="Renomear"
-                        className="p-1 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors"
+                        className="p-1 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors"
                       >
                         <Pencil className="h-3.5 w-3.5" />
                       </button>
@@ -197,7 +199,7 @@ export function ClientSelector({ isCollapsed = false }: ClientSelectorProps) {
                         onClick={() => handleDelete(client.id)}
                         title={clients.length <= 1 ? 'Não é possível remover o único cliente' : 'Remover'}
                         disabled={clients.length <= 1}
-                        className="p-1 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                        className="p-1 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>
@@ -209,7 +211,7 @@ export function ClientSelector({ isCollapsed = false }: ClientSelectorProps) {
           </div>
 
           {/* Criar novo cliente */}
-          <div className="border-t border-border/50 p-2">
+          <div className="border-t border-slate-100 p-2">
             {isCreating ? (
               <div className="flex items-center gap-1 px-1">
                 <input
@@ -218,19 +220,19 @@ export function ClientSelector({ isCollapsed = false }: ClientSelectorProps) {
                   onChange={e => setNewName(e.target.value)}
                   onKeyDown={e => handleKeyDown(e, confirmCreate, cancelCreate)}
                   placeholder="Nome do cliente..."
-                  className="flex-1 text-sm px-2 py-1 rounded-lg border border-primary/30 bg-card outline-none focus:ring-2 focus:ring-primary/20"
+                  className="flex-1 text-sm px-2 py-1 rounded-lg border border-emerald-300 bg-white outline-none focus:ring-2 focus:ring-emerald-200"
                 />
-                <button onClick={confirmCreate} className="p-1.5 text-primary hover:text-primary/80">
+                <button onClick={confirmCreate} className="p-1.5 text-emerald-600 hover:text-emerald-700">
                   <Check className="h-3.5 w-3.5" />
                 </button>
-                <button onClick={cancelCreate} className="p-1.5 text-muted-foreground hover:text-foreground">
+                <button onClick={cancelCreate} className="p-1.5 text-slate-400 hover:text-slate-600">
                   <X className="h-3.5 w-3.5" />
                 </button>
               </div>
             ) : (
               <button
                 onClick={startCreate}
-                className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-primary hover:bg-primary/5 transition-colors font-medium"
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-emerald-700 hover:bg-emerald-50 transition-colors font-medium"
               >
                 <Plus className="h-4 w-4" />
                 Novo cliente

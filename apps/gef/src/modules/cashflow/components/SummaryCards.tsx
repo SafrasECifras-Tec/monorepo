@@ -25,7 +25,7 @@ export function SummaryCards({ stockData }: SummaryCardsProps) {
       label: 'Estoque Total',
       value: formatSacas(totalInicial),
       icon: <Package className="h-5 w-5" />,
-      iconBg: 'bg-muted text-muted-foreground',
+      iconBg: 'bg-slate-100 text-slate-600',
     },
     {
       label: 'Total Vendido',
@@ -37,7 +37,7 @@ export function SummaryCards({ stockData }: SummaryCardsProps) {
       label: 'Saldo a Comercializar',
       value: formatSacas(totalSaldo),
       icon: <Warehouse className="h-5 w-5" />,
-      iconBg: 'bg-primary/5 text-primary',
+      iconBg: 'bg-emerald-50 text-emerald-700',
     },
     {
       label: 'Receita Total',
@@ -53,8 +53,8 @@ export function SummaryCards({ stockData }: SummaryCardsProps) {
         <GlassCard key={c.label} className="p-5 flex items-center gap-4">
           <div className={cn('p-2.5 rounded-xl', c.iconBg)}>{c.icon}</div>
           <div className="min-w-0">
-            <p className="text-[14px] text-muted-foreground font-medium">{c.label}</p>
-            <p className="text-[24px] font-bold text-foreground truncate leading-tight">{c.value}</p>
+            <p className="text-[14px] text-slate-500 font-medium">{c.label}</p>
+            <p className="text-[24px] font-bold text-slate-800 truncate leading-tight">{c.value}</p>
           </div>
         </GlassCard>
       ))}

@@ -28,7 +28,7 @@ export function CropCard({ crop }: CropCardProps) {
       {/* Header da cultura */}
       <button
         onClick={() => setOpen((p) => !p)}
-        className="w-full flex items-center justify-between px-6 py-4 hover:bg-accent/60 transition-colors cursor-pointer"
+        className="w-full flex items-center justify-between px-6 py-4 hover:bg-slate-50/60 transition-colors cursor-pointer"
       >
         <div className="flex items-center gap-4">
           {/* Badge cultura */}
@@ -38,44 +38,44 @@ export function CropCard({ crop }: CropCardProps) {
 
           {/* Métricas rápidas */}
           <div className="hidden sm:flex items-center gap-6 text-sm">
-            <span className="text-muted-foreground">
+            <span className="text-slate-500">
               Estoque inicial:{' '}
-              <span className="font-semibold text-foreground">{formatSacas(crop.initialStock)}</span>
+              <span className="font-semibold text-slate-700">{formatSacas(crop.initialStock)}</span>
             </span>
-            <span className="text-muted-foreground">•</span>
-            <span className="text-muted-foreground">
+            <span className="text-slate-400">•</span>
+            <span className="text-slate-500">
               Vendido:{' '}
-              <span className="font-semibold text-foreground">{formatSacas(crop.soldStock)}</span>
-              <span className="ml-1 text-xs text-muted-foreground">({percentVend}%)</span>
+              <span className="font-semibold text-slate-700">{formatSacas(crop.soldStock)}</span>
+              <span className="ml-1 text-xs text-slate-400">({percentVend}%)</span>
             </span>
-            <span className="text-muted-foreground">•</span>
-            <span className="text-muted-foreground">
+            <span className="text-slate-400">•</span>
+            <span className="text-slate-500">
               Saldo:{' '}
-              <span className="font-semibold text-primary">{formatSacas(saldo)}</span>
+              <span className="font-semibold text-emerald-700">{formatSacas(saldo)}</span>
             </span>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="hidden md:flex flex-col items-end">
-            <span className="text-[10px] font-medium text-muted-foreground leading-none mb-0.5">Receita Realizada</span>
+            <span className="text-[10px] font-medium text-slate-400 leading-none mb-0.5">Receita Realizada</span>
             <span className="text-sm font-semibold text-blue-700">{fmtCurrency(receita)}</span>
           </div>
           {open
-            ? <ChevronDown className="h-4 w-4 text-muted-foreground" />
-            : <ChevronRight className="h-4 w-4 text-muted-foreground" />}
+            ? <ChevronDown className="h-4 w-4 text-slate-400" />
+            : <ChevronRight className="h-4 w-4 text-slate-400" />}
         </div>
       </button>
 
       {/* Barra de progresso de comercialização */}
       <div className="px-6 pb-3">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-xs text-muted-foreground">Comercialização</span>
-          <span className="text-xs font-medium text-muted-foreground">{percentVend}% vendido</span>
+          <span className="text-xs text-slate-400">Comercialização</span>
+          <span className="text-xs font-medium text-slate-600">{percentVend}% vendido</span>
         </div>
-        <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+        <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
           <div
-            className="h-full bg-primary rounded-full transition-all duration-500"
+            className="h-full bg-emerald-500 rounded-full transition-all duration-500"
             style={{ width: `${percentVend}%` }}
           />
         </div>
@@ -92,20 +92,20 @@ export function CropCard({ crop }: CropCardProps) {
             transition={{ duration: 0.25, ease: 'easeInOut' }}
             style={{ overflow: 'hidden' }}
           >
-            <div className="border-t border-border/50">
+            <div className="border-t border-slate-100">
               {/* Resumo de métricas (mobile) */}
-              <div className="sm:hidden px-6 py-3 grid grid-cols-3 gap-3 bg-accent/50">
+              <div className="sm:hidden px-6 py-3 grid grid-cols-3 gap-3 bg-slate-50/50">
                 <div>
-                  <p className="text-xs text-muted-foreground">Estoque</p>
-                  <p className="text-sm font-semibold text-foreground">{formatSacas(crop.initialStock)}</p>
+                  <p className="text-xs text-slate-400">Estoque</p>
+                  <p className="text-sm font-semibold text-slate-700">{formatSacas(crop.initialStock)}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Vendido</p>
-                  <p className="text-sm font-semibold text-foreground">{formatSacas(crop.soldStock)}</p>
+                  <p className="text-xs text-slate-400">Vendido</p>
+                  <p className="text-sm font-semibold text-slate-700">{formatSacas(crop.soldStock)}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Saldo</p>
-                  <p className="text-sm font-semibold text-primary">{formatSacas(saldo)}</p>
+                  <p className="text-xs text-slate-400">Saldo</p>
+                  <p className="text-sm font-semibold text-emerald-700">{formatSacas(saldo)}</p>
                 </div>
               </div>
 
@@ -113,24 +113,24 @@ export function CropCard({ crop }: CropCardProps) {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="bg-accent/80 border-b border-border/50">
-                      <th className="text-left px-6 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Data</th>
-                      <th className="text-right px-6 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Qtd. Sacas</th>
-                      <th className="text-right px-6 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Preço Médio</th>
-                      <th className="text-right px-6 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Valor Total</th>
+                    <tr className="bg-slate-50/80 border-b border-slate-100">
+                      <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Data</th>
+                      <th className="text-right px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Qtd. Sacas</th>
+                      <th className="text-right px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Preço Médio</th>
+                      <th className="text-right px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Valor Total</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-border/50">
+                  <tbody className="divide-y divide-slate-50">
                     {crop.sales.map((sale, idx) => (
-                      <tr key={idx} className="hover:bg-accent/60 transition-colors">
-                        <td className="px-6 py-3 text-muted-foreground tabular-nums">{sale.date}</td>
-                        <td className="px-6 py-3 text-right font-medium text-foreground tabular-nums">
+                      <tr key={idx} className="hover:bg-slate-50/60 transition-colors">
+                        <td className="px-6 py-3 text-slate-600 tabular-nums">{sale.date}</td>
+                        <td className="px-6 py-3 text-right font-medium text-slate-700 tabular-nums">
                           {sale.quantity.toLocaleString('pt-BR')} scs
                         </td>
-                        <td className="px-6 py-3 text-right text-muted-foreground tabular-nums">
+                        <td className="px-6 py-3 text-right text-slate-600 tabular-nums">
                           {fmtCurrency(sale.avgPrice)}
                         </td>
-                        <td className="px-6 py-3 text-right font-semibold text-foreground tabular-nums">
+                        <td className="px-6 py-3 text-right font-semibold text-slate-800 tabular-nums">
                           {fmtCurrency(sale.totalValue)}
                         </td>
                       </tr>
@@ -138,14 +138,14 @@ export function CropCard({ crop }: CropCardProps) {
                   </tbody>
                   {/* Rodapé com totais */}
                   <tfoot>
-                    <tr className="bg-accent/80 border-t border-border">
-                      <td className="px-6 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                    <tr className="bg-slate-50/80 border-t border-slate-200">
+                      <td className="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">
                         Total
                       </td>
-                      <td className="px-6 py-3 text-right font-bold text-foreground tabular-nums">
+                      <td className="px-6 py-3 text-right font-bold text-slate-700 tabular-nums">
                         {formatSacas(crop.soldStock)}
                       </td>
-                      <td className="px-6 py-3 text-right text-xs text-muted-foreground tabular-nums">
+                      <td className="px-6 py-3 text-right text-xs text-slate-400 tabular-nums">
                         Média: {fmtCurrency(avgPriceAll)}
                       </td>
                       <td className="px-6 py-3 text-right font-bold text-blue-700 tabular-nums">

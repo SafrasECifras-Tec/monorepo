@@ -25,6 +25,9 @@ export interface SafraData {
   precoMedioVenda: number;
   receitaBruta: number;
   custoTotal: number;
+  custoInsumos: number;
+  custoOperacao: number;
+  custoJuros: number;
   lucroBruto: number;
   despesasOperacionais: number;
   ebitda: number;
@@ -48,6 +51,7 @@ export const dreData: Record<Safra, SafraData> = {
     precoMedioVenda: 148,
     receitaBruta: 19633680,
     custoTotal: 13200000,
+    custoInsumos: 7260000, custoOperacao: 3960000, custoJuros: 1980000,
     lucroBruto: 6433680,
     despesasOperacionais: 2100000,
     ebitda: 5200000,
@@ -79,6 +83,7 @@ export const dreData: Record<Safra, SafraData> = {
     precoMedioVenda: 135,
     receitaBruta: 20027250,
     custoTotal: 14100000,
+    custoInsumos: 7755000, custoOperacao: 4230000, custoJuros: 2115000,
     lucroBruto: 5927250,
     despesasOperacionais: 2300000,
     ebitda: 4800000,
@@ -110,6 +115,7 @@ export const dreData: Record<Safra, SafraData> = {
     precoMedioVenda: 122,
     receitaBruta: 19812800,
     custoTotal: 14900000,
+    custoInsumos: 8195000, custoOperacao: 4470000, custoJuros: 2235000,
     lucroBruto: 4912800,
     despesasOperacionais: 2450000,
     ebitda: 3800000,
@@ -141,6 +147,7 @@ export const dreData: Record<Safra, SafraData> = {
     precoMedioVenda: 131,
     receitaBruta: 23678250,
     custoTotal: 15900000,
+    custoInsumos: 8745000, custoOperacao: 4770000, custoJuros: 2385000,
     lucroBruto: 7778250,
     despesasOperacionais: 2650000,
     ebitda: 6400000,

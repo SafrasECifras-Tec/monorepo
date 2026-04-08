@@ -22,7 +22,7 @@ interface BalanceInicioTabProps {
   selectedColumn: string;
 }
 
-const PIE_COLORS = ['#267046', '#e06050', '#d4a017', '#3b82f6', '#8b5cf6', '#0f766e', '#dc2626', '#b45309'];
+const PIE_COLORS = ['#2563eb', '#7c3aed', '#475569', '#0ea5e9', '#b45309', '#0f766e', '#dc2626', '#059669'];
 
 const norm = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -56,7 +56,7 @@ const PercentChange = ({ prev, curr }: { prev: number; curr: number }) => {
   const pct = ((curr - prev) / Math.abs(prev)) * 100;
   const isUp = pct > 0;
   const Icon = isUp ? ArrowUp : ArrowDown;
-  const color = isUp ? 'text-primary' : 'text-destructive';
+  const color = isUp ? 'text-emerald-500' : 'text-red-500';
   return (
     <div className={`flex items-center gap-0.5 ${color} text-xs font-semibold`}>
       <Icon className="h-3 w-3" />
@@ -74,20 +74,20 @@ const CustomTooltip = ({ active, payload, total }: any) => {
       initial={{ opacity: 0, x: 10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.2 }}
-      className="bg-card p-3 rounded-xl shadow-elevated border border-border/50 min-w-[200px] z-50 pointer-events-none"
+      className="bg-white p-3 rounded-xl shadow-xl border border-slate-100 min-w-[200px] z-50 pointer-events-none"
     >
       <div className="flex items-center gap-2 mb-2">
         <div className="w-3 h-3 rounded-full" style={{ backgroundColor: data.color }}></div>
-        <span className="font-semibold text-foreground">{data.name}</span>
+        <span className="font-semibold text-slate-700">{data.name}</span>
       </div>
       <div className="flex flex-col gap-1.5">
         <div className="flex justify-between items-center gap-4">
-          <span className="text-sm text-muted-foreground">Valor:</span>
-          <span className="text-sm font-medium text-foreground">{formatCurrency(data.value, 'BRL', false)}</span>
+          <span className="text-sm text-slate-500">Valor:</span>
+          <span className="text-sm font-medium text-slate-900">{formatCurrency(data.value, 'BRL', false)}</span>
         </div>
         <div className="flex justify-between items-center gap-4">
-          <span className="text-sm text-muted-foreground">Participação:</span>
-          <span className="text-sm font-medium text-foreground">{percentage}%</span>
+          <span className="text-sm text-slate-500">Participação:</span>
+          <span className="text-sm font-medium text-slate-900">{percentage}%</span>
         </div>
       </div>
     </motion.div>
@@ -113,26 +113,26 @@ const PieSection = ({
   setHovered: (v: string | null) => void;
   currencyMode: 'BRL' | 'SOJA';
 }) => (
-  <GlassCard className="p-4 md:p-6 flex flex-col hover:shadow-card transition-all duration-300 border-border/60 min-h-[280px]">
+  <GlassCard className="p-4 md:p-6 flex flex-col hover:shadow-md transition-all duration-300 border-slate-200/60 min-h-[280px]">
     <div className="flex items-center gap-2 mb-6">
-      <Icon className="h-6 w-6 text-foreground" />
-      <h3 className="text-lg font-semibold text-foreground">{title}</h3>
+      <Icon className="h-6 w-6 text-slate-800" />
+      <h3 className="text-lg font-semibold text-slate-800">{title}</h3>
     </div>
 
     <div className="flex flex-col xl:flex-row items-start xl:items-center gap-6 mt-auto">
       <div className="flex flex-col items-start xl:w-1/3 shrink-0">
-        <span className="text-2xl lg:text-3xl font-bold text-foreground tracking-tight">
+        <span className="text-2xl lg:text-3xl font-bold text-slate-800 tracking-tight">
           {formatCurrency(total, currencyMode)}
         </span>
         {prevTotal > 0 && (
-          <div className="flex items-center gap-1.5 mt-2 text-muted-foreground text-xs">
+          <div className="flex items-center gap-1.5 mt-2 text-slate-500 text-xs">
             <PercentChange prev={prevTotal} curr={total} />
             <span>em relação à coluna anterior</span>
           </div>
         )}
       </div>
 
-      <div className="flex items-center gap-6 w-full xl:flex-1 justify-start xl:justify-center pt-4 xl:pt-0 border-t xl:border-t-0 border-border">
+      <div className="flex items-center gap-6 w-full xl:flex-1 justify-start xl:justify-center pt-4 xl:pt-0 border-t xl:border-t-0 border-slate-200">
         <div className="w-40 h-40 shrink-0">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -183,12 +183,12 @@ const PieSection = ({
             >
               <div className="flex items-center gap-2 mb-1">
                 <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: entry.color }}></div>
-                <span className={`text-xs transition-colors duration-200 ${hovered === entry.name ? 'font-bold text-foreground' : 'font-medium text-muted-foreground'} leading-none`}>
+                <span className={`text-xs transition-colors duration-200 ${hovered === entry.name ? 'font-bold text-slate-800' : 'font-medium text-slate-500'} leading-none`}>
                   {entry.name.length > 20 ? entry.name.slice(0, 18) + '…' : entry.name}
                 </span>
               </div>
               <div className="flex items-center gap-2 pl-4">
-                <span className="text-sm font-semibold text-foreground">{formatCurrency(entry.value, currencyMode, true)}</span>
+                <span className="text-sm font-semibold text-slate-800">{formatCurrency(entry.value, currencyMode, true)}</span>
               </div>
             </div>
           ))}
@@ -268,18 +268,18 @@ export function BalanceInicioTab({ ativo, passivo, columns, selectedColumn }: Ba
       {/* Top KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
         {/* Ativo */}
-        <GlassCard className="p-4 md:p-6 flex flex-col justify-between relative group hover:shadow-elevated transition-all duration-300 border-border/60">
-          <div className="absolute -right-6 -top-6 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all overflow-hidden"></div>
+        <GlassCard className="p-4 md:p-6 flex flex-col justify-between relative group hover:shadow-lg transition-all duration-300 border-slate-200/60">
+          <div className="absolute -right-6 -top-6 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all overflow-hidden"></div>
           <div className="flex items-center gap-3 mb-2">
-            <Wallet className="h-6 w-6 text-foreground" />
-            <span className="text-foreground font-semibold text-lg">Ativo</span>
+            <Wallet className="h-6 w-6 text-slate-800" />
+            <span className="text-slate-800 font-semibold text-lg">Ativo</span>
           </div>
           <div className="flex flex-col items-start mt-4">
-            <span className="text-2xl lg:text-3xl font-bold text-foreground tracking-tight">
+            <span className="text-2xl lg:text-3xl font-bold text-slate-800 tracking-tight">
               {formatCurrency(totalAtivo, currencyMode)}
             </span>
             {prevAtivo > 0 && (
-              <div className="flex items-center gap-1.5 mt-2 text-muted-foreground text-xs">
+              <div className="flex items-center gap-1.5 mt-2 text-slate-500 text-xs">
                 <PercentChange prev={prevAtivo} curr={totalAtivo} />
                 <span>em relação à coluna anterior</span>
               </div>
@@ -288,18 +288,18 @@ export function BalanceInicioTab({ ativo, passivo, columns, selectedColumn }: Ba
         </GlassCard>
 
         {/* Passivo */}
-        <GlassCard className="p-4 md:p-6 flex flex-col justify-between relative group hover:shadow-elevated transition-all duration-300 border-border/60">
-          <div className="absolute -right-6 -top-6 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all overflow-hidden"></div>
+        <GlassCard className="p-4 md:p-6 flex flex-col justify-between relative group hover:shadow-lg transition-all duration-300 border-slate-200/60">
+          <div className="absolute -right-6 -top-6 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all overflow-hidden"></div>
           <div className="flex items-center gap-3 mb-2">
-            <Briefcase className="h-6 w-6 text-foreground" />
-            <span className="text-foreground font-semibold text-lg">Passivo</span>
+            <Briefcase className="h-6 w-6 text-slate-800" />
+            <span className="text-slate-800 font-semibold text-lg">Passivo</span>
           </div>
           <div className="flex flex-col items-start mt-4">
-            <span className="text-2xl lg:text-3xl font-bold text-foreground tracking-tight">
+            <span className="text-2xl lg:text-3xl font-bold text-slate-800 tracking-tight">
               {formatCurrency(totalPassivo, currencyMode)}
             </span>
             {prevPassivo > 0 && (
-              <div className="flex items-center gap-1.5 mt-2 text-muted-foreground text-xs">
+              <div className="flex items-center gap-1.5 mt-2 text-slate-500 text-xs">
                 <PercentChange prev={prevPassivo} curr={totalPassivo} />
                 <span>em relação à coluna anterior</span>
               </div>
@@ -308,18 +308,18 @@ export function BalanceInicioTab({ ativo, passivo, columns, selectedColumn }: Ba
         </GlassCard>
 
         {/* Patrimônio Líquido */}
-        <GlassCard className="p-4 md:p-6 flex flex-col justify-between relative group hover:shadow-elevated transition-all duration-300 border-border/60">
-          <div className="absolute -right-6 -top-6 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all overflow-hidden"></div>
+        <GlassCard className="p-4 md:p-6 flex flex-col justify-between relative group hover:shadow-lg transition-all duration-300 border-slate-200/60">
+          <div className="absolute -right-6 -top-6 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all overflow-hidden"></div>
           <div className="flex items-center gap-3 mb-2">
-            <Scale className="h-6 w-6 text-foreground" />
-            <span className="text-foreground font-semibold text-lg">Patrimônio Líquido</span>
+            <Scale className="h-6 w-6 text-slate-800" />
+            <span className="text-slate-800 font-semibold text-lg">Patrimônio Líquido</span>
           </div>
           <div className="flex flex-col items-start mt-4">
-            <span className="text-2xl lg:text-3xl font-bold text-foreground tracking-tight">
+            <span className="text-2xl lg:text-3xl font-bold text-slate-800 tracking-tight">
               {formatCurrency(totalPL, currencyMode)}
             </span>
             {prevPL > 0 && (
-              <div className="flex items-center gap-1.5 mt-2 text-muted-foreground text-xs">
+              <div className="flex items-center gap-1.5 mt-2 text-slate-500 text-xs">
                 <PercentChange prev={prevPL} curr={totalPL} />
                 <span>em relação à coluna anterior</span>
               </div>

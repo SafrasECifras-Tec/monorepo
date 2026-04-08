@@ -76,6 +76,9 @@ export interface SafraImportData {
   precoMedioVenda: number;
   receitaBruta: number;
   custoTotal: number;
+  custoInsumos: number;
+  custoOperacao: number;
+  custoJuros: number;
   lucroBruto: number;
   despesasOperacionais: number;
   ebitda: number;

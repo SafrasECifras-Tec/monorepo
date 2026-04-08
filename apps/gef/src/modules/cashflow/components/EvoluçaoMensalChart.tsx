@@ -83,20 +83,20 @@ export function EvoluçaoMensalChart({
   return (
     <GlassCard className={cn(
       'p-6 flex flex-col min-h-[350px] transition-colors duration-500',
-      hasValeDaMorte ? 'bg-destructive/5 border-destructive/20 shadow-[0_0_30px_rgba(239,68,68,0.1)]' : ''
+      hasValeDaMorte ? 'bg-red-50/50 border-red-200 shadow-[0_0_30px_rgba(239,68,68,0.1)]' : ''
     )}>
       <div className="flex items-start justify-between mb-6">
         <div>
           <div className="flex items-center gap-3">
-            <h2 className="text-lg font-bold text-foreground">Evolução Mensal</h2>
-            <span className="text-[10px] font-bold uppercase tracking-wider bg-muted text-muted-foreground px-2 py-1 rounded-full">Clique no mês para detalhar</span>
+            <h2 className="text-lg font-bold text-slate-800">Evolução Mensal</h2>
+            <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-500 px-2 py-1 rounded-full">Clique no mês para detalhar</span>
           </div>
-          <p className="text-sm text-muted-foreground mt-1">Entradas, Saídas e Saldo Acumulado</p>
+          <p className="text-sm text-slate-500 mt-1">Entradas, Saídas e Saldo Acumulado</p>
         </div>
 
         <div className="flex flex-col items-end gap-2">
           {hasValeDaMorte && (
-            <div className="px-3 py-1 bg-destructive/10 text-destructive rounded-full text-xs font-bold uppercase tracking-wider animate-pulse mb-2">
+            <div className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold uppercase tracking-wider animate-pulse mb-2">
               Alerta de Caixa Negativo
             </div>
           )}
@@ -104,15 +104,15 @@ export function EvoluçaoMensalChart({
           <div className="flex items-center gap-4 text-sm">
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-[#10b981]"></div>
-              <span className="text-muted-foreground font-medium">Entradas</span>
+              <span className="text-slate-600 font-medium">Entradas</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-[#ef4444]"></div>
-              <span className="text-muted-foreground font-medium">Saídas</span>
+              <span className="text-slate-600 font-medium">Saídas</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-[#3b82f6]"></div>
-              <span className="text-muted-foreground font-medium">Saldo</span>
+              <span className="text-slate-600 font-medium">Saldo</span>
             </div>
           </div>
         </div>
@@ -173,19 +173,19 @@ export function EvoluçaoMensalChart({
                   const displayYear = periodMode === '2026' ? '2026' : (['Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'].includes(label as string) ? `20${periodMode.split('/')[0]}` : `20${periodMode.split('/')[1]}`);
 
                   return (
-                    <div className="bg-card/95 backdrop-blur-sm border border-border p-4 rounded-xl shadow-elevated min-w-[200px]">
-                      <p className="font-bold text-foreground mb-3 text-base border-b border-border/50 pb-2">
+                    <div className="bg-white/95 backdrop-blur-sm border border-slate-200 p-4 rounded-xl shadow-xl min-w-[200px]">
+                      <p className="font-bold text-slate-900 mb-3 text-base border-b border-slate-100 pb-2">
                         {fullMonth} {displayYear}
                       </p>
 
                       <div className="space-y-2">
                         {entries.map((entry, index) => (
                           <div key={index} className="flex items-center justify-between gap-4">
-                            <span className="text-sm text-muted-foreground flex items-center gap-2">
+                            <span className="text-sm text-slate-600 flex items-center gap-2">
                               <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
                               {entry.name}
                             </span>
-                            <span className="text-sm font-semibold text-foreground">
+                            <span className="text-sm font-semibold text-slate-800">
                               {formatCurrency(entry.value as number, currencyMode)}
                             </span>
                           </div>
@@ -194,13 +194,13 @@ export function EvoluçaoMensalChart({
 
                       {saldo && (
                         <>
-                          <div className="my-3 border-t border-border" />
+                          <div className="my-3 border-t border-slate-200" />
                           <div className="flex items-center justify-between gap-4">
-                            <span className="text-sm font-bold text-foreground flex items-center gap-2">
+                            <span className="text-sm font-bold text-slate-900 flex items-center gap-2">
                               <div className="w-2 h-2 rounded-full" style={{ backgroundColor: saldo.color }} />
                               {saldo.name}
                             </span>
-                            <span className="text-sm font-extrabold text-foreground">
+                            <span className="text-sm font-extrabold text-slate-900">
                               {formatCurrency(saldo.value as number, currencyMode)}
                             </span>
                           </div>

@@ -24,7 +24,7 @@ const fmtNum = (v: number) => v.toLocaleString('pt-BR');
 
 // ── Paleta ────────────────────────────────────────────────────────────────────
 
-const CULTURA_COLORS = ['#10b981', '#f59e0b', '#3b82f6', '#8b5cf6', '#f43f5e'];
+const CULTURA_COLORS = ['#6366f1', '#f59e0b', '#0ea5e9', '#8b5cf6', '#f43f5e'];
 
 // ── KpiCard ───────────────────────────────────────────────────────────────────
 
@@ -38,13 +38,13 @@ function KpiCard({ label, value, sub, trend, badge, delay = 0 }: {
   const down = trend && trend.value < 0;
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay }}>
-      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-card transition-all duration-300 h-full">
-        <span className="text-[14px] font-semibold text-muted-foreground uppercase tracking-wider">{label}</span>
-        <span className="text-[24px] font-black text-foreground leading-tight">{value}</span>
-        {sub && <span className="text-xs text-muted-foreground">{sub}</span>}
+      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-md transition-all duration-300 h-full">
+        <span className="text-[14px] font-semibold text-slate-500 uppercase tracking-wider">{label}</span>
+        <span className="text-[24px] font-black text-slate-800 leading-tight">{value}</span>
+        {sub && <span className="text-xs text-slate-400">{sub}</span>}
         {trend && (
           <div className={cn('flex items-center gap-1 text-xs font-semibold mt-auto',
-            up ? 'text-primary' : down ? 'text-destructive' : 'text-muted-foreground')}>
+            up ? 'text-emerald-600' : down ? 'text-red-500' : 'text-slate-400')}>
             {up ? <ArrowUpRight className="h-3.5 w-3.5" /> : down ? <ArrowDownRight className="h-3.5 w-3.5" /> : <Minus className="h-3.5 w-3.5" />}
             {trend.value > 0 ? '+' : ''}{trend.value.toFixed(1)}% {trend.label}
           </div>
@@ -69,9 +69,9 @@ function DonutLegend({ items }: { items: { name: string; value: number; color: s
         <div key={item.name} className="flex items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-1.5 min-w-0">
             <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
-            <span className="text-muted-foreground font-medium truncate">{item.name}</span>
+            <span className="text-slate-600 font-medium truncate">{item.name}</span>
           </div>
-          <span className="text-muted-foreground font-semibold shrink-0">
+          <span className="text-slate-500 font-semibold shrink-0">
             {((item.value / item.total) * 100).toFixed(0)}%
           </span>
         </div>
@@ -94,17 +94,17 @@ function BulletBar({ label, realizado, orcado, delay = 0 }: {
     <motion.div initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.35, delay }} className="flex flex-col gap-1.5">
       <div className="flex items-center justify-between text-xs">
-        <span className="font-semibold text-muted-foreground">{label}</span>
+        <span className="font-semibold text-slate-600">{label}</span>
         <div className="flex items-center gap-2">
-          <span className="text-muted-foreground">{fmtCompact(realizado)} / {fmtCompact(orcado)}</span>
+          <span className="text-slate-400">{fmtCompact(realizado)} / {fmtCompact(orcado)}</span>
           <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold"
             style={{ backgroundColor: `${barColor}20`, color: barColor }}>
             {rawPct.toFixed(0)}%
           </span>
         </div>
       </div>
-      <div className="relative h-4 rounded-full bg-muted overflow-hidden">
-        <div className="absolute top-0 bottom-0 w-0.5 bg-muted-foreground/60 z-10"
+      <div className="relative h-4 rounded-full bg-slate-100 overflow-hidden">
+        <div className="absolute top-0 bottom-0 w-0.5 bg-slate-400/60 z-10"
           style={{ left: `${Math.min(100 / (pct > 100 ? pct / 100 : 1), 100)}%` }} />
         <motion.div className="absolute top-0 left-0 h-full rounded-full"
           style={{ backgroundColor: barColor }}
@@ -112,7 +112,7 @@ function BulletBar({ label, realizado, orcado, delay = 0 }: {
           animate={{ width: `${Math.min(pct, 100)}%` }}
           transition={{ duration: 0.8, delay: delay + 0.1, ease: 'easeOut' }} />
       </div>
-      <span className="text-[10px] text-muted-foreground">{statusText}</span>
+      <span className="text-[10px] text-slate-400">{statusText}</span>
     </motion.div>
   );
 }
@@ -125,11 +125,11 @@ function MetricRow({ icon, label, value, delay = 0 }: {
   return (
     <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, delay }}
-      className="flex items-center justify-between p-3 rounded-xl bg-accent/60">
-      <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
+      className="flex items-center justify-between p-3 rounded-xl bg-slate-50/60">
+      <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
         <span>{icon}</span>{label}
       </div>
-      <span className="text-xs font-bold text-foreground">{value}</span>
+      <span className="text-xs font-bold text-slate-800">{value}</span>
     </motion.div>
   );
 }
@@ -225,9 +225,9 @@ export function DREVBPTab({ safraAtual, dreDataRecord, safras, selectedCultura =
         {/* Esquerda — Barras horizontais */}
         <motion.div className="lg:col-span-3"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}>
-          <GlassCard className="p-5 h-full hover:shadow-card transition-all duration-300">
-            <h3 className="text-sm font-bold text-foreground mb-0.5">VBP por Cultura</h3>
-            <p className="text-xs text-muted-foreground mb-4">Valor Bruto de Produção por atividade</p>
+          <GlassCard className="p-5 h-full hover:shadow-md transition-all duration-300">
+            <h3 className="text-sm font-bold text-slate-700 mb-0.5">VBP por Cultura</h3>
+            <p className="text-xs text-slate-400 mb-4">Valor Bruto de Produção por atividade</p>
             <div style={{ height: Math.max(culturaSorted.length * 56, 180) }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={culturaSorted} layout="vertical"
@@ -256,8 +256,8 @@ export function DREVBPTab({ safraAtual, dreDataRecord, safras, selectedCultura =
         {/* Direita — Donut */}
         <motion.div className="lg:col-span-2"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.15 }}>
-          <GlassCard className="p-5 h-full hover:shadow-card transition-all duration-300">
-            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4">Composição do VBP</h3>
+          <GlassCard className="p-5 h-full hover:shadow-md transition-all duration-300">
+            <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-4">Composição do VBP</h3>
             <div className="flex flex-col items-center gap-3">
               <div className="h-44 w-44">
                 <ResponsiveContainer width="100%" height="100%">
@@ -294,9 +294,9 @@ export function DREVBPTab({ safraAtual, dreDataRecord, safras, selectedCultura =
         {/* Esquerda — Evolução */}
         <motion.div className="lg:col-span-3"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.15 }}>
-          <GlassCard className="p-5 h-full hover:shadow-card transition-all duration-300">
-            <h3 className="text-sm font-bold text-foreground mb-0.5">Evolução do VBP</h3>
-            <p className="text-xs text-muted-foreground mb-4">VBP total por safra + preço médio de venda</p>
+          <GlassCard className="p-5 h-full hover:shadow-md transition-all duration-300">
+            <h3 className="text-sm font-bold text-slate-700 mb-0.5">Evolução do VBP</h3>
+            <p className="text-xs text-slate-400 mb-4">VBP total por safra + preço médio de venda</p>
             <div className="h-56">
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart data={historicoData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
@@ -324,12 +324,12 @@ export function DREVBPTab({ safraAtual, dreDataRecord, safras, selectedCultura =
             </div>
             <div className="flex items-center justify-center gap-6 mt-2">
               <div className="flex items-center gap-1.5 text-xs">
-                <span className="w-2.5 h-2.5 rounded-full bg-primary" />
-                <span className="text-muted-foreground font-medium">VBP Total</span>
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                <span className="text-slate-500 font-medium">VBP Total</span>
               </div>
               <div className="flex items-center gap-1.5 text-xs">
                 <span className="w-6 h-0.5 rounded bg-amber-400" />
-                <span className="text-muted-foreground font-medium">Preço Médio (R$/sc)</span>
+                <span className="text-slate-500 font-medium">Preço Médio (R$/sc)</span>
               </div>
             </div>
           </GlassCard>
@@ -338,14 +338,14 @@ export function DREVBPTab({ safraAtual, dreDataRecord, safras, selectedCultura =
         {/* Direita — Orçado + Métricas derivadas */}
         <motion.div className="lg:col-span-2"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.2 }}>
-          <GlassCard className="p-5 h-full hover:shadow-card transition-all duration-300">
-            <h3 className="text-sm font-bold text-foreground mb-0.5">VBP — Orçado vs. Realizado</h3>
-            <p className="text-xs text-muted-foreground mb-4">Meta de receita bruta planejada</p>
+          <GlassCard className="p-5 h-full hover:shadow-md transition-all duration-300">
+            <h3 className="text-sm font-bold text-slate-700 mb-0.5">VBP — Orçado vs. Realizado</h3>
+            <p className="text-xs text-slate-400 mb-4">Meta de receita bruta planejada</p>
             <BulletBar label="VBP Total" realizado={data.receitaBruta} orcado={data.orcadoVbp} delay={0.25} />
 
-            <div className="border-t border-border/50 my-5" />
+            <div className="border-t border-slate-100 my-5" />
 
-            <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-3">Como o VBP se forma</h4>
+            <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Como o VBP se forma</h4>
             <div className="flex flex-col gap-2">
               <MetricRow icon="📐" label="Área Plantada" value={`${fmtNum(data.areaTotal)} ha`} delay={0.3} />
               <MetricRow icon="×" label="Produtividade Média" value={`${data.produtividadeMedia.toFixed(1)} sc/ha`} delay={0.33} />
@@ -353,11 +353,11 @@ export function DREVBPTab({ safraAtual, dreDataRecord, safras, selectedCultura =
               <MetricRow icon="×" label="Preço Médio de Venda" value={`R$ ${data.precoMedioVenda}/sc`} delay={0.39} />
               <motion.div initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3, delay: 0.42 }}
-                className="flex items-center justify-between p-3 rounded-xl bg-primary/5 border border-primary/20">
-                <div className="flex items-center gap-2 text-xs text-primary font-bold">
+                className="flex items-center justify-between p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+                <div className="flex items-center gap-2 text-xs text-emerald-700 font-bold">
                   <Target className="h-3.5 w-3.5" />VBP Total
                 </div>
-                <span className="text-sm font-black text-primary">{fmtCompact(data.receitaBruta)}</span>
+                <span className="text-sm font-black text-emerald-800">{fmtCompact(data.receitaBruta)}</span>
               </motion.div>
             </div>
           </GlassCard>
@@ -366,14 +366,14 @@ export function DREVBPTab({ safraAtual, dreDataRecord, safras, selectedCultura =
 
       {/* ── Linha 4: Tabela detalhada por cultura ───────────────────── */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.2 }}>
-        <GlassCard className="p-5 hover:shadow-card transition-all duration-300">
-          <h3 className="text-sm font-bold text-foreground mb-4">Detalhamento por Cultura</h3>
+        <GlassCard className="p-5 hover:shadow-md transition-all duration-300">
+          <h3 className="text-sm font-bold text-slate-700 mb-4">Detalhamento por Cultura</h3>
           <div className="overflow-x-auto custom-scrollbar">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border/50">
+                <tr className="border-b border-slate-100">
                   {['Cultura', 'Área (ha)', 'Produção (sc)', 'Produtiv. (sc/ha)', 'Preço Médio', 'VBP (R$)', '% do Total'].map(h => (
-                    <th key={h} className="px-3 py-2.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">{h}</th>
+                    <th key={h} className="px-3 py-2.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -381,25 +381,25 @@ export function DREVBPTab({ safraAtual, dreDataRecord, safras, selectedCultura =
                 {data.culturas.map((c, i) => {
                   const pctTotal = (c.receitaBruta / data.receitaBruta) * 100;
                   return (
-                    <tr key={c.nome} className="border-b border-border/50 hover:bg-accent/60 transition-colors">
-                      <td className="px-3 py-3 font-bold text-foreground">
+                    <tr key={c.nome} className="border-b border-slate-50 hover:bg-slate-50/60 transition-colors">
+                      <td className="px-3 py-3 font-bold text-slate-800">
                         <div className="flex items-center gap-2">
                           <span className="w-2.5 h-2.5 rounded-full shrink-0"
                             style={{ backgroundColor: CULTURA_COLORS[i % CULTURA_COLORS.length] }} />
                           {c.nome}
                         </div>
                       </td>
-                      <td className="px-3 py-3 text-muted-foreground">{fmtNum(c.area)}</td>
-                      <td className="px-3 py-3 text-muted-foreground">{fmtNum(c.producao)}</td>
-                      <td className="px-3 py-3 text-muted-foreground">{c.produtividade.toFixed(1)}</td>
-                      <td className="px-3 py-3 text-muted-foreground">R$ {c.precoMedio}/sc</td>
-                      <td className="px-3 py-3 font-semibold text-primary">{fmtCompact(c.receitaBruta)}</td>
+                      <td className="px-3 py-3 text-slate-600">{fmtNum(c.area)}</td>
+                      <td className="px-3 py-3 text-slate-600">{fmtNum(c.producao)}</td>
+                      <td className="px-3 py-3 text-slate-600">{c.produtividade.toFixed(1)}</td>
+                      <td className="px-3 py-3 text-slate-600">R$ {c.precoMedio}/sc</td>
+                      <td className="px-3 py-3 font-semibold text-emerald-700">{fmtCompact(c.receitaBruta)}</td>
                       <td className="px-3 py-3">
                         <span className={cn(
                           'font-bold px-2 py-0.5 rounded-full text-xs',
-                          pctTotal >= 40 ? 'bg-primary/10 text-primary' :
+                          pctTotal >= 40 ? 'bg-emerald-100 text-emerald-700' :
                           pctTotal >= 20 ? 'bg-blue-100 text-blue-700' :
-                          'bg-muted text-muted-foreground',
+                          'bg-slate-100 text-slate-600',
                         )}>
                           {pctTotal.toFixed(1)}%
                         </span>
@@ -409,14 +409,14 @@ export function DREVBPTab({ safraAtual, dreDataRecord, safras, selectedCultura =
                 })}
               </tbody>
               <tfoot>
-                <tr className="border-t-2 border-border bg-accent/60">
-                  <td className="px-3 py-3 font-black text-foreground">Total</td>
-                  <td className="px-3 py-3 font-bold text-foreground">{fmtNum(data.areaTotal)}</td>
-                  <td className="px-3 py-3 font-bold text-foreground">{fmtNum(data.producaoTotal)}</td>
-                  <td className="px-3 py-3 font-bold text-foreground">{data.produtividadeMedia.toFixed(1)}</td>
-                  <td className="px-3 py-3 font-bold text-foreground">R$ {data.precoMedioVenda}/sc</td>
-                  <td className="px-3 py-3 font-black text-primary">{fmtBRL(data.receitaBruta)}</td>
-                  <td className="px-3 py-3 font-black text-foreground">100%</td>
+                <tr className="border-t-2 border-slate-200 bg-slate-50/60">
+                  <td className="px-3 py-3 font-black text-slate-800">Total</td>
+                  <td className="px-3 py-3 font-bold text-slate-700">{fmtNum(data.areaTotal)}</td>
+                  <td className="px-3 py-3 font-bold text-slate-700">{fmtNum(data.producaoTotal)}</td>
+                  <td className="px-3 py-3 font-bold text-slate-700">{data.produtividadeMedia.toFixed(1)}</td>
+                  <td className="px-3 py-3 font-bold text-slate-700">R$ {data.precoMedioVenda}/sc</td>
+                  <td className="px-3 py-3 font-black text-emerald-800">{fmtBRL(data.receitaBruta)}</td>
+                  <td className="px-3 py-3 font-black text-slate-700">100%</td>
                 </tr>
               </tfoot>
             </table>

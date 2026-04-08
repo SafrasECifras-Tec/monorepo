@@ -21,11 +21,11 @@ function Toggle({ enabled, onToggle }: { enabled: boolean; onToggle: () => void 
       onClick={onToggle}
       className={cn(
         'relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none cursor-pointer shrink-0',
-        enabled ? 'bg-primary' : 'bg-muted'
+        enabled ? 'bg-emerald-500' : 'bg-slate-200'
       )}
     >
       <span className={cn(
-        'inline-block h-4 w-4 transform rounded-full bg-card shadow-soft transition-transform duration-200',
+        'inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200',
         enabled ? 'translate-x-6' : 'translate-x-1'
       )} />
     </button>
@@ -49,20 +49,20 @@ function Section({
     <GlassCard className="p-6 flex flex-col gap-5">
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-muted rounded-xl text-muted-foreground">{icon}</div>
+          <div className="p-2.5 bg-slate-100 rounded-xl text-slate-600">{icon}</div>
           <div>
-            <h2 className="text-base font-bold text-foreground">{title}</h2>
-            <p className="text-sm text-muted-foreground mt-0.5">{subtitle}</p>
+            <h2 className="text-base font-bold text-slate-800">{title}</h2>
+            <p className="text-sm text-slate-500 mt-0.5">{subtitle}</p>
           </div>
         </div>
-        <span className="text-xs font-semibold text-muted-foreground whitespace-nowrap mt-1">
+        <span className="text-xs font-semibold text-slate-400 whitespace-nowrap mt-1">
           {visibleCount}/{items.length} visíveis
         </span>
       </div>
-      <div className="divide-y divide-border/50">
+      <div className="divide-y divide-slate-100">
         {items.map(item => (
           <div key={item.key} className="flex items-center justify-between py-3 gap-4">
-            <span className={cn('text-sm font-medium transition-colors', visibility[item.key] ? 'text-foreground' : 'text-muted-foreground')}>
+            <span className={cn('text-sm font-medium transition-colors', visibility[item.key] ? 'text-slate-700' : 'text-slate-400')}>
               {item.label}
             </span>
             <Toggle enabled={!!visibility[item.key]} onToggle={() => onToggle(item.key)} />
@@ -113,20 +113,20 @@ function ModuleCard({
     <div className={cn(
       'flex flex-col gap-3 p-4 rounded-2xl border transition-all duration-200',
       hasData
-        ? 'bg-primary/5 border-primary/20'
-        : 'bg-accent/60 border-border'
+        ? 'bg-emerald-50/60 border-emerald-200'
+        : 'bg-slate-50/60 border-slate-200'
     )}>
       {/* Header do card */}
       <div className="flex items-start justify-between gap-2">
         <div className={cn(
           'p-2 rounded-xl transition-colors',
-          hasData ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'
+          hasData ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'
         )}>
           {icon}
         </div>
         {hasData
-          ? <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-          : <CircleDashed  className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
+          ? <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+          : <CircleDashed  className="h-4 w-4 text-slate-300 shrink-0 mt-0.5" />
         }
       </div>
 
@@ -134,17 +134,17 @@ function ModuleCard({
       <div className="flex flex-col gap-0.5 flex-1">
         <span className={cn(
           'text-sm font-semibold leading-tight',
-          hasData ? 'text-primary' : 'text-muted-foreground'
+          hasData ? 'text-emerald-900' : 'text-slate-600'
         )}>
           {label}
         </span>
-        <span className="text-xs text-muted-foreground">{description}</span>
+        <span className="text-xs text-slate-400">{description}</span>
       </div>
 
       {/* Status */}
       {hasData ? (
         <div className="flex flex-col gap-2">
-          <span className="text-xs text-primary font-medium">
+          <span className="text-xs text-emerald-600 font-medium">
             {formatDate(importedAt!)}
           </span>
           <button
@@ -152,8 +152,8 @@ function ModuleCard({
             title="Remover dados importados"
             className={cn(
               'flex items-center justify-center gap-1.5 w-full py-1.5 rounded-lg',
-              'text-xs font-semibold text-destructive border border-destructive/20 bg-destructive/5',
-              'hover:bg-destructive/10 hover:border-destructive/30 hover:text-destructive transition-all duration-150'
+              'text-xs font-semibold text-red-500 border border-red-200 bg-red-50',
+              'hover:bg-red-100 hover:border-red-300 hover:text-red-600 transition-all duration-150'
             )}
           >
             <Trash2 className="h-3 w-3" />
@@ -161,7 +161,7 @@ function ModuleCard({
           </button>
         </div>
       ) : (
-        <span className="text-xs text-muted-foreground italic">usando demonstração</span>
+        <span className="text-xs text-slate-400 italic">usando demonstração</span>
       )}
     </div>
   );
@@ -182,39 +182,39 @@ function OverwriteDialog({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-foreground/40 backdrop-blur-sm"
+        className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
         onClick={onCancel}
       />
 
       {/* Dialog */}
-      <div className="relative bg-card rounded-2xl shadow-2xl max-w-sm w-full p-6 flex flex-col gap-5 animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 flex flex-col gap-5 animate-in fade-in zoom-in-95 duration-200">
         {/* Close */}
         <button
           onClick={onCancel}
-          className="absolute top-4 right-4 p-1 rounded-lg text-muted-foreground hover:text-muted-foreground hover:bg-muted transition-colors"
+          className="absolute top-4 right-4 p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
         >
           <X className="h-4 w-4" />
         </button>
 
         {/* Icon + Title */}
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-warning/5 rounded-xl shrink-0">
-            <AlertTriangle className="h-5 w-5 text-warning" />
+          <div className="p-2.5 bg-amber-50 rounded-xl shrink-0">
+            <AlertTriangle className="h-5 w-5 text-amber-500" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-foreground">Substituir dados?</h3>
-            <p className="text-sm text-muted-foreground mt-0.5">Esta ação não pode ser desfeita</p>
+            <h3 className="text-base font-bold text-slate-800">Substituir dados?</h3>
+            <p className="text-sm text-slate-500 mt-0.5">Esta ação não pode ser desfeita</p>
           </div>
         </div>
 
         {/* Body */}
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-600">
           Os módulos abaixo já possuem dados importados e serão <strong>substituídos</strong> pelo novo arquivo:
         </p>
 
         <ul className="flex flex-col gap-2">
           {labels.map(label => (
-            <li key={label} className="flex items-center gap-2.5 text-sm font-medium text-foreground">
+            <li key={label} className="flex items-center gap-2.5 text-sm font-medium text-slate-700">
               <span className="h-2 w-2 rounded-full bg-amber-400 shrink-0" />
               {label}
             </li>
@@ -225,13 +225,13 @@ function OverwriteDialog({
         <div className="flex items-center gap-3 pt-1">
           <button
             onClick={onCancel}
-            className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold border border-border text-muted-foreground hover:bg-accent transition-colors"
+            className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors"
           >
             Cancelar
           </button>
           <button
             onClick={onConfirm}
-            className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold bg-primary text-white hover:bg-primary/90 transition-colors shadow-soft"
+            className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition-colors shadow-sm"
           >
             Substituir
           </button>
@@ -302,8 +302,8 @@ export function AjustesDashboard() {
 
       <div className="flex flex-col space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 pb-6">
         <header>
-          <h1 className="text-3xl font-bold text-foreground tracking-tight">Ajustes</h1>
-          <p className="text-muted-foreground mt-1">Configure indicadores e importe dados por módulo</p>
+          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Ajustes</h1>
+          <p className="text-slate-500 mt-1">Configure indicadores e importe dados por módulo</p>
         </header>
 
         {/* ── Importação de Dados ───────────────────────────────────────── */}
@@ -311,19 +311,19 @@ export function AjustesDashboard() {
           {/* Título da seção */}
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-base font-bold text-foreground">Importação de Dados</h2>
-              <p className="text-sm text-muted-foreground mt-0.5">
-                Importe um único arquivo <code className="bg-muted px-1 rounded text-xs">.xlsx</code> com uma ou mais abas reconhecidas
+              <h2 className="text-base font-bold text-slate-800">Importação de Dados</h2>
+              <p className="text-sm text-slate-500 mt-0.5">
+                Importe um único arquivo <code className="bg-slate-100 px-1 rounded text-xs">.xlsx</code> com uma ou mais abas reconhecidas
               </p>
             </div>
             {/* Badge de progresso */}
             <div className={cn(
               'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border shrink-0',
               importedCount === moduleKeys.length
-                ? 'bg-primary/5 text-primary border-primary/20'
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                 : importedCount > 0
-                  ? 'bg-warning/5 text-warning border-warning/20'
-                  : 'bg-muted text-muted-foreground border-border'
+                  ? 'bg-amber-50 text-amber-700 border-amber-200'
+                  : 'bg-slate-100 text-slate-500 border-slate-200'
             )}>
               {importedCount > 0 && <CheckCircle2 className="h-3 w-3" />}
               {importedCount}/{moduleKeys.length} módulos
@@ -342,26 +342,26 @@ export function AjustesDashboard() {
               'border-2 border-dashed transition-all duration-200',
               !isLoading && 'cursor-pointer',
               isDragging
-                ? 'border-primary/40 bg-primary/5 scale-[1.01]'
+                ? 'border-emerald-400 bg-emerald-50/70 scale-[1.01]'
                 : isLoading
-                  ? 'border-border bg-accent/50 opacity-70'
-                  : 'border-border bg-accent/30 hover:border-primary/30 hover:bg-primary/5'
+                  ? 'border-slate-200 bg-slate-50/50 opacity-70'
+                  : 'border-slate-200 bg-slate-50/30 hover:border-emerald-300 hover:bg-emerald-50/30'
             )}
           >
             {/* Ícone central */}
             <div className={cn(
               'p-4 rounded-2xl transition-colors duration-200',
-              isDragging ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'
+              isDragging ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'
             )}>
               {isLoading
-                ? <FileSpreadsheet className="h-7 w-7 animate-pulse text-primary" />
+                ? <FileSpreadsheet className="h-7 w-7 animate-pulse text-emerald-500" />
                 : <CloudUpload className={cn('h-7 w-7 transition-transform duration-200', isDragging && 'scale-110')} />
               }
             </div>
 
             {/* Texto */}
             <div className="text-center">
-              <p className="text-sm font-semibold text-foreground">
+              <p className="text-sm font-semibold text-slate-700">
                 {isLoading
                   ? 'Processando arquivo...'
                   : isDragging
@@ -370,7 +370,7 @@ export function AjustesDashboard() {
                 }
               </p>
               {!isLoading && (
-                <p className="text-xs text-muted-foreground mt-1">Somente arquivos .xlsx · Máximo 10MB</p>
+                <p className="text-xs text-slate-400 mt-1">Somente arquivos .xlsx · Máximo 10MB</p>
               )}
             </div>
 
@@ -378,7 +378,7 @@ export function AjustesDashboard() {
             {!isLoading && !isDragging && (
               <button
                 onClick={(e) => { e.stopPropagation(); openFilePicker(); }}
-                className="mt-1 px-5 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-xl shadow-soft transition-colors duration-200"
+                className="mt-1 px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-colors duration-200"
               >
                 Selecionar arquivo
               </button>
@@ -398,12 +398,12 @@ export function AjustesDashboard() {
           </div>
 
           {/* ── Ação: baixar modelo ───────────────────────────────────── */}
-          <div className="flex items-center justify-between gap-4 pt-2 border-t border-border/50">
-            <p className="text-xs text-muted-foreground leading-relaxed">
+          <div className="flex items-center justify-between gap-4 pt-2 border-t border-slate-100">
+            <p className="text-xs text-slate-400 leading-relaxed">
               Não tem o modelo?{' '}
               <button
                 onClick={downloadTemplateUniversal}
-                className="text-primary hover:text-primary font-medium underline underline-offset-2 transition-colors"
+                className="text-emerald-600 hover:text-emerald-700 font-medium underline underline-offset-2 transition-colors"
               >
                 Baixe o modelo universal
               </button>
@@ -411,7 +411,7 @@ export function AjustesDashboard() {
             </p>
             <button
               onClick={downloadTemplateUniversal}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-card border border-border text-muted-foreground hover:bg-accent hover:border-border transition-all duration-200 shadow-soft shrink-0"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 shadow-sm shrink-0"
             >
               <Download className="h-4 w-4" />
               <span className="hidden sm:inline">Baixar Modelo</span>

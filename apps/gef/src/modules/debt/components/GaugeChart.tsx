@@ -47,7 +47,7 @@ export function GaugeChart({ value, max, colorRanges }: GaugeChartProps) {
         <text x={cx + r} y={cy + 30} fontSize="14" fill="#64748b" textAnchor="middle" fontWeight="500">{max}</text>
       </svg>
       <div className="absolute bottom-2 left-0 right-0 text-center flex flex-col items-center">
-        <span className="text-5xl font-bold text-foreground tracking-tight">{value.toFixed(2)}</span>
+        <span className="text-5xl font-bold text-slate-800 tracking-tight">{value.toFixed(2)}</span>
       </div>
     </div>
   );

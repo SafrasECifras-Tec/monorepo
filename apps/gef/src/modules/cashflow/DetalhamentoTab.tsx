@@ -200,23 +200,23 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
           <div className="flex flex-row flex-wrap items-center gap-3 flex-1 min-w-[280px]">
             {/* Search Bar */}
             <div className="relative w-full sm:max-w-xs flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="text"
                 placeholder="Buscar descrição, fornecedor..."
-                className="w-full pl-9 pr-3 py-2 bg-accent border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
 
             {/* Quick Filters (Chips) */}
-            <div className="flex items-center p-1 bg-muted rounded-xl shrink-0 overflow-x-auto custom-scrollbar">
+            <div className="flex items-center p-1 bg-slate-100 rounded-xl shrink-0 overflow-x-auto custom-scrollbar">
               <button
                 onClick={() => setTypeFilter('todos')}
                 className={cn(
                   'px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer whitespace-nowrap',
-                  typeFilter === 'todos' ? 'bg-card text-foreground shadow-soft' : 'text-muted-foreground hover:text-foreground'
+                  typeFilter === 'todos' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
                 )}
               >
                 Todas
@@ -225,7 +225,7 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
                 onClick={() => setTypeFilter('entrada')}
                 className={cn(
                   'px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer whitespace-nowrap',
-                  typeFilter === 'entrada' ? 'bg-card text-primary shadow-soft' : 'text-muted-foreground hover:text-foreground'
+                  typeFilter === 'entrada' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
                 )}
               >
                 Entradas
@@ -234,7 +234,7 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
                 onClick={() => setTypeFilter('saida')}
                 className={cn(
                   'px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer whitespace-nowrap',
-                  typeFilter === 'saida' ? 'bg-card text-destructive shadow-soft' : 'text-muted-foreground hover:text-foreground'
+                  typeFilter === 'saida' ? 'bg-white text-red-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
                 )}
               >
                 Saídas
@@ -247,13 +247,13 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
                 <select
                   value={categoriaFilter}
                   onChange={e => setCategoriaFilter(e.target.value)}
-                  className="appearance-none bg-card/70 border border-border shadow-soft text-foreground hover:bg-card transition-colors pl-3 pr-8 h-[36px] text-xs font-medium rounded-xl outline-none cursor-pointer focus:border-primary max-w-[160px]"
+                  className="appearance-none bg-white/70 border border-slate-200 shadow-sm text-slate-700 hover:bg-white transition-colors pl-3 pr-8 h-[36px] text-xs font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500 max-w-[160px]"
                 >
                   {categoriasOptions.map(cat => (
                     <option key={cat} value={cat}>{cat}</option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+                <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
               </div>
             )}
           </div>
@@ -261,12 +261,12 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
           {/* Right: Period and Export */}
           <div className="flex flex-row flex-wrap items-center gap-2">
             {/* Mode Toggle */}
-            <div className="flex items-center p-1 bg-muted rounded-lg shrink-0">
+            <div className="flex items-center p-1 bg-slate-100 rounded-lg shrink-0">
               <button
                 onClick={() => setDateFilterMode('periodo')}
                 className={cn(
                   'px-2 py-1.5 text-xs font-bold rounded-md transition-all cursor-pointer whitespace-nowrap',
-                  dateFilterMode === 'periodo' ? 'bg-card text-primary shadow-soft' : 'text-muted-foreground hover:text-foreground'
+                  dateFilterMode === 'periodo' ? 'bg-white text-emerald-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'
                 )}
               >
                 Período
@@ -275,7 +275,7 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
                 onClick={() => setDateFilterMode('unico')}
                 className={cn(
                   'px-2 py-1.5 text-xs font-bold rounded-md transition-all cursor-pointer whitespace-nowrap',
-                  dateFilterMode === 'unico' ? 'bg-card text-primary shadow-soft' : 'text-muted-foreground hover:text-foreground'
+                  dateFilterMode === 'unico' ? 'bg-white text-emerald-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'
                 )}
               >
                 Dia Único
@@ -285,7 +285,7 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
             {/* Date Inputs */}
             <div className={cn(
               'flex items-center gap-2 border rounded-xl px-3 py-1.5 transition-all min-h-[36px] min-w-[140px] shrink-0',
-              'bg-card border-border shadow-soft hover:border-primary/50'
+              'bg-white border-slate-200 shadow-sm hover:border-emerald-500/50'
             )}>
               <AnimatePresence mode="wait">
                 {dateFilterMode === 'periodo' ? (
@@ -301,13 +301,13 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
                       <div className="flex flex-col flex-1">
                         <span className={cn(
                           'text-[8px] uppercase font-extrabold leading-none mb-0.5',
-                          'text-muted-foreground'
+                          'text-slate-400'
                         )}>Período</span>
                         <div className="relative flex items-center w-full">
                           <Popover>
                             <PopoverTrigger className={cn(
                               'flex items-center justify-between w-full text-left font-bold text-xs bg-transparent border-none outline-none focus:ring-0 p-0 gap-2 cursor-pointer whitespace-nowrap',
-                              (startDate || endDate) ? 'text-foreground' : 'text-muted-foreground'
+                              (startDate || endDate) ? 'text-slate-700' : 'text-slate-400'
                             )}>
                               {startDate ? (
                                 endDate ? (
@@ -318,7 +318,7 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
                               ) : (
                                 'Selecione'
                               )}
-                              <CalendarIcon className="w-3.5 h-3.5 text-muted-foreground group-hover/date:text-primary transition-colors shrink-0" />
+                              <CalendarIcon className="w-3.5 h-3.5 text-slate-400 group-hover/date:text-emerald-500 transition-colors shrink-0" />
                             </PopoverTrigger>
                             <PopoverContent className="w-auto p-0" align="start">
                               <CalendarComponent
@@ -363,16 +363,16 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
                     <div className="flex flex-col flex-1">
                       <span className={cn(
                         'text-[8px] uppercase font-extrabold leading-none mb-0.5',
-                        'text-muted-foreground'
+                        'text-slate-400'
                       )}>Data Selecionada</span>
                       <div className="relative flex items-center w-full">
                         <Popover>
                           <PopoverTrigger className={cn(
                             'flex items-center justify-between w-full text-left font-bold text-xs bg-transparent border-none outline-none focus:ring-0 p-0 gap-2 cursor-pointer whitespace-nowrap',
-                            startDate ? 'text-foreground' : 'text-muted-foreground'
+                            startDate ? 'text-slate-700' : 'text-slate-400'
                           )}>
                             {startDate ? format(parseISO(startDate), 'dd/MM/yyyy') : 'dd/mm/aaaa'}
-                            <CalendarIcon className="w-3.5 h-3.5 text-muted-foreground group-hover/date:text-primary transition-colors shrink-0" />
+                            <CalendarIcon className="w-3.5 h-3.5 text-slate-400 group-hover/date:text-emerald-500 transition-colors shrink-0" />
                           </PopoverTrigger>
                           <PopoverContent className="w-auto p-0" align="start">
                             <CalendarComponent
@@ -395,10 +395,10 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
             </div>
 
             {/* Separator */}
-            <div className="h-6 w-px bg-border mx-1 shrink-0 hidden sm:block" />
+            <div className="h-6 w-px bg-slate-200 mx-1 shrink-0 hidden sm:block" />
 
             {/* Quick Action Presets */}
-            <div className="flex items-center gap-1 bg-accent/50 p-1 rounded-xl border border-border/50 shrink-0">
+            <div className="flex items-center gap-1 bg-slate-50/50 p-1 rounded-xl border border-slate-100 shrink-0">
               {[
                 { id: 'limpar', label: 'Tudo' },
                 { id: 'mes', label: 'Mês' },
@@ -410,8 +410,8 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
                   className={cn(
                     'px-2 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer whitespace-nowrap',
                     activePreset === p.id
-                      ? 'bg-card text-primary shadow-soft border border-border/50'
-                      : 'text-muted-foreground hover:text-primary hover:bg-card/50'
+                      ? 'bg-white text-emerald-600 shadow-sm border border-slate-200/50'
+                      : 'text-slate-400 hover:text-emerald-600 hover:bg-white/50'
                   )}
                 >
                   {p.label}
@@ -419,10 +419,10 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
               ))}
             </div>
 
-            <div className="h-6 w-px bg-border mx-1 shrink-0 hidden sm:block" />
+            <div className="h-6 w-px bg-slate-200 mx-1 shrink-0 hidden sm:block" />
 
             <button
-              className="flex items-center justify-center p-2 bg-foreground text-white rounded-xl hover:bg-foreground/90 transition-all shadow-card h-[36px] w-[36px] cursor-pointer shrink-0"
+              className="flex items-center justify-center p-2 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition-all shadow-md h-[36px] w-[36px] cursor-pointer shrink-0"
               title="Exportar"
             >
               <FileDown className="w-4 h-4 shrink-0" />
@@ -432,96 +432,96 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
       </GlassCard>
 
       {/* Data Table */}
-      <GlassCard className="overflow-hidden border-none shadow-elevated flex flex-col flex-1 min-h-[500px]">
+      <GlassCard className="overflow-hidden border-none shadow-xl flex flex-col flex-1 min-h-[500px]">
         <div className="overflow-x-auto overflow-y-auto flex-1 custom-scrollbar">
           <table className="w-full text-left border-collapse">
-            <thead className="sticky top-0 z-10 bg-accent border-b border-border">
+            <thead className="sticky top-0 z-10 bg-slate-50 border-b border-slate-200">
               <tr>
                 <th
-                  className="px-6 py-4 text-[11px] font-bold text-muted-foreground uppercase tracking-wider cursor-pointer hover:bg-muted transition-colors group"
+                  className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors group"
                   onClick={() => handleSort('data')}
                 >
                   <div className="flex items-center gap-1">
                     Data
                     {sortConfig?.key === 'data' ? (
-                      sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3 text-foreground" /> : <ArrowDown className="w-3 h-3 text-foreground" />
+                      sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3 text-slate-800" /> : <ArrowDown className="w-3 h-3 text-slate-800" />
                     ) : (
-                      <ArrowUpDown className="w-3 h-3 text-muted-foreground group-hover:text-foreground" />
+                      <ArrowUpDown className="w-3 h-3 text-slate-400 group-hover:text-slate-600" />
                     )}
                   </div>
                 </th>
                 <th
-                  className="px-6 py-4 text-[11px] font-bold text-muted-foreground uppercase tracking-wider cursor-pointer hover:bg-muted transition-colors group"
+                  className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors group"
                   onClick={() => handleSort('descricao')}
                 >
                   <div className="flex items-center gap-1">
                     Descrição / Fornecedor
                     {sortConfig?.key === 'descricao' ? (
-                      sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3 text-foreground" /> : <ArrowDown className="w-3 h-3 text-foreground" />
+                      sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3 text-slate-800" /> : <ArrowDown className="w-3 h-3 text-slate-800" />
                     ) : (
-                      <ArrowUpDown className="w-3 h-3 text-muted-foreground group-hover:text-foreground" />
+                      <ArrowUpDown className="w-3 h-3 text-slate-400 group-hover:text-slate-600" />
                     )}
                   </div>
                 </th>
                 <th
-                  className="px-6 py-4 text-[11px] font-bold text-muted-foreground uppercase tracking-wider cursor-pointer hover:bg-muted transition-colors group"
+                  className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors group"
                   onClick={() => handleSort('categoria')}
                 >
                   <div className="flex items-center gap-1">
                     Categoria
                     {sortConfig?.key === 'categoria' ? (
-                      sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3 text-foreground" /> : <ArrowDown className="w-3 h-3 text-foreground" />
+                      sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3 text-slate-800" /> : <ArrowDown className="w-3 h-3 text-slate-800" />
                     ) : (
-                      <ArrowUpDown className="w-3 h-3 text-muted-foreground group-hover:text-foreground" />
+                      <ArrowUpDown className="w-3 h-3 text-slate-400 group-hover:text-slate-600" />
                     )}
                   </div>
                 </th>
                 <th
-                  className="px-6 py-4 text-[11px] font-bold text-muted-foreground uppercase tracking-wider cursor-pointer hover:bg-muted transition-colors group"
+                  className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors group"
                   onClick={() => handleSort('centroCusto')}
                 >
                   <div className="flex items-center gap-1">
                     Centro de Custo
                     {sortConfig?.key === 'centroCusto' ? (
-                      sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3 text-foreground" /> : <ArrowDown className="w-3 h-3 text-foreground" />
+                      sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3 text-slate-800" /> : <ArrowDown className="w-3 h-3 text-slate-800" />
                     ) : (
-                      <ArrowUpDown className="w-3 h-3 text-muted-foreground group-hover:text-foreground" />
+                      <ArrowUpDown className="w-3 h-3 text-slate-400 group-hover:text-slate-600" />
                     )}
                   </div>
                 </th>
                 <th
-                  className="px-6 py-4 text-[11px] font-bold text-muted-foreground uppercase tracking-wider cursor-pointer hover:bg-muted transition-colors group"
+                  className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors group"
                   onClick={() => handleSort('status')}
                 >
                   <div className="flex items-center justify-center gap-1">
                     Status
                     {sortConfig?.key === 'status' ? (
-                      sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3 text-foreground" /> : <ArrowDown className="w-3 h-3 text-foreground" />
+                      sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3 text-slate-800" /> : <ArrowDown className="w-3 h-3 text-slate-800" />
                     ) : (
-                      <ArrowUpDown className="w-3 h-3 text-muted-foreground group-hover:text-foreground" />
+                      <ArrowUpDown className="w-3 h-3 text-slate-400 group-hover:text-slate-600" />
                     )}
                   </div>
                 </th>
                 <th
-                  className="px-6 py-4 text-[11px] font-bold text-muted-foreground uppercase tracking-wider text-right cursor-pointer hover:bg-muted transition-colors group"
+                  className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-right cursor-pointer hover:bg-slate-100 transition-colors group"
                   onClick={() => handleSort('valor')}
                 >
                   <div className="flex items-center justify-end gap-1">
                     Valor
                     {sortConfig?.key === 'valor' ? (
-                      sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3 text-foreground" /> : <ArrowDown className="w-3 h-3 text-foreground" />
+                      sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3 text-slate-800" /> : <ArrowDown className="w-3 h-3 text-slate-800" />
                     ) : (
-                      <ArrowUpDown className="w-3 h-3 text-muted-foreground group-hover:text-foreground" />
+                      <ArrowUpDown className="w-3 h-3 text-slate-400 group-hover:text-slate-600" />
                     )}
                   </div>
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/50 bg-card">
+            <tbody className="divide-y divide-slate-100 bg-white">
               {sortedData.length > 0 ? (
                 sortedData.map((item) => (
-                  <tr key={item.id} className="hover:bg-accent/80 transition-colors group">
-                    <td className="px-6 py-4 text-sm text-muted-foreground font-medium">
+                  <tr key={item.id} className="hover:bg-slate-50/80 transition-colors group">
+                    <td className="px-6 py-4 text-sm text-slate-600 font-medium">
                       {(() => {
                         const [year, month, day] = item.data.split('-').map(Number);
                         return new Date(year, month - 1, day).toLocaleDateString('pt-BR');
@@ -529,36 +529,36 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex flex-col">
-                        <span className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">{item.descricao}</span>
-                        <span className="text-xs text-muted-foreground">{item.fornecedor}</span>
+                        <span className="text-sm font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">{item.descricao}</span>
+                        <span className="text-xs text-slate-400">{item.fornecedor}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="px-2.5 py-1 bg-muted text-muted-foreground rounded-lg text-[10px] font-bold uppercase tracking-tight">
+                      <span className="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-lg text-[10px] font-bold uppercase tracking-tight">
                         {item.categoria}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-muted-foreground">
+                    <td className="px-6 py-4 text-sm text-slate-500">
                       {item.centroCusto}
                     </td>
                     <td className="px-6 py-4 text-center">
                       <span className={cn(
                         'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider',
-                        item.status === 'pago' || item.status === 'recebido' ? 'bg-success/5 text-success border border-success/15' :
+                        item.status === 'pago' || item.status === 'recebido' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' :
                           item.status === 'pendente' ? 'bg-amber-50 text-amber-700 border border-amber-100' :
-                            'bg-destructive/5 text-destructive border border-destructive/15'
+                            'bg-red-50 text-red-700 border border-red-100'
                       )}>
                         <div className={cn(
                           'w-1.5 h-1.5 rounded-full',
-                          item.status === 'pago' || item.status === 'recebido' ? 'bg-success' :
-                            item.status === 'pendente' ? 'bg-amber-500' : 'bg-destructive'
+                          item.status === 'pago' || item.status === 'recebido' ? 'bg-emerald-500' :
+                            item.status === 'pendente' ? 'bg-amber-500' : 'bg-red-500'
                         )} />
                         {item.status}
                       </span>
                     </td>
                     <td className={cn(
                       'px-6 py-4 text-sm font-bold text-right tabular-nums',
-                      item.valor > 0 ? 'text-primary' : 'text-destructive'
+                      item.valor > 0 ? 'text-emerald-600' : 'text-red-600'
                     )}>
                       {formatCurrency(item.valor, currencyMode)}
                     </td>
@@ -566,7 +566,7 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-muted-foreground italic">
+                  <td colSpan={6} className="px-6 py-12 text-center text-slate-400 italic">
                     Nenhum lançamento encontrado com os filtros aplicados.
                   </td>
                 </tr>
@@ -576,15 +576,15 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
         </div>
 
         {/* Table Footer / Summary - Fixed at bottom */}
-        <div className="bg-accent border-t border-border px-6 py-4 flex items-center justify-between shrink-0">
-          <div className="text-sm text-muted-foreground font-medium">
-            Mostrando <span className="text-foreground font-bold">{sortedData.length}</span> de <span className="text-foreground font-bold">{data.length}</span> lançamentos
+        <div className="bg-slate-50 border-t border-slate-200 px-6 py-4 flex items-center justify-between shrink-0">
+          <div className="text-sm text-slate-500 font-medium">
+            Mostrando <span className="text-slate-800 font-bold">{sortedData.length}</span> de <span className="text-slate-800 font-bold">{data.length}</span> lançamentos
           </div>
           <div className="flex flex-col items-end">
-            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Total Filtrado</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Filtrado</span>
             <span className={cn(
               'text-base font-bold tabular-nums',
-              totalFiltrado >= 0 ? 'text-primary' : 'text-destructive'
+              totalFiltrado >= 0 ? 'text-emerald-600' : 'text-red-600'
             )}>
               {formatCurrency(totalFiltrado, currencyMode)}
             </span>

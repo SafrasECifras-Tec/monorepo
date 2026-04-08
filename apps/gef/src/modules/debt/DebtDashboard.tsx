@@ -250,8 +250,8 @@ export function DebtDashboard() {
     <div className="flex flex-col h-full space-y-6">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-foreground tracking-tight">Endividamento</h1>
-          <p className="text-muted-foreground mt-1">Visão geral e projeção de dívidas</p>
+          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Endividamento</h1>
+          <p className="text-slate-500 mt-1">Visão geral e projeção de dívidas</p>
         </div>
         <ImportButton
           hasData={hasImportedData}
@@ -264,7 +264,7 @@ export function DebtDashboard() {
       <div className="flex flex-col gap-3 2xl:flex-row 2xl:items-end 2xl:justify-between">
         {/* Linha 1 / esquerda em 2xl: Tab nav */}
         <div className="flex overflow-x-auto custom-scrollbar shrink-0">
-          <GlassCard className="p-1 flex items-center gap-1 w-fit bg-card/60 border border-border/60 shadow-soft rounded-xl shrink-0">
+          <GlassCard className="p-1 flex items-center gap-1 w-fit bg-white/60 border border-slate-200/60 shadow-sm rounded-xl shrink-0">
             {TABS.map(tab => (
               <button
                 key={tab.id}
@@ -272,8 +272,8 @@ export function DebtDashboard() {
                 className={cn(
                   'px-4 py-1.5 rounded-lg font-medium transition-all duration-200 text-sm whitespace-nowrap cursor-pointer',
                   activeTab === tab.id
-                    ? 'bg-card text-primary shadow-soft border border-border/50'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-card/40',
+                    ? 'bg-white text-[#059669] shadow-sm border border-slate-200/50'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/40',
                 )}
               >
                 {tab.label}
@@ -314,39 +314,39 @@ export function DebtDashboard() {
       {/* KPI Cards */}
       {hasImportedData && (<>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-card transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300">
           <div className="flex items-center gap-2 mb-4">
-            <TrendingDown className="h-5 w-5 text-foreground" />
-            <span className="text-sm font-semibold text-foreground uppercase tracking-wider">Endividamento</span>
+            <TrendingDown className="h-5 w-5 text-slate-800" />
+            <span className="text-sm font-semibold text-slate-800 uppercase tracking-wider">Endividamento</span>
           </div>
-          <div className="text-xl lg:text-lg xl:text-xl 2xl:text-2xl font-bold text-foreground tracking-tight whitespace-nowrap">
+          <div className="text-xl lg:text-lg xl:text-xl 2xl:text-2xl font-bold text-slate-800 tracking-tight whitespace-nowrap">
             {formatCurrency(totalEndividamento, currencyMode)}
           </div>
         </GlassCard>
-        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-card transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300">
           <div className="flex items-center gap-2 mb-4">
-            <DollarSign className="h-5 w-5 text-foreground" />
-            <span className="text-sm font-semibold text-foreground uppercase tracking-wider">Valor Principal</span>
+            <DollarSign className="h-5 w-5 text-slate-800" />
+            <span className="text-sm font-semibold text-slate-800 uppercase tracking-wider">Valor Principal</span>
           </div>
-          <div className="text-xl lg:text-lg xl:text-xl 2xl:text-2xl font-bold text-foreground tracking-tight whitespace-nowrap">
+          <div className="text-xl lg:text-lg xl:text-xl 2xl:text-2xl font-bold text-slate-800 tracking-tight whitespace-nowrap">
             {formatCurrency(totalPrincipal, currencyMode)}
           </div>
         </GlassCard>
-        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-card transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300">
           <div className="flex items-center gap-2 mb-4">
-            <Wallet className="h-5 w-5 text-foreground" />
-            <span className="text-sm font-semibold text-foreground uppercase tracking-wider">Juros</span>
+            <Wallet className="h-5 w-5 text-slate-800" />
+            <span className="text-sm font-semibold text-slate-800 uppercase tracking-wider">Juros</span>
           </div>
-          <div className="text-xl lg:text-lg xl:text-xl 2xl:text-2xl font-bold text-foreground tracking-tight whitespace-nowrap">
+          <div className="text-xl lg:text-lg xl:text-xl 2xl:text-2xl font-bold text-slate-800 tracking-tight whitespace-nowrap">
             {formatCurrency(totalJuros, currencyMode)}
           </div>
         </GlassCard>
-        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-card transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300">
           <div className="flex items-center gap-2 mb-4">
-            <Percent className="h-5 w-5 text-foreground" />
-            <span className="text-sm font-semibold text-foreground uppercase tracking-wider">Taxa Efetiva</span>
+            <Percent className="h-5 w-5 text-slate-800" />
+            <span className="text-sm font-semibold text-slate-800 uppercase tracking-wider">Taxa Efetiva</span>
           </div>
-          <div className="text-xl lg:text-lg xl:text-xl 2xl:text-2xl font-bold text-foreground tracking-tight whitespace-nowrap">
+          <div className="text-xl lg:text-lg xl:text-xl 2xl:text-2xl font-bold text-slate-800 tracking-tight whitespace-nowrap">
             {taxaEfetiva.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%
           </div>
         </GlassCard>
@@ -360,27 +360,27 @@ export function DebtDashboard() {
               <EndividamentoPorSafraChart data={endividamentoPorSafraChartData} currencyMode={currencyMode} sojaPrice={sojaPrice} />
 
               {/* Valores por Horizonte */}
-              <GlassCard className="p-6 flex flex-col hover:shadow-card transition-all duration-300">
+              <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
                 <div className="mb-8">
                   <h3 className="text-lg font-bold text-[#1e3a29]">Valores por Horizonte</h3>
-                  <p className="text-sm text-muted-foreground mt-1">Principal sem juros por prazo</p>
+                  <p className="text-sm text-slate-400 mt-1">Principal sem juros por prazo</p>
                 </div>
                 <div className="flex flex-col gap-8">
                   {filteredTermData.map((item, idx) => (
                     <div key={idx} className="flex flex-col gap-2">
                       <div className="flex justify-between items-end mb-1">
-                        <span className="text-sm font-medium text-muted-foreground">{item.name}</span>
+                        <span className="text-sm font-medium text-slate-600">{item.name}</span>
                         <span className="text-sm font-bold" style={{ color: item.color }}>{formatCurrency(item.value, currencyMode)}</span>
                       </div>
-                      <div className="w-full h-3.5 bg-muted rounded-full overflow-hidden">
+                      <div className="w-full h-3.5 bg-slate-100 rounded-full overflow-hidden">
                         <div className="h-full rounded-full transition-all duration-500" style={{ width: `${item.percent}%`, backgroundColor: item.color }} />
                       </div>
-                      <span className="text-xs text-muted-foreground font-medium">{item.percent}% do total</span>
+                      <span className="text-xs text-slate-400 font-medium">{item.percent}% do total</span>
                     </div>
                   ))}
                 </div>
-                <div className="mt-auto pt-5 border-t border-border flex justify-between items-center">
-                  <span className="text-sm font-medium text-muted-foreground">Total Principal</span>
+                <div className="mt-auto pt-5 border-t border-slate-200 flex justify-between items-center">
+                  <span className="text-sm font-medium text-slate-500">Total Principal</span>
                   <span className="text-lg font-bold text-[#1e3a29]">
                     {formatCurrency(filteredTermData.reduce((acc, d) => acc + d.value, 0), currencyMode)}
                   </span>

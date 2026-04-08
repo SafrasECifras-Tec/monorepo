@@ -26,7 +26,7 @@ const formatPercent = (percent: number) => `${percent.toFixed(1)}%`;
 const CustomTooltip = ({ active, payload, label, currencyMode }: any) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-foreground/95 backdrop-blur-md border border-slate-700 p-3 rounded-lg shadow-elevated">
+    <div className="bg-slate-800/95 backdrop-blur-md border border-slate-700 p-3 rounded-lg shadow-xl">
       <p className="font-medium text-slate-100 mb-1">{label}</p>
       <p className="text-sm text-slate-300">
         Endividamento: <span className="font-semibold text-white">{formatValue(payload[0].value, currencyMode)}</span>
@@ -92,10 +92,10 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         {/* Por Tipo de Financiamento */}
-        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-card transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-md transition-all duration-300">
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-foreground">por Tipo de Financiamento</h3>
-            <p className="text-xs text-muted-foreground italic">(Endividamento | % do Total)</p>
+            <h3 className="text-lg font-semibold text-slate-800">por Tipo de Financiamento</h3>
+            <p className="text-xs text-slate-500 italic">(Endividamento | % do Total)</p>
           </div>
           <div className="flex-1 w-full relative min-h-[300px]">
             <div className="absolute inset-0">
@@ -127,10 +127,10 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
         </GlassCard>
 
         {/* Por Descrição */}
-        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-card transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-md transition-all duration-300">
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-foreground">por Descrição</h3>
-            <p className="text-xs text-muted-foreground italic">(Endividamento | % do Total)</p>
+            <h3 className="text-lg font-semibold text-slate-800">por Descrição</h3>
+            <p className="text-xs text-slate-500 italic">(Endividamento | % do Total)</p>
           </div>
           <div className="flex-1 w-full relative min-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
             <div className="absolute inset-0">
@@ -160,10 +160,10 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
         </GlassCard>
 
         {/* Por Banco */}
-        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-card transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-md transition-all duration-300">
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-foreground">por Banco</h3>
-            <p className="text-xs text-muted-foreground italic">(Endividamento | % do Total)</p>
+            <h3 className="text-lg font-semibold text-slate-800">por Banco</h3>
+            <p className="text-xs text-slate-500 italic">(Endividamento | % do Total)</p>
           </div>
           <div className="flex-1 w-full relative min-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
             <div className="absolute inset-0">
@@ -195,13 +195,13 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
       </div>
 
       {/* Parcelas Table */}
-      <GlassCard className="p-6 flex flex-col hover:shadow-card transition-all duration-300">
+      <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
         <div className="mb-6">
-          <h3 className="text-lg font-semibold text-foreground">por Parcelas</h3>
+          <h3 className="text-lg font-semibold text-slate-800">por Parcelas</h3>
         </div>
-        <div className="overflow-x-auto overflow-y-auto max-h-[400px] custom-scrollbar rounded-lg border border-border/60">
+        <div className="overflow-x-auto overflow-y-auto max-h-[400px] custom-scrollbar rounded-lg border border-slate-200/60">
           <table className="w-full text-sm text-left relative min-w-[800px]">
-            <thead className="text-xs text-muted-foreground uppercase bg-accent sticky top-0 z-10">
+            <thead className="text-xs text-slate-500 uppercase bg-slate-50 sticky top-0 z-10">
               <tr>
                 <th className="px-4 py-3 whitespace-nowrap">Mês-Ano</th>
                 <th className="px-4 py-3 whitespace-nowrap">Banco</th>
@@ -214,22 +214,22 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
                 <th className="px-4 py-3 text-right whitespace-nowrap">Taxa Efetiva</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/50">
+            <tbody className="divide-y divide-slate-100">
               {filteredParcelas.map((row, i) => (
-                <tr key={i} className="hover:bg-card/60 transition-colors bg-card/20">
-                  <td className="px-4 py-3 font-medium text-foreground whitespace-nowrap">{row.mesAno}</td>
-                  <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{row.banco}</td>
-                  <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{row.contrato}</td>
-                  <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{row.tipo}</td>
-                  <td className="px-4 py-3 text-muted-foreground min-w-[200px]">{row.descricao}</td>
-                  <td className="px-4 py-3 text-right text-foreground whitespace-nowrap">{formatCurrency(row.principal, currencyMode)}</td>
-                  <td className="px-4 py-3 text-right text-foreground whitespace-nowrap">{formatCurrency(row.juros, currencyMode)}</td>
-                  <td className="px-4 py-3 text-right font-medium text-foreground whitespace-nowrap">{formatCurrency(row.total, currencyMode)}</td>
-                  <td className="px-4 py-3 text-right text-foreground whitespace-nowrap">{row.taxa.toFixed(2)}%</td>
+                <tr key={i} className="hover:bg-white/60 transition-colors bg-white/20">
+                  <td className="px-4 py-3 font-medium text-slate-800 whitespace-nowrap">{row.mesAno}</td>
+                  <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{row.banco}</td>
+                  <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{row.contrato}</td>
+                  <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{row.tipo}</td>
+                  <td className="px-4 py-3 text-slate-600 min-w-[200px]">{row.descricao}</td>
+                  <td className="px-4 py-3 text-right text-slate-700 whitespace-nowrap">{formatCurrency(row.principal, currencyMode)}</td>
+                  <td className="px-4 py-3 text-right text-slate-700 whitespace-nowrap">{formatCurrency(row.juros, currencyMode)}</td>
+                  <td className="px-4 py-3 text-right font-medium text-slate-800 whitespace-nowrap">{formatCurrency(row.total, currencyMode)}</td>
+                  <td className="px-4 py-3 text-right text-slate-700 whitespace-nowrap">{row.taxa.toFixed(2)}%</td>
                 </tr>
               ))}
             </tbody>
-            <tfoot className="bg-muted font-bold text-foreground sticky bottom-0 z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+            <tfoot className="bg-slate-200 font-bold text-slate-800 sticky bottom-0 z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
               <tr>
                 <td colSpan={5} className="px-4 py-4">Total</td>
                 <td className="px-4 py-4 text-right whitespace-nowrap">{formatCurrency(totaisParcelas.principal, currencyMode)}</td>

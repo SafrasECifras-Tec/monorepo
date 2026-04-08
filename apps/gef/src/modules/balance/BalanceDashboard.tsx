@@ -42,8 +42,8 @@ export function BalanceDashboard() {
       {/* Header Row: Title */}
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-foreground tracking-tight">Balanço Patrimonial</h1>
-          <p className="text-muted-foreground mt-1 text-lg">Visão geral do ativo, passivo e patrimônio líquido</p>
+          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Balanço Patrimonial</h1>
+          <p className="text-slate-600 mt-1 text-lg">Visão geral do ativo, passivo e patrimônio líquido</p>
         </div>
         <ImportButton
           hasData={hasImportedData}
@@ -56,7 +56,7 @@ export function BalanceDashboard() {
       <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-4 xl:gap-6">
         {/* Tabs Navigation */}
         <div className="flex overflow-x-auto pb-2 -mb-2 custom-scrollbar w-full xl:w-auto">
-          <GlassCard className="p-1 flex items-center gap-1 w-max bg-card/60 border border-border/60 shadow-soft rounded-xl shrink-0">
+          <GlassCard className="p-1 flex items-center gap-1 w-max bg-white/60 border border-slate-200/60 shadow-sm rounded-xl shrink-0">
             {[
               { id: 'inicio', label: 'Início' },
               { id: 'ativo', label: 'Ativo' },
@@ -69,8 +69,8 @@ export function BalanceDashboard() {
                 className={cn(
                   "px-4 py-1.5 rounded-lg font-medium transition-all duration-200 text-sm whitespace-nowrap",
                   activeTab === tab.id
-                    ? "bg-card text-primary shadow-soft border border-border/50"
-                    : "text-muted-foreground hover:text-foreground hover:bg-card/40"
+                    ? "bg-white text-[#059669] shadow-sm border border-slate-200/50"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-white/40"
                 )}
               >
                 {tab.label}
@@ -84,55 +84,55 @@ export function BalanceDashboard() {
           {/* View Mode Filter (Only for Ativo and Passivo) */}
           {(activeTab === 'ativo' || activeTab === 'passivo') && (
             <div className="flex flex-col gap-1.5 w-full lg:w-auto">
-              <span className="text-sm font-medium text-muted-foreground">Visualização:</span>
+              <span className="text-sm font-medium text-slate-600">Visualização:</span>
               <div className="relative">
                 <select 
                   value={viewMode}
                   onChange={(e) => setViewMode(e.target.value)}
-                  className="w-full lg:w-48 appearance-none bg-card/60 border border-border/60 shadow-soft text-foreground hover:bg-card/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-primary"
+                  className="w-full lg:w-48 appearance-none bg-white/60 border border-slate-200/60 shadow-sm text-slate-700 hover:bg-white/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500"
                 >
                   <option value="Detalhamento">Detalhamento</option>
                   <option value="Tabela">Tabela</option>
                   <option value="Árvore Hierárquica">Árvore Hierárquica</option>
                 </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
               </div>
             </div>
           )}
 
           {/* Fazenda Filter */}
           <div className="flex flex-col gap-1.5 w-full lg:w-auto">
-            <span className="text-sm font-medium text-muted-foreground">Fazenda:</span>
+            <span className="text-sm font-medium text-slate-600">Fazenda:</span>
             <div className="relative">
               <select 
                 value={selectedFazenda}
                 onChange={(e) => setSelectedFazenda(e.target.value)}
-                className="w-full lg:w-48 appearance-none bg-card/60 border border-border/60 shadow-soft text-foreground hover:bg-card/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-primary"
+                className="w-full lg:w-48 appearance-none bg-white/60 border border-slate-200/60 shadow-sm text-slate-700 hover:bg-white/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500"
               >
                 <option value="Todas">Todas</option>
                 <option value="Fazenda Boa Vista">Fazenda Boa Vista</option>
                 <option value="Fazenda São João">Fazenda São João</option>
                 <option value="Fazenda Santa Rita">Fazenda Santa Rita</option>
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
             </div>
           </div>
 
           {/* Avaliação Filter — populado dinamicamente pelas colunas importadas */}
           {columns.length > 0 && (
             <div className="flex flex-col gap-1.5 w-full lg:w-auto">
-              <span className="text-sm font-medium text-muted-foreground">Coluna:</span>
+              <span className="text-sm font-medium text-slate-600">Coluna:</span>
               <div className="relative">
                 <select
                   value={selectedAvaliacao}
                   onChange={(e) => setSelectedAvaliacao(e.target.value)}
-                  className="w-full lg:w-48 appearance-none bg-card/60 border border-border/60 shadow-soft text-foreground hover:bg-card/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-primary"
+                  className="w-full lg:w-48 appearance-none bg-white/60 border border-slate-200/60 shadow-sm text-slate-700 hover:bg-white/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500"
                 >
                   {columns.map(col => (
                     <option key={col} value={col}>{col}</option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
               </div>
             </div>
           )}

@@ -22,53 +22,53 @@ export function CashFlowSummaryCards({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {/* Saldo Inicial */}
-      <GlassCard className="p-6 flex flex-col hover:shadow-card transition-all duration-300">
+      <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
         <div className="flex items-center gap-3 mb-4">
           <div className="p-2 bg-blue-100 text-blue-600 rounded-lg">
             <Wallet className="w-5 h-5" />
           </div>
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Saldo Inicial</h3>
+          <h3 className="text-sm font-semibold text-slate-600 uppercase tracking-wider">Saldo Inicial</h3>
         </div>
-        <div className="text-3xl font-bold text-foreground">
+        <div className="text-3xl font-bold text-slate-800">
           {formatCurrency(saldoInicial, currencyMode)}
         </div>
       </GlassCard>
 
       {/* Total de Entradas */}
-      <GlassCard className="p-6 flex flex-col hover:shadow-card transition-all duration-300">
+      <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-primary/10 text-primary rounded-lg">
+          <div className="p-2 bg-emerald-100 text-emerald-600 rounded-lg">
             <ArrowUpRight className="w-5 h-5" />
           </div>
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Total de Entradas</h3>
+          <h3 className="text-sm font-semibold text-slate-600 uppercase tracking-wider">Total de Entradas</h3>
         </div>
-        <div className="text-3xl font-bold text-foreground">
+        <div className="text-3xl font-bold text-slate-800">
           {formatCurrency(totalEntradas, currencyMode)}
         </div>
       </GlassCard>
 
       {/* Total de Saídas */}
-      <GlassCard className="p-6 flex flex-col hover:shadow-card transition-all duration-300">
+      <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-destructive/10 text-destructive rounded-lg">
+          <div className="p-2 bg-red-100 text-red-600 rounded-lg">
             <ArrowDownRight className="w-5 h-5" />
           </div>
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Total de Saídas</h3>
+          <h3 className="text-sm font-semibold text-slate-600 uppercase tracking-wider">Total de Saídas</h3>
         </div>
-        <div className="text-3xl font-bold text-foreground">
+        <div className="text-3xl font-bold text-slate-800">
           {formatCurrency(totalSaidas, currencyMode)}
         </div>
       </GlassCard>
 
       {/* Saldo Final Projetado */}
-      <GlassCard className="p-6 flex flex-col hover:shadow-card transition-all duration-300">
+      <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
         <div className="flex items-center gap-3 mb-4">
           <div className="p-2 bg-indigo-100 text-indigo-600 rounded-lg">
             <Calculator className="w-5 h-5" />
           </div>
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Saldo Final Projetado</h3>
+          <h3 className="text-sm font-semibold text-slate-600 uppercase tracking-wider">Saldo Final Projetado</h3>
         </div>
-        <div className="text-3xl font-bold text-foreground">
+        <div className="text-3xl font-bold text-slate-800">
           {formatCurrency(saldoFinalProjetado, currencyMode)}
         </div>
       </GlassCard>

@@ -16,11 +16,11 @@ export function ImportButton({ hasData, isLoading = false, onClick, className }:
       disabled={isLoading}
       title={hasData ? 'Dados importados — clique para reimportar' : 'Importar planilha (.xlsx)'}
       className={cn(
-        'group flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-semibold',
-        'transition-all duration-200 border shadow-soft active:scale-[0.97]',
+        'group flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold',
+        'transition-all duration-200 border shadow-sm',
         hasData
-          ? 'bg-success/5 text-success border-success/20 hover:bg-success/10 hover:border-success/30'
-          : 'bg-card text-muted-foreground border-border/60 hover:bg-accent hover:text-foreground hover:border-border',
+          ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100 hover:border-emerald-300'
+          : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50 hover:text-slate-700 hover:border-slate-300',
         'disabled:opacity-50 disabled:cursor-not-allowed',
         className
       )}

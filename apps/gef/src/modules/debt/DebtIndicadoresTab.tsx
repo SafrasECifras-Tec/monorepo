@@ -21,10 +21,10 @@ interface Props {
 
 function IndicadorPlaceholder({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
-    <GlassCard className="p-6 flex flex-col items-center justify-center hover:shadow-card transition-all duration-300 min-h-[300px]">
-      <BarChart3 className="h-10 w-10 text-muted-foreground mb-3" />
-      <h3 className="text-lg font-semibold text-foreground mb-1">{title}</h3>
-      <p className="text-sm text-muted-foreground text-center max-w-xs">
+    <GlassCard className="p-6 flex flex-col items-center justify-center hover:shadow-md transition-all duration-300 min-h-[300px]">
+      <BarChart3 className="h-10 w-10 text-slate-300 mb-3" />
+      <h3 className="text-lg font-semibold text-slate-800 mb-1">{title}</h3>
+      <p className="text-sm text-slate-400 text-center max-w-xs">
         {subtitle ?? 'Dados de DRE/EBITDA necessários. Importe a aba correspondente para calcular este indicador.'}
       </p>
     </GlassCard>
@@ -64,10 +64,10 @@ export function DebtIndicadoresTab({
 
           {vis.comprometimento_ebitda && (
             hasEbitdaData ? (
-              <GlassCard className="p-6 h-[450px] flex flex-col hover:shadow-card transition-all duration-300">
+              <GlassCard className="p-6 h-[450px] flex flex-col hover:shadow-md transition-all duration-300">
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-foreground">Comprometimento do EBITDA</h3>
-                  <p className="text-xs text-muted-foreground italic mt-1">Investimentos + Aquisições de Terras + Consórcios + Juros / EBITDA</p>
+                  <h3 className="text-lg font-semibold text-slate-800">Comprometimento do EBITDA</h3>
+                  <p className="text-xs text-slate-500 italic mt-1">Investimentos + Aquisições de Terras + Consórcios + Juros / EBITDA</p>
                 </div>
                 <div className="flex-1 w-full relative">
                   <ResponsiveContainer width="100%" height="100%">
@@ -132,10 +132,10 @@ export function DebtIndicadoresTab({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
               {vis.endividamento_receita && (
                 endividamentoReceita != null ? (
-                  <GlassCard className="p-6 flex flex-col hover:shadow-card transition-all duration-300 min-h-[350px]">
+                  <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300 min-h-[350px]">
                     <div className="mb-4">
-                      <h3 className="text-lg font-semibold text-foreground">Endividamento / Receita</h3>
-                      <p className="text-xs text-muted-foreground italic mt-1">*Para o calculo não se considera o Vlr Principal de Custeio</p>
+                      <h3 className="text-lg font-semibold text-slate-800">Endividamento / Receita</h3>
+                      <p className="text-xs text-slate-500 italic mt-1">*Para o calculo não se considera o Vlr Principal de Custeio</p>
                     </div>
                     <div className="flex-1 flex items-center justify-center mt-4 overflow-hidden">
                       <GaugeChart
@@ -155,10 +155,10 @@ export function DebtIndicadoresTab({
 
               {vis.endividamento_ebitda && (
                 endividamentoEbitda != null ? (
-                  <GlassCard className="p-6 flex flex-col hover:shadow-card transition-all duration-300 min-h-[350px]">
+                  <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300 min-h-[350px]">
                     <div className="mb-4">
-                      <h3 className="text-lg font-semibold text-foreground">Endividamento / EBITDA</h3>
-                      <p className="text-xs text-muted-foreground italic mt-1">*Para o calculo não se considera o Vlr Principal de Custeio</p>
+                      <h3 className="text-lg font-semibold text-slate-800">Endividamento / EBITDA</h3>
+                      <p className="text-xs text-slate-500 italic mt-1">*Para o calculo não se considera o Vlr Principal de Custeio</p>
                     </div>
                     <div className="flex-1 flex items-center justify-center mt-4 overflow-hidden">
                       <GaugeChart
@@ -183,15 +183,15 @@ export function DebtIndicadoresTab({
         <div className="lg:col-span-1 flex flex-col gap-6">
 
           {vis.renegociacao && (
-            <GlassCard className="p-6 flex flex-col hover:shadow-card transition-all duration-300">
+            <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-foreground">Renegociação</h3>
-                <p className="text-xs text-muted-foreground italic mt-1">Total</p>
+                <h3 className="text-lg font-semibold text-slate-800">Renegociação</h3>
+                <p className="text-xs text-slate-500 italic mt-1">Total</p>
               </div>
               <div className="flex flex-col justify-center py-2">
-                <div className="text-4xl font-bold text-foreground mb-2">{formatCurrency(0, currencyMode)}</div>
-                <p className="text-sm text-muted-foreground">
-                  Representa <span className="font-semibold text-foreground">0,00%</span> do endividamento total
+                <div className="text-4xl font-bold text-slate-800 mb-2">{formatCurrency(0, currencyMode)}</div>
+                <p className="text-sm text-slate-500">
+                  Representa <span className="font-semibold text-slate-700">0,00%</span> do endividamento total
                 </p>
               </div>
             </GlassCard>
@@ -199,23 +199,23 @@ export function DebtIndicadoresTab({
 
           {vis.custeio_custo && (
             custeioRatio != null ? (
-              <GlassCard className="p-6 flex flex-col hover:shadow-card transition-all duration-300">
+              <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
                 <div className="mb-8">
-                  <h3 className="text-lg font-semibold text-foreground">Custeio / Custo Desembolsado</h3>
+                  <h3 className="text-lg font-semibold text-slate-800">Custeio / Custo Desembolsado</h3>
                 </div>
                 <div className="relative pt-6 pb-2 flex items-center gap-4">
                   <div className="flex-1 relative">
-                    <div className="absolute left-[40%] -top-6 bottom-0 border-l-2 border-dashed border-muted-foreground z-10 flex flex-col items-center">
-                      <span className="absolute -top-5 whitespace-nowrap text-xs font-medium text-muted-foreground bg-card px-1">Máx: 40%</span>
+                    <div className="absolute left-[40%] -top-6 bottom-0 border-l-2 border-dashed border-slate-400 z-10 flex flex-col items-center">
+                      <span className="absolute -top-5 whitespace-nowrap text-xs font-medium text-slate-500 bg-white px-1">Máx: 40%</span>
                     </div>
-                    <div className="h-6 bg-muted rounded-full overflow-hidden relative flex w-full">
+                    <div className="h-6 bg-slate-100 rounded-full overflow-hidden relative flex w-full">
                       <div
-                        className={cn('h-full rounded-full transition-all duration-500', custeioRatio > 40 ? 'bg-destructive' : 'bg-primary')}
+                        className={cn('h-full rounded-full transition-all duration-500', custeioRatio > 40 ? 'bg-red-500' : 'bg-emerald-500')}
                         style={{ width: `${Math.min(custeioRatio, 100)}%` }}
                       />
                     </div>
                   </div>
-                  <div className={cn('text-xl font-bold', custeioRatio > 40 ? 'text-destructive' : 'text-primary')}>
+                  <div className={cn('text-xl font-bold', custeioRatio > 40 ? 'text-red-500' : 'text-emerald-500')}>
                     {custeioRatio.toFixed(0)}%
                   </div>
                 </div>
@@ -227,19 +227,19 @@ export function DebtIndicadoresTab({
 
           {vis.custo_financeiro && (
             hasCustoFinanceiroData ? (
-              <GlassCard className="p-6 flex-1 flex flex-col hover:shadow-card transition-all duration-300 min-h-[300px]">
+              <GlassCard className="p-6 flex-1 flex flex-col hover:shadow-md transition-all duration-300 min-h-[300px]">
                 <div className="mb-6 flex flex-col gap-3">
-                  <h3 className="text-lg font-semibold text-foreground">Custo Financeiro vs:</h3>
+                  <h3 className="text-lg font-semibold text-slate-800">Custo Financeiro vs:</h3>
                   <div className="relative w-full sm:w-fit">
                     <select
-                      className="w-full sm:w-60 appearance-none bg-card/60 border border-border/60 shadow-soft text-foreground hover:bg-card/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-primary"
+                      className="w-full sm:w-60 appearance-none bg-white/60 border border-slate-200/60 shadow-sm text-slate-700 hover:bg-white/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500"
                       value={custoFinanceiroVs}
                       onChange={e => setCustoFinanceiroVs(e.target.value as 'Desembolso Operacional' | 'EBITDA')}
                     >
                       <option value="Desembolso Operacional">Desembolso Operacional</option>
                       <option value="EBITDA">EBITDA</option>
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
                   </div>
                 </div>
                 <div className="flex-1 w-full relative">

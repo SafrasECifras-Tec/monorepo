@@ -40,7 +40,7 @@ const analysisItems = [
 
 export function AppSidebar({ activeModule, onNavigate }: AppSidebarProps) {
   const { state, toggleSidebar, isMobile } = useSidebar();
-  const { user, signOut } = useAuth();
+  const { user, logout } = useAuth();
   const { clients, activeClient, switchClient } = useClient();
 
   const collapsed = !isMobile && state === "collapsed";
@@ -56,14 +56,11 @@ export function AppSidebar({ activeModule, onNavigate }: AppSidebarProps) {
 
   const handleSair = () => {
     if (isMobile) toggleSidebar();
-    signOut();
-    // redirect happens automatically via App.tsx useEffect when user becomes null
+    logout();
   };
 
-  const userName = user?.user_metadata?.full_name ?? user?.user_metadata?.name ?? user?.email ?? "";
-  const userPicture = user?.user_metadata?.avatar_url ?? user?.user_metadata?.picture ?? "";
-  const userInitials = userName
-    ? userName.slice(0, 2).toUpperCase()
+  const userInitials = user?.name
+    ? user.name.slice(0, 2).toUpperCase()
     : user?.email?.slice(0, 2).toUpperCase() ?? "??";
 
   const renderItems = (items: typeof gestaoItems) =>
@@ -270,8 +267,8 @@ export function AppSidebar({ activeModule, onNavigate }: AppSidebarProps) {
                 "flex items-center gap-2.5 rounded-xl transition-colors duration-200 hover:bg-sidebar-accent",
                 collapsed ? "p-2 justify-center w-full" : "flex-1 min-w-0 px-2 py-2",
               )}>
-                {userPicture ? (
-                  <img src={userPicture} alt={userName} className="h-7 w-7 rounded-lg object-cover shrink-0" referrerPolicy="no-referrer" />
+                {user?.picture ? (
+                  <img src={user.picture} alt={user.name} className="h-7 w-7 rounded-lg object-cover shrink-0" referrerPolicy="no-referrer" />
                 ) : (
                   <div className="h-7 w-7 rounded-lg bg-primary/15 flex items-center justify-center shrink-0">
                     <span className="text-[10px] font-bold text-primary">{userInitials}</span>
@@ -279,14 +276,14 @@ export function AppSidebar({ activeModule, onNavigate }: AppSidebarProps) {
                 )}
                 {!collapsed && (
                   <span className="text-[12px] text-sidebar-foreground/70 truncate min-w-0 flex-1 text-left">
-                    {user?.email ?? "—"}
+                    {user?.email ?? user?.name ?? "—"}
                   </span>
                 )}
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent side="top" align="start" className="w-52">
               <div className="px-2 py-1.5">
-                <p className="text-[11px] text-muted-foreground truncate">{user?.email ?? "—"}</p>
+                <p className="text-[11px] text-muted-foreground truncate">{user?.email ?? user?.name ?? "—"}</p>
               </div>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => onNavigate("ajustes")}>

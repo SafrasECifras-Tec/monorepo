@@ -4,7 +4,7 @@
  */
 
 import { useState } from 'react';
-import { TooltipProvider } from '@/components/ui/tooltip';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { DREDashboard } from '@/modules/dre/DREDashboard';
 import { DebtDashboard } from '@/modules/debt/DebtDashboard';
@@ -17,16 +17,20 @@ import { SettingsProvider } from '@/contexts/SettingsContext';
 import { ImportDataProvider } from '@/contexts/ImportDataContext';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { ClientProvider } from '@/contexts/ClientContext';
-import { Toaster } from 'sonner';
 import { LoginPage } from '@/pages/LoginPage';
+import { Toaster } from 'sonner';
+
+const GOOGLE_CLIENT_ID =
+  import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+  '359561013239-44d1m7harmo5dglpitl895gstgjv1efe.apps.googleusercontent.com';
 
 function EstoqueModule() {
   const estoqueData = useEstoqueData();
   return (
     <div className="flex flex-col space-y-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 pb-6">
       <header>
-        <h1 className="text-3xl font-bold text-foreground tracking-tight">Estoque</h1>
-        <p className="text-muted-foreground mt-1">Gestao e comercializacao de graos</p>
+        <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Estoque</h1>
+        <p className="text-slate-500 mt-1">Gestão e comercialização de grãos</p>
       </header>
       <EstoqueTab stockData={estoqueData ?? []} />
     </div>
@@ -34,16 +38,8 @@ function EstoqueModule() {
 }
 
 function AppContent() {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const [activeModule, setActiveModule] = useState('cashflow');
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="h-6 w-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
 
   if (!user) {
     return <LoginPage />;
@@ -66,7 +62,7 @@ function AppContent() {
       default:
         return (
           <div className="flex items-center justify-center h-full">
-            <h2 className="text-2xl font-bold text-muted-foreground">Modulo em desenvolvimento</h2>
+            <h2 className="text-2xl font-bold text-slate-400">Módulo em desenvolvimento</h2>
           </div>
         );
     }
@@ -75,12 +71,12 @@ function AppContent() {
   return (
     <ClientProvider>
       <ImportDataProvider>
-        <SettingsProvider>
-          <MainLayout activeModule={activeModule} onNavigate={setActiveModule}>
-            {renderModule()}
-          </MainLayout>
-          <Toaster position="top-right" />
-        </SettingsProvider>
+      <SettingsProvider>
+        <MainLayout activeModule={activeModule} onNavigate={setActiveModule}>
+          {renderModule()}
+        </MainLayout>
+        <Toaster position="top-right" />
+      </SettingsProvider>
       </ImportDataProvider>
     </ClientProvider>
   );
@@ -88,14 +84,11 @@ function AppContent() {
 
 export default function App() {
   return (
-    <AuthProvider
-      allowedDomain="safrasecifras.com.br"
-      onSignIn={() => window.location.replace('/')}
-    >
-      <TooltipProvider delayDuration={0}>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <AuthProvider>
         <AppContent />
-      </TooltipProvider>
-      <Toaster position="top-right" />
-    </AuthProvider>
+        <Toaster position="top-right" />
+      </AuthProvider>
+    </GoogleOAuthProvider>
   );
 }

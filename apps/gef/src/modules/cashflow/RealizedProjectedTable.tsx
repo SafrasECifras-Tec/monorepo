@@ -35,7 +35,7 @@ const months = MONTHS_PT;
 const currentMonthIndex = new Date().getMonth();
 
 const formatValue = (value: number, currencyMode: CurrencyMode) => {
-  if (value === 0) return <span className="text-muted-foreground">-</span>;
+  if (value === 0) return <span className="text-[#B0B0B0]">-</span>;
 
   let displayValue = value;
   if (currencyMode === 'SOJA') displayValue = value / 120;
@@ -326,7 +326,7 @@ export function RealizedProjectedTable({
       layout
       transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       className={cn(
-        "overflow-hidden border-border/60 bg-card/80 shadow-elevated flex flex-col rounded-[2rem]",
+        "overflow-hidden border-slate-200/60 bg-white/80 shadow-xl flex flex-col rounded-2xl",
         isFullscreen
           ? "fixed inset-2 z-50 rounded-xl shadow-2xl"
           : "h-full"
@@ -351,23 +351,23 @@ export function RealizedProjectedTable({
         currencyMode={currencyMode}
         onAddProjection={handleAddProjection}
       />
-      <div className="px-5 py-4 border-b border-border/50 bg-card/40 flex flex-col gap-3">
+      <div className="px-5 py-4 border-b border-slate-100 bg-white/40 flex flex-col gap-3">
         {/* Row 1: Título + ações primárias */}
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 rounded-lg shrink-0">
-              <TrendingUp className="h-5 w-5 text-primary" />
+            <div className="p-2 bg-emerald-100 rounded-lg shrink-0">
+              <TrendingUp className="h-5 w-5 text-emerald-600" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-foreground">Fluxo de Caixa Realizado vs Projetado</h2>
-              <p className="text-xs text-muted-foreground">Visão detalhada mensal com separação de competência</p>
+              <h2 className="text-base font-bold text-slate-800">Fluxo de Caixa Realizado vs Projetado</h2>
+              <p className="text-xs text-slate-500">Visão detalhada mensal com separação de competência</p>
             </div>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => setShowSaveModal(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors"
             >
               <Save className="h-4 w-4" />
               Salvar Projeção
@@ -375,7 +375,7 @@ export function RealizedProjectedTable({
 
             <button
               onClick={() => setShowHistory(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-muted-foreground bg-card border border-border rounded-lg hover:bg-accent transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
             >
               <Clock className="h-4 w-4" />
               Histórico
@@ -389,7 +389,7 @@ export function RealizedProjectedTable({
             <button
               onClick={() => setIsFullscreen(f => !f)}
               title={isFullscreen ? 'Sair da tela cheia (Esc)' : 'Expandir tela cheia'}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-muted-foreground bg-card border border-border rounded-lg hover:bg-accent transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
             >
               {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
               {isFullscreen ? 'Minimizar' : 'Tela Cheia'}
@@ -399,10 +399,10 @@ export function RealizedProjectedTable({
 
         {/* Row 2: Controles de visualização */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-accent border border-border rounded-lg">
-            <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">Saldo Inicial</span>
-            <div className="h-3.5 w-px bg-border" />
-            <span className="text-xs text-muted-foreground shrink-0">R$</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg">
+            <span className="text-xs font-medium text-slate-500 whitespace-nowrap">Saldo Inicial</span>
+            <div className="h-3.5 w-px bg-slate-300" />
+            <span className="text-xs text-slate-400 shrink-0">R$</span>
             <input
               type="text"
               inputMode="numeric"
@@ -425,18 +425,18 @@ export function RealizedProjectedTable({
               onKeyDown={e => {
                 if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
               }}
-              className="w-24 text-sm font-medium text-foreground bg-transparent outline-none text-right"
+              className="w-24 text-sm font-medium text-slate-700 bg-transparent outline-none text-right"
             />
           </div>
 
-          <div className="h-5 w-px bg-border" />
+          <div className="h-5 w-px bg-slate-200" />
 
-          <div className="flex items-center bg-muted p-1 rounded-lg border border-border">
+          <div className="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200">
             <button
               onClick={() => setViewMode('monthly')}
               className={cn(
                 'px-3 py-1.5 text-sm font-medium rounded-md transition-all',
-                viewMode === 'monthly' ? 'bg-card text-primary shadow-soft' : 'text-muted-foreground hover:text-foreground'
+                viewMode === 'monthly' ? 'bg-white text-emerald-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'
               )}
             >
               Mensal
@@ -445,41 +445,41 @@ export function RealizedProjectedTable({
               onClick={() => setViewMode('annual')}
               className={cn(
                 'px-3 py-1.5 text-sm font-medium rounded-md transition-all',
-                viewMode === 'annual' ? 'bg-card text-primary shadow-soft' : 'text-muted-foreground hover:text-foreground'
+                viewMode === 'annual' ? 'bg-white text-emerald-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'
               )}
             >
               Anual
             </button>
           </div>
 
-          <div className="h-5 w-px bg-border" />
+          <div className="h-5 w-px bg-slate-200" />
 
           <div className="relative" ref={filterRef}>
             <button
               onClick={() => setShowColumnFilter(!showColumnFilter)}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-muted-foreground bg-card border border-border rounded-lg hover:bg-accent transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
             >
               <Columns className="h-4 w-4" />
               Ocultar {viewMode === 'monthly' ? 'Meses' : 'Anos'}
             </button>
 
             {showColumnFilter && (
-              <div className="absolute right-0 mt-2 w-48 bg-card rounded-xl shadow-elevated border border-border/50 z-50 py-2">
-                <div className="px-3 py-2 border-b border-border/50 mb-1">
-                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 z-50 py-2">
+                <div className="px-3 py-2 border-b border-slate-100 mb-1">
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                     {viewMode === 'monthly' ? 'Meses' : 'Anos'} Visíveis
                   </span>
                 </div>
                 <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
                   {columns.map((col, i) => (
-                    <label key={col} className="flex items-center gap-2 px-3 py-1.5 hover:bg-accent cursor-pointer">
+                    <label key={col} className="flex items-center gap-2 px-3 py-1.5 hover:bg-slate-50 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={visibleColumns[i]}
                         onChange={() => toggleColumn(i)}
-                        className="rounded border-border text-primary focus:ring-primary"
+                        className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
                       />
-                      <span className="text-sm text-foreground">{col}</span>
+                      <span className="text-sm text-slate-700">{col}</span>
                     </label>
                   ))}
                 </div>
@@ -491,18 +491,18 @@ export function RealizedProjectedTable({
 
       <div className={cn("relative overflow-y-auto custom-scrollbar flex-1 min-h-0", isFullscreen ? "overflow-x-hidden" : "overflow-x-auto")}>
         <table className={cn("w-full border-separate border-spacing-0 text-xs", isFullscreen && "table-fixed")}>
-          <thead className="sticky top-0 z-40 bg-accent">
-            <tr className="bg-accent">
-              <th className={cn("sticky left-0 z-50 bg-accent py-3 px-3 text-left font-bold text-foreground border-r border-b border-border", isFullscreen ? "w-[190px]" : "min-w-[200px]")}>
+          <thead className="sticky top-0 z-40 bg-slate-50">
+            <tr className="bg-slate-50">
+              <th className={cn("sticky left-0 z-50 bg-slate-50 py-3 px-3 text-left font-bold text-slate-700 border-r border-b border-slate-200", isFullscreen ? "w-[190px]" : "min-w-[200px]")}>
                 Categorias
               </th>
               {columns.map((col, i) => visibleColumns[i] && (
                 <th
                   key={col}
                   className={cn(
-                    'py-3 px-2 text-right font-bold text-foreground border-r border-b border-border/50 whitespace-nowrap',
+                    'py-3 px-2 text-right font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap',
                     isFullscreen ? "" : "min-w-[100px]",
-                    viewMode === 'monthly' && i > currentMonthIndex ? 'bg-blue-50/50' : 'bg-accent'
+                    viewMode === 'monthly' && i > currentMonthIndex ? 'bg-blue-50/50' : 'bg-slate-50'
                   )}
                 >
                   <div className="flex flex-col items-end gap-1">
@@ -510,32 +510,32 @@ export function RealizedProjectedTable({
                   </div>
                 </th>
               ))}
-              <th className={cn("py-3 px-2 text-right font-bold text-foreground bg-muted border-b border-border whitespace-nowrap", isFullscreen ? "" : "min-w-[110px]")}>
+              <th className={cn("py-3 px-2 text-right font-bold text-slate-800 bg-slate-200 border-b border-slate-300 whitespace-nowrap", isFullscreen ? "" : "min-w-[110px]")}>
                 Total
               </th>
             </tr>
           </thead>
 
-          <tbody className="bg-card">
+          <tbody className="bg-white">
             {currentData.map((master, masterIdx) => (
               <React.Fragment key={master.name}>
                 {/* Master Row */}
                 <tr
-                  className="group transition-colors hover:bg-accent"
+                  className="group transition-colors hover:bg-slate-50"
                 >
                   <td
                     className={cn(
-                      'sticky left-0 z-20 py-3 px-3 font-bold border-r border-b border-border flex items-center justify-between cursor-pointer',
-                      master.name === 'ENTRADAS' ? 'text-primary bg-card' :
-                      master.name === 'SAÍDAS' ? 'text-destructive bg-card' : 'text-foreground bg-card'
+                      'sticky left-0 z-20 py-3 px-3 font-bold border-r border-b border-slate-200 flex items-center justify-between cursor-pointer',
+                      master.name === 'ENTRADAS' ? 'text-emerald-700 bg-white' :
+                      master.name === 'SAÍDAS' ? 'text-red-700 bg-white' : 'text-slate-800 bg-white'
                     )}
                     onClick={() => toggleMaster(master.name)}
                   >
                     <div className="flex items-center gap-1.5">
-                      {expandedMaster[master.name] ? <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" /> : <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />}
+                      {expandedMaster[master.name] ? <ChevronDown className="h-3.5 w-3.5 text-slate-400" /> : <ChevronRight className="h-3.5 w-3.5 text-slate-400" />}
                       {master.name}
-                      {master.name === 'ENTRADAS' && <TrendingUp className="h-3.5 w-3.5 text-primary" />}
-                      {master.name === 'SAÍDAS' && <TrendingDown className="h-3.5 w-3.5 text-destructive" />}
+                      {master.name === 'ENTRADAS' && <TrendingUp className="h-3.5 w-3.5 text-emerald-500" />}
+                      {master.name === 'SAÍDAS' && <TrendingDown className="h-3.5 w-3.5 text-red-500" />}
                     </div>
                   </td>
                   {master.values.map((val, i) => visibleColumns[i] && (
@@ -543,7 +543,7 @@ export function RealizedProjectedTable({
                       key={i}
                       title={formatFullValue(val, currencyMode)}
                       className={cn(
-                        'py-3 px-2 text-right font-bold border-r border-b border-border/50 font-mono whitespace-nowrap',
+                        'py-3 px-2 text-right font-bold border-r border-b border-slate-100 font-mono whitespace-nowrap',
                         viewMode === 'monthly' && i > currentMonthIndex ? 'bg-blue-50/20' : ''
                       )}
                     >
@@ -552,7 +552,7 @@ export function RealizedProjectedTable({
                   ))}
                   <td
                     title={formatFullValue(calculateRowTotal(master.values), currencyMode)}
-                    className="py-3 px-2 text-right font-bold bg-muted text-foreground border-b border-border font-mono whitespace-nowrap"
+                    className="py-3 px-2 text-right font-bold bg-slate-100 text-slate-900 border-b border-slate-200 font-mono whitespace-nowrap"
                   >
                     {formatValue(calculateRowTotal(master.values), currencyMode)}
                   </td>
@@ -578,13 +578,13 @@ export function RealizedProjectedTable({
                         key={child.name}
                         className={cn(
                           'transition-colors group/row',
-                          child.isSubMaster ? 'bg-muted hover:bg-muted/80' : 'hover:bg-accent/50'
+                          child.isSubMaster ? 'bg-slate-100 hover:bg-slate-100/80' : 'hover:bg-slate-50/50'
                         )}
                       >
                         <td
                           className={cn(
-                            'sticky left-0 z-20 py-3 px-3 border-r border-b border-border flex items-center justify-between',
-                            child.isSubMaster ? 'pl-7 font-bold text-foreground bg-muted cursor-pointer' : 'pl-10 text-muted-foreground font-medium bg-card'
+                            'sticky left-0 z-20 py-3 px-3 border-r border-b border-slate-200 flex items-center justify-between',
+                            child.isSubMaster ? 'pl-7 font-bold text-slate-700 bg-slate-100 cursor-pointer' : 'pl-10 text-slate-600 font-medium bg-white'
                           )}
                           onClick={child.isSubMaster ? () => toggleSubMaster(child.name) : undefined}
                         >
@@ -601,7 +601,7 @@ export function RealizedProjectedTable({
                                   e.stopPropagation();
                                   setSelectedCrop(child.name.replace(/^Venda de\s+/i, ''));
                                 }}
-                                className="p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/5 rounded-md opacity-0 group-hover/row:opacity-100 transition-all cursor-pointer"
+                                className="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-md opacity-0 group-hover/row:opacity-100 transition-all cursor-pointer"
                                 title="Ver Estoque"
                               >
                                 <Warehouse className="h-3.5 w-3.5" />
@@ -623,11 +623,11 @@ export function RealizedProjectedTable({
                               key={i}
                               title={formatFullValue(val, currencyMode)}
                               className={cn(
-                                'py-3 px-2 text-right border-r border-b border-accent font-mono relative transition-colors duration-500 whitespace-nowrap',
-                                child.isSubMaster ? 'font-bold text-foreground' : 'text-muted-foreground',
+                                'py-3 px-2 text-right border-r border-b border-slate-50 font-mono relative transition-colors duration-500 whitespace-nowrap',
+                                child.isSubMaster ? 'font-bold text-slate-700' : 'text-slate-600',
                                 viewMode === 'monthly' && i > currentMonthIndex ? 'bg-blue-50/10' : '',
-                                isBeyondAutoLimit ? 'bg-accent/30' : '',
-                                highlightedCell?.masterIdx === masterIdx && highlightedCell?.childIdx === childIdx && highlightedCell?.colIdx === i ? 'bg-primary/10' : ''
+                                isBeyondAutoLimit ? 'bg-slate-50/30' : '',
+                                highlightedCell?.masterIdx === masterIdx && highlightedCell?.childIdx === childIdx && highlightedCell?.colIdx === i ? 'bg-emerald-100/80' : ''
                               )}
                             >
                               {canEdit ? (
@@ -647,8 +647,8 @@ export function RealizedProjectedTable({
                         <td
                           title={formatFullValue(calculateRowTotal(child.values), currencyMode)}
                           className={cn(
-                            'py-3 px-2 text-right border-b border-border/50 font-mono whitespace-nowrap',
-                            child.isSubMaster ? 'font-bold text-foreground bg-muted' : 'font-semibold text-foreground bg-muted'
+                            'py-3 px-2 text-right border-b border-slate-100 font-mono whitespace-nowrap',
+                            child.isSubMaster ? 'font-bold text-slate-800 bg-slate-200' : 'font-semibold text-slate-700 bg-slate-100'
                           )}
                         >
                           {formatValue(calculateRowTotal(child.values), currencyMode)}
@@ -661,17 +661,17 @@ export function RealizedProjectedTable({
             ))}
           </tbody>
 
-          <tfoot className="sticky bottom-0 z-40 bg-card shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+          <tfoot className="sticky bottom-0 z-40 bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
             {/* Saldo Inicial */}
-            <tr className="text-foreground">
-              <td className="sticky left-0 z-50 bg-accent py-3 px-3 font-semibold border-r border-t-2 border-t-primary border-r-border">
+            <tr className="text-slate-800">
+              <td className="sticky left-0 z-50 bg-slate-50 py-3 px-3 font-semibold border-r border-t-2 border-t-emerald-600 border-r-slate-200">
                 Saldo Inicial
               </td>
               {saldoInicialMensal.map((val, i) => visibleColumns[i] && (
                 <td
                   key={i}
                   title={formatFullValue(val, currencyMode)}
-                  className="py-3 px-2 text-right font-semibold border-r border-t-2 border-t-primary border-r-border font-mono bg-accent relative text-foreground whitespace-nowrap"
+                  className="py-3 px-2 text-right font-semibold border-r border-t-2 border-t-emerald-600 border-r-slate-200 font-mono bg-slate-50 relative text-slate-700 whitespace-nowrap"
                 >
                   <EditableCell
                     value={val}
@@ -683,21 +683,21 @@ export function RealizedProjectedTable({
               ))}
               <td
                 title={formatFullValue(saldoInicialMensal[0], currencyMode)}
-                className="py-3 px-2 text-right font-semibold bg-muted border-t-2 border-t-primary font-mono text-foreground whitespace-nowrap"
+                className="py-3 px-2 text-right font-semibold bg-slate-200 border-t-2 border-t-emerald-600 font-mono text-slate-800 whitespace-nowrap"
               >
                 {formatValue(saldoInicialMensal[0], currencyMode)}
               </td>
             </tr>
             {/* Variação de Caixa */}
-            <tr className="text-foreground">
-              <td className="sticky left-0 z-50 bg-accent py-3 px-3 font-semibold border-r border-t border-border">
+            <tr className="text-slate-800">
+              <td className="sticky left-0 z-50 bg-slate-50 py-3 px-3 font-semibold border-r border-t border-slate-200">
                 Variação de Caixa (Mensal)
               </td>
               {variacaoCaixa.map((val, i) => visibleColumns[i] && (
                 <td
                   key={i}
                   title={formatFullValue(val, currencyMode)}
-                  className="py-3 px-2 text-right font-semibold border-r border-t border-border font-mono bg-accent text-foreground whitespace-nowrap"
+                  className="py-3 px-2 text-right font-semibold border-r border-t border-slate-200 font-mono bg-slate-50 text-slate-700 whitespace-nowrap"
                 >
                   <div className="flex flex-col items-end">
                     <span>{val > 0 ? '+' : ''}{formatValue(val, currencyMode)}</span>
@@ -706,32 +706,32 @@ export function RealizedProjectedTable({
               ))}
               <td
                 title={formatFullValue(calculateRowTotal(variacaoCaixa), currencyMode)}
-                className="py-3 px-2 text-right font-semibold bg-muted border-t border-border font-mono text-foreground whitespace-nowrap"
+                className="py-3 px-2 text-right font-semibold bg-slate-200 border-t border-slate-200 font-mono text-slate-800 whitespace-nowrap"
               >
                 {formatValue(calculateRowTotal(variacaoCaixa), currencyMode)}
               </td>
             </tr>
             {/* Saldo em Caixa */}
-            <tr className="text-foreground">
-              <td className="sticky left-0 z-50 bg-muted py-3 px-3 font-black border-r border-t border-border">
+            <tr className="text-slate-900">
+              <td className="sticky left-0 z-50 bg-slate-100 py-3 px-3 font-black border-r border-t border-slate-200">
                 Saldo em Caixa (Acumulado)
               </td>
               {saldoAcumulado.map((val, i) => visibleColumns[i] && (
                 <td
                   key={i}
                   title={formatFullValue(val, currencyMode)}
-                  className="py-3 px-2 text-right font-black border-r border-t border-border font-mono bg-muted whitespace-nowrap"
+                  className="py-3 px-2 text-right font-black border-r border-t border-slate-200 font-mono bg-slate-100 whitespace-nowrap"
                 >
-                  <span className={cn(val >= 0 ? 'text-primary' : 'text-destructive')}>
+                  <span className={cn(val >= 0 ? 'text-emerald-600' : 'text-red-600')}>
                     {formatValue(val, currencyMode)}
                   </span>
                 </td>
               ))}
               <td
                 title={formatFullValue(saldoAcumulado[saldoAcumulado.length - 1], currencyMode)}
-                className="py-3 px-2 text-right font-black bg-muted border-t border-border font-mono whitespace-nowrap"
+                className="py-3 px-2 text-right font-black bg-slate-300 border-t border-slate-300 font-mono whitespace-nowrap"
               >
-                <span className={cn(saldoAcumulado[saldoAcumulado.length - 1] >= 0 ? 'text-primary' : 'text-destructive')}>
+                <span className={cn(saldoAcumulado[saldoAcumulado.length - 1] >= 0 ? 'text-emerald-600' : 'text-red-600')}>
                   {formatValue(saldoAcumulado[saldoAcumulado.length - 1], currencyMode)}
                 </span>
               </td>
@@ -740,10 +740,10 @@ export function RealizedProjectedTable({
         </table>
       </div>
 
-      <div className="p-4 bg-accent border-t border-border flex items-center gap-3">
-        <Info className="h-4 w-4 text-muted-foreground" />
-        <p className="text-xs text-muted-foreground">
-          * Valores realizados até <span className="font-bold text-foreground">Março/2026</span>. Projeções baseadas no planejamento de safra e contratos futuros.
+      <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center gap-3">
+        <Info className="h-4 w-4 text-slate-400" />
+        <p className="text-xs text-slate-500">
+          * Valores realizados até <span className="font-bold text-slate-700">Março/2026</span>. Projeções baseadas no planejamento de safra e contratos futuros.
         </p>
       </div>
     </motion.div>

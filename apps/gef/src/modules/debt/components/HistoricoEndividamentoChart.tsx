@@ -42,10 +42,10 @@ export function HistoricoEndividamentoChart({ data, currencyMode, sojaPrice = 12
   if (!data.length) return null;
 
   return (
-    <GlassCard className="p-6 flex flex-col hover:shadow-card transition-all duration-300">
+    <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
       <div className="mb-4">
-        <h3 className="text-lg font-bold text-foreground">Histórico do Endividamento</h3>
-        <p className="text-sm text-muted-foreground mt-0.5">Evolução anual por categoria</p>
+        <h3 className="text-lg font-bold text-slate-800">Histórico do Endividamento</h3>
+        <p className="text-sm text-slate-400 mt-0.5">Evolução anual por categoria</p>
       </div>
 
       <div className="h-[320px] w-full">
@@ -90,7 +90,7 @@ export function HistoricoEndividamentoChart({ data, currencyMode, sojaPrice = 12
               iconType="circle"
               iconSize={8}
               formatter={(value) => (
-                <span className="text-muted-foreground text-xs font-medium">
+                <span className="text-slate-600 text-xs font-medium">
                   {value === 'compraDeTerras' ? 'Compra de Terras'
                     : value === 'custeios'     ? 'Custeios'
                     : value === 'investimentos' ? 'Investimentos'

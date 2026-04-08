@@ -34,6 +34,12 @@ function AuthForm() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [videoVisible, setVideoVisible] = useState(false);
   const [cardVisible, setCardVisible] = useState(false);
+
+  // Safety fallback: show the card even if the video never fires onCanPlay
+  useEffect(() => {
+    const t = setTimeout(() => setCardVisible(true), 800);
+    return () => clearTimeout(t);
+  }, []);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -64,12 +70,10 @@ function AuthForm() {
 
   const handleGoogleLogin = async () => {
     setGoogleLoading(true);
-    const next = searchParams.get("next") ?? "/";
-    const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: callbackUrl,
+        redirectTo: `${window.location.origin}/auth/callback`,
         queryParams: { hd: "safrasecifras.com.br" },
       },
     });
@@ -96,8 +100,9 @@ function AuthForm() {
           }}
           onCanPlay={() => {
             setVideoVisible(true);
-            setTimeout(() => setCardVisible(true), 650);
+            setCardVisible(true);
           }}
+          onError={() => setCardVisible(true)}
         >
           <source src="/login-bg.mp4" type="video/mp4" />
         </video>

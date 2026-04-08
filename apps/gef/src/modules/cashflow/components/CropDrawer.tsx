@@ -85,7 +85,7 @@ export function CropDrawer({ isOpen, onClose, cropName, cropStock, currencyMode,
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.25 }}
-        className="fixed inset-0 bg-foreground/20 z-50"
+        className="fixed inset-0 bg-slate-900/20 z-50"
         onClick={onClose}
       />
 
@@ -96,22 +96,22 @@ export function CropDrawer({ isOpen, onClose, cropName, cropStock, currencyMode,
         animate={{ x: 0 }}
         exit={{ x: '100%' }}
         transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-        className="fixed inset-y-0 right-0 w-full md:w-[420px] bg-card shadow-2xl z-50 flex flex-col border-l border-border"
+        className="fixed inset-y-0 right-0 w-full md:w-[420px] bg-white shadow-2xl z-50 flex flex-col border-l border-slate-200"
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-border/50 bg-accent/50">
+        <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 text-primary rounded-lg">
+            <div className="p-2 bg-emerald-100 text-emerald-700 rounded-lg">
               <Wheat className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-foreground">Cultura: {lastCropName.current}</h2>
-              <p className="text-sm text-muted-foreground">Resumo de Estoque</p>
+              <h2 className="text-lg font-bold text-slate-800">Cultura: {lastCropName.current}</h2>
+              <p className="text-sm text-slate-500">Resumo de Estoque</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-full transition-colors cursor-pointer"
+            className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
@@ -121,15 +121,15 @@ export function CropDrawer({ isOpen, onClose, cropName, cropStock, currencyMode,
         <div className="flex-1 overflow-y-auto p-6 space-y-8">
           {/* Summary Cards */}
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider">Resumo de Estoque</h3>
+            <h3 className="text-sm font-semibold text-slate-800 uppercase tracking-wider">Resumo de Estoque</h3>
             <div className="grid grid-cols-1 gap-3">
-              <div className="bg-accent border border-border/50 rounded-xl p-4 flex items-center justify-between">
-                <span className="text-sm font-medium text-muted-foreground">Estoque Total</span>
-                <span className="text-base font-bold text-foreground">{stockTotal.toLocaleString('pt-BR')} scs</span>
+              <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 flex items-center justify-between">
+                <span className="text-sm font-medium text-slate-600">Estoque Total</span>
+                <span className="text-base font-bold text-slate-800">{stockTotal.toLocaleString('pt-BR')} scs</span>
               </div>
-              <div className="bg-primary/5 border border-primary/15 rounded-xl p-4 flex items-center justify-between">
-                <span className="text-sm font-medium text-primary">Saldo a Comercializar</span>
-                <span className="text-base font-bold text-primary">{stockSaldo.toLocaleString('pt-BR')} scs</span>
+              <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex items-center justify-between">
+                <span className="text-sm font-medium text-emerald-800">Saldo a Comercializar</span>
+                <span className="text-base font-bold text-emerald-700">{stockSaldo.toLocaleString('pt-BR')} scs</span>
               </div>
             </div>
           </div>
@@ -139,26 +139,26 @@ export function CropDrawer({ isOpen, onClose, cropName, cropStock, currencyMode,
             {!showSimulation ? (
               <button
                 onClick={() => setShowSimulation(true)}
-                className="w-full py-2.5 px-4 border-2 border-dashed border-primary/20 text-primary font-medium rounded-xl hover:bg-primary/5 hover:border-primary/30 transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-2.5 px-4 border-2 border-dashed border-emerald-200 text-emerald-700 font-medium rounded-xl hover:bg-emerald-50 hover:border-emerald-300 transition-colors flex items-center justify-center gap-2 cursor-pointer"
               >
                 + Simular Nova Venda
               </button>
             ) : (
-              <div className="bg-card border border-primary/20 rounded-xl p-4 shadow-soft space-y-4">
+              <div className="bg-white border border-emerald-200 rounded-xl p-4 shadow-sm space-y-4">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-bold text-primary">Projetar Venda</h3>
-                  <button onClick={() => setShowSimulation(false)} className="text-muted-foreground hover:text-foreground">
+                  <h3 className="text-sm font-bold text-emerald-800">Projetar Venda</h3>
+                  <button onClick={() => setShowSimulation(false)} className="text-slate-400 hover:text-slate-600">
                     <X className="h-4 w-4" />
                   </button>
                 </div>
 
                 <div className="grid grid-cols-3 gap-3">
                   <div className="space-y-1">
-                    <label className="text-xs font-medium text-muted-foreground">Mês</label>
+                    <label className="text-xs font-medium text-slate-600">Mês</label>
                     <select
                       value={simMonth}
                       onChange={(e) => setSimMonth(e.target.value)}
-                      className="w-full text-sm border border-border rounded-lg p-2 bg-accent focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                      className="w-full text-sm border border-slate-200 rounded-lg p-2 bg-slate-50 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
                     >
                       {months.map((m, i) => {
                         const isRealized = i <= currentMonthIndex;
@@ -171,40 +171,40 @@ export function CropDrawer({ isOpen, onClose, cropName, cropStock, currencyMode,
                     </select>
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs font-medium text-muted-foreground">Quantidade</label>
+                    <label className="text-xs font-medium text-slate-600">Quantidade</label>
                     <div className="relative">
                       <input
                         type="number"
                         value={simQuantity}
                         onChange={(e) => setSimQuantity(e.target.value)}
-                        className="w-full text-sm border border-border rounded-lg p-2 pr-8 bg-accent focus:ring-2 focus:ring-primary focus:border-primary outline-none text-right"
+                        className="w-full text-sm border border-slate-200 rounded-lg p-2 pr-8 bg-slate-50 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-right"
                         placeholder="0"
                       />
-                      <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">scs</span>
+                      <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-slate-400">scs</span>
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs font-medium text-muted-foreground">Preço Médio</label>
+                    <label className="text-xs font-medium text-slate-600">Preço Médio</label>
                     <div className="relative">
-                      <span className="absolute left-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">R$</span>
+                      <span className="absolute left-2 top-1/2 -translate-y-1/2 text-xs text-slate-400">R$</span>
                       <input
                         type="number"
                         value={simPrice}
                         onChange={(e) => setSimPrice(e.target.value)}
-                        className="w-full text-sm border border-border rounded-lg p-2 pl-7 bg-accent focus:ring-2 focus:ring-primary focus:border-primary outline-none text-right"
+                        className="w-full text-sm border border-slate-200 rounded-lg p-2 pl-7 bg-slate-50 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-right"
                         placeholder="0,00"
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-3 border-t border-border/50">
+                <div className="flex items-center justify-between pt-3 border-t border-slate-100">
                   <div>
-                    <span className="text-xs text-muted-foreground block">Valor Final Projetado</span>
+                    <span className="text-xs text-slate-500 block">Valor Final Projetado</span>
                     <span
                       className={cn(
                         'text-lg font-bold',
-                        simQuantity && simPrice ? 'text-primary' : 'text-muted-foreground'
+                        simQuantity && simPrice ? 'text-emerald-600' : 'text-slate-400'
                       )}
                     >
                       = {simQuantity && simPrice ? formatFullValue(calculatedValue, currencyMode) : 'R$ 0,00'}
@@ -213,7 +213,7 @@ export function CropDrawer({ isOpen, onClose, cropName, cropStock, currencyMode,
                   <button
                     onClick={handleAddProjection}
                     disabled={!simQuantity || !simPrice}
-                    className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                    className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   >
                     Adicionar ao Fluxo
                   </button>

@@ -35,8 +35,8 @@ export function EstoqueTab({ stockData }: EstoqueTabProps) {
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
         <div className="flex items-center gap-2">
-          <Warehouse className="h-4 w-4 text-muted-foreground" />
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+          <Warehouse className="h-4 w-4 text-slate-500" />
+          <h3 className="text-sm font-semibold text-slate-600 uppercase tracking-wide">
             Culturas
           </h3>
         </div>
