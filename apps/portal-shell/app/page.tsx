@@ -12,12 +12,12 @@ import { UserMenu } from "@/components/UserMenu";
 const GEF_URL =
   process.env.NODE_ENV === "development"
     ? "http://localhost:3000"
-    : (process.env.NEXT_PUBLIC_GEF_URL ?? "http://localhost:3000");
+    : (process.env.NEXT_PUBLIC_GEF_URL || "https://socios-gef.tecnologia-231.workers.dev");
 
 const PLT_URL =
   process.env.NODE_ENV === "development"
     ? "http://localhost:8080"
-    : (process.env.NEXT_PUBLIC_PLT_URL ?? "http://localhost:8080");
+    : (process.env.NEXT_PUBLIC_PLT_URL || "https://socios-plt.tecnologia-231.workers.dev");
 
 export default async function LaunchpadPage() {
   const supabase = await createSupabaseServerClient();
