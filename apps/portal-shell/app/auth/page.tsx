@@ -64,10 +64,12 @@ function AuthForm() {
 
   const handleGoogleLogin = async () => {
     setGoogleLoading(true);
+    const next = searchParams.get("next") ?? "/";
+    const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: callbackUrl,
         queryParams: { hd: "safrasecifras.com.br" },
       },
     });
