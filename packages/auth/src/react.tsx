@@ -53,6 +53,15 @@ export function AuthProvider({ children, allowedDomain, onSignIn }: AuthProvider
   };
 
   useEffect(() => {
+    // When the portal opens this app with Supabase tokens in the hash,
+    // Supabase's _initialize() processes them asynchronously. We must NOT
+    // set loading=false until SIGNED_IN fires (or a safety timeout expires).
+    const hasHashTokens =
+      typeof window !== "undefined" &&
+      window.location.hash.includes("access_token");
+
+    let safetyTimer: ReturnType<typeof setTimeout> | undefined;
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -65,6 +74,8 @@ export function AuthProvider({ children, allowedDomain, onSignIn }: AuthProvider
           window.location.replace(`/auth?error=domain_not_allowed`);
           return;
         }
+
+        if (safetyTimer) clearTimeout(safetyTimer);
 
         setSession(session);
         setUser(session.user);
@@ -86,10 +97,14 @@ export function AuthProvider({ children, allowedDomain, onSignIn }: AuthProvider
       setUser(session?.user ?? null);
       if (session?.user) {
         setTimeout(() => fetchRole(session.user.id), 0);
+        setLoading(false);
       } else {
         setRole(null);
+        // Keep loading=true while hash tokens are still being processed
+        if (!hasHashTokens) {
+          setLoading(false);
+        }
       }
-      setLoading(false);
     });
 
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -97,11 +112,31 @@ export function AuthProvider({ children, allowedDomain, onSignIn }: AuthProvider
       setUser(session?.user ?? null);
       if (session?.user) {
         fetchRole(session.user.id);
+        setLoading(false);
+      } else if (!hasHashTokens) {
+        setLoading(false);
       }
-      setLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    // Safety timeout: if hash tokens are invalid/expired, SIGNED_IN never
+    // fires. Force loading=false after 5s so the app can redirect normally.
+    if (hasHashTokens) {
+      safetyTimer = setTimeout(() => {
+        setLoading((current) => {
+          if (current) {
+            console.warn(
+              "@socios/auth: hash token processing timed out (5 s) — tokens may be expired or invalid"
+            );
+          }
+          return false;
+        });
+      }, 5_000);
+    }
+
+    return () => {
+      subscription.unsubscribe();
+      if (safetyTimer) clearTimeout(safetyTimer);
+    };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const signOut = async () => {
