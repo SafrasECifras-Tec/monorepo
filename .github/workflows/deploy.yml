@@ -90,7 +90,7 @@ jobs:
       # @cloudflare/next-on-pages runs its own `vercel build` → `next build`
       # internally, so we skip the separate turbo build and pass env vars here.
       - name: Build & Package portal-shell for Cloudflare Pages
-        if: steps.portal-check.outcome == 'failure'
+        if: steps.portal-check.outcome == 'failure' || steps.gef-check.outcome == 'failure' || steps.plt-check.outcome == 'failure'
         working-directory: apps/portal-shell
         run: npx @cloudflare/next-on-pages@1
         env:
@@ -100,7 +100,7 @@ jobs:
           NEXT_PUBLIC_PLT_URL: https://socios-plt.tecnologia-231.workers.dev
 
       - name: Deploy portal-shell → Cloudflare Pages
-        if: steps.portal-check.outcome == 'failure'
+        if: steps.portal-check.outcome == 'failure' || steps.gef-check.outcome == 'failure' || steps.plt-check.outcome == 'failure'
         working-directory: apps/portal-shell
         run: npx wrangler pages deploy .vercel/output/static --project-name sociosdoagro
         env:
