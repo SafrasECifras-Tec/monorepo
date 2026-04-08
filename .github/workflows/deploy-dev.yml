@@ -1,0 +1,126 @@
+name: Deploy (Dev)
+
+on:
+  push:
+    branches: [dev]
+
+concurrency:
+  group: deploy-dev-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build & Deploy (Dev)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      # ── Setup ─────────────────────────────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.8.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ── PLT: Planejamento Tributário ───────────────────────────────────────
+      - name: Detect PLT changes
+        id: plt-check
+        continue-on-error: true
+        run: npx turbo-ignore planejamento-tributario --fallback=HEAD^1
+
+      - name: Build PLT
+        if: steps.plt-check.outcome == 'failure'
+        run: pnpm turbo run build --filter=planejamento-tributario
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
+          VITE_PORTAL_URL: https://dev.sociosdoagro.pages.dev
+
+      - name: Deploy PLT → Cloudflare Workers (dev)
+        if: steps.plt-check.outcome == 'failure'
+        working-directory: apps/planejamento-tributario
+        run: npx wrangler deploy --name socios-plt-dev
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+      # ── GEF: Gestão Econômica e Financeira ────────────────────────────────
+      - name: Detect GEF changes
+        id: gef-check
+        continue-on-error: true
+        run: npx turbo-ignore gef --fallback=HEAD^1
+
+      - name: Build GEF
+        if: steps.gef-check.outcome == 'failure'
+        run: pnpm turbo run build --filter=gef
+        env:
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          VITE_PORTAL_URL: https://dev.sociosdoagro.pages.dev
+
+      - name: Deploy GEF → Cloudflare Workers (dev)
+        if: steps.gef-check.outcome == 'failure'
+        working-directory: apps/gef
+        run: npx wrangler deploy --config dist/wrangler.json --name socios-gef-dev
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+      # ── Portal Shell ───────────────────────────────────────────────────────
+      - name: Detect portal-shell changes
+        id: portal-check
+        continue-on-error: true
+        run: npx turbo-ignore portal-shell --fallback=HEAD^1
+
+      - name: Build & Package portal-shell for Cloudflare Pages
+        if: steps.portal-check.outcome == 'failure'
+        working-directory: apps/portal-shell
+        run: npx @cloudflare/next-on-pages@1
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          NEXT_PUBLIC_GEF_URL: https://socios-gef-dev.tecnologia-231.workers.dev
+          NEXT_PUBLIC_PLT_URL: https://socios-plt-dev.tecnologia-231.workers.dev
+
+      - name: Deploy portal-shell → Cloudflare Pages (dev branch)
+        if: steps.portal-check.outcome == 'failure'
+        working-directory: apps/portal-shell
+        run: npx wrangler pages deploy .vercel/output/static --project-name sociosdoagro --branch dev
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: 2312b6bac3bbc53c1a38e7bd3ff08fe8
+
+      # ── Sumário ────────────────────────────────────────────────────────────
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Deploy Summary (Dev)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.plt-check.outcome }}" == "failure" ]; then
+            echo "- **PLT dev**: 🚀 deploiado → https://socios-plt-dev.tecnologia-231.workers.dev" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **PLT dev**: ⏭️ sem mudanças, pulado" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ "${{ steps.gef-check.outcome }}" == "failure" ]; then
+            echo "- **GEF dev**: 🚀 deploiado → https://socios-gef-dev.tecnologia-231.workers.dev" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **GEF dev**: ⏭️ sem mudanças, pulado" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ "${{ steps.portal-check.outcome }}" == "failure" ]; then
+            echo "- **Portal dev**: 🚀 deploiado → https://dev.sociosdoagro.pages.dev" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **Portal dev**: ⏭️ sem mudanças, pulado" >> $GITHUB_STEP_SUMMARY
+          fi

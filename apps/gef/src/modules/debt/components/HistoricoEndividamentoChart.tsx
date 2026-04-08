@@ -4,7 +4,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, Legend, LabelList,
 } from 'recharts';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { GlassCard } from '@socios/ui';
 import {
   DEBT_CHART_COLORS,
 } from '@/data/debt/debtChartData';

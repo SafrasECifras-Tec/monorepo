@@ -6,7 +6,7 @@ import {
   ComposedChart, Line,
 } from 'recharts';
 import { ArrowUpRight, ArrowDownRight, Minus, TrendingDown } from 'lucide-react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { GlassCard } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import type { SafraImportData } from '@/contexts/ImportDataContext';
 

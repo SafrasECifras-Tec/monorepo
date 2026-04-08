@@ -1,5 +1,5 @@
 import React from 'react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { GlassCard } from '@socios/ui';
 import { formatCurrency } from '@/lib/formatters';
 import { motion } from 'motion/react';
 import type { BancoItem } from '@/data/debt/debtBancosData';

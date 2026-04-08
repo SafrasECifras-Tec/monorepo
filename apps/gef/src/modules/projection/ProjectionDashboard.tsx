@@ -33,7 +33,7 @@ import {
   Bar,
   Cell
 } from 'recharts';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { GlassCard } from '@socios/ui';
 import { cn } from '@/lib/utils';
 
 // Types

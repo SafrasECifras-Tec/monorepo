@@ -12,7 +12,7 @@ import {
   ReferenceLine,
   Cell,
 } from 'recharts';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { GlassCard } from '@socios/ui';
 import { formatCurrency, formatCompactCurrency } from '@/lib/formatters';
 import type { CurrencyMode } from '@/lib/formatters';
 import { cashFlowData, monthFullNames } from '@/data/cashflow/cashFlowChartData';

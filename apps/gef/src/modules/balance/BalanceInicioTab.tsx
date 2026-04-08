@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { GlassCard } from '@socios/ui';
 import { motion } from 'motion/react';
 import {
   ArrowDown,

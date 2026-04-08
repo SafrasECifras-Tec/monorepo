@@ -105,6 +105,19 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: 2312b6bac3bbc53c1a38e7bd3ff08fe8
 
+      # ── Redirect Workers (domínios legados) ───────────────────────────────
+      - name: Deploy redirect-gef → Cloudflare Workers
+        working-directory: apps/redirect-gef
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+      - name: Deploy redirect-plt → Cloudflare Workers
+        working-directory: apps/redirect-plt
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
       # ── Sumário ────────────────────────────────────────────────────────────
       - name: Summary
         if: always()
@@ -126,3 +139,5 @@ jobs:
           else
             echo "- **Portal**: ⏭️ sem mudanças, pulado" >> $GITHUB_STEP_SUMMARY
           fi
+          echo "- **redirect-gef**: 🔀 gef.tecnologia-231.workers.dev → sociosdoagro.pages.dev" >> $GITHUB_STEP_SUMMARY
+          echo "- **redirect-plt**: 🔀 planejamento-tributario.tecnologia-231.workers.dev → sociosdoagro.pages.dev" >> $GITHUB_STEP_SUMMARY
