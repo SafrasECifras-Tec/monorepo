@@ -3,10 +3,8 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getServerTenantId } from "@/lib/tenant.server";
 import { BarChart3, Calculator, Landmark, ShieldCheck } from "lucide-react";
 
-// NOTE: do NOT set `runtime = "edge"` here.
-// Edge Runtime causes RSC manifest ID mismatches in pnpm monorepos.
-// For Cloudflare Pages deployment, @cloudflare/next-on-pages handles
-// edge compilation at build time without requiring per-route declarations.
+// Required by @cloudflare/next-on-pages: dynamic routes must declare edge runtime.
+export const runtime = "edge";
 import type { Fazenda } from "@socios/database";
 import { Header } from "@/components/Header";
 import { AppLauncherCard } from "@/components/AppLauncherCard";
