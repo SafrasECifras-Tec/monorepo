@@ -18,8 +18,7 @@ import { ImportDataProvider } from '@/contexts/ImportDataContext';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { ClientProvider } from '@/contexts/ClientContext';
 import { Toaster } from 'sonner';
-
-const PORTAL_URL = (import.meta as any).env?.VITE_PORTAL_URL ?? 'http://localhost:4000';
+import { LoginPage } from '@/pages/LoginPage';
 
 function EstoqueModule() {
   const estoqueData = useEstoqueData();
@@ -38,18 +37,16 @@ function AppContent() {
   const { user, loading } = useAuth();
   const [activeModule, setActiveModule] = useState('cashflow');
 
-  useEffect(() => {
-    if (!loading && !user) {
-      window.location.href = PORTAL_URL;
-    }
-  }, [loading, user]);
-
-  if (loading || !user) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="h-6 w-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
       </div>
     );
+  }
+
+  if (!user) {
+    return <LoginPage />;
   }
 
   const renderModule = () => {
