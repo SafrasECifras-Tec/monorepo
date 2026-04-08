@@ -26,6 +26,7 @@
     "@radix-ui/react-tabs": "^1.1.12",
     "@radix-ui/react-tooltip": "^1.2.7",
     "@react-oauth/google": "^0.13.4",
+    "@socios/auth": "workspace:*",
     "@socios/ui": "workspace:*",
     "@socios/utils": "workspace:*",
     "@tailwindcss/vite": "^4.1.14",
