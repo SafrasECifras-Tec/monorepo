@@ -5,7 +5,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, LabelList,
 } from 'recharts';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { GlassCard } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import type { SafraImportData } from '@/contexts/ImportDataContext';
 import { dreData } from '@/data/dre/dreData';

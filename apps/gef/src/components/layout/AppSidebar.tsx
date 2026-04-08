@@ -161,7 +161,7 @@ export function AppSidebar({ activeModule, onNavigate }: AppSidebarProps) {
   return (
     <Sidebar
       variant="sidebar"
-      className={cn("border-0 bg-transparent", collapsed ? "w-[5.25rem]" : "w-[17rem]")}
+      className="border-0 bg-transparent"
       collapsible="icon"
     >
       <div className="flex h-full flex-col border-r border-sidebar-border/60 bg-sidebar">

@@ -29,8 +29,8 @@ function EstoqueModule() {
   return (
     <div className="flex flex-col space-y-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 pb-6">
       <header>
-        <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Estoque</h1>
-        <p className="text-slate-500 mt-1">Gestão e comercialização de grãos</p>
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">Estoque</h1>
+        <p className="text-muted-foreground mt-1">Gestão e comercialização de grãos</p>
       </header>
       <EstoqueTab stockData={estoqueData ?? []} />
     </div>
@@ -62,7 +62,7 @@ function AppContent() {
       default:
         return (
           <div className="flex items-center justify-center h-full">
-            <h2 className="text-2xl font-bold text-slate-400">Módulo em desenvolvimento</h2>
+            <h2 className="text-2xl font-bold text-muted-foreground">Módulo em desenvolvimento</h2>
           </div>
         );
     }
@@ -71,12 +71,12 @@ function AppContent() {
   return (
     <ClientProvider>
       <ImportDataProvider>
-      <SettingsProvider>
-        <MainLayout activeModule={activeModule} onNavigate={setActiveModule}>
-          {renderModule()}
-        </MainLayout>
-        <Toaster position="top-right" />
-      </SettingsProvider>
+        <SettingsProvider>
+          <MainLayout activeModule={activeModule} onNavigate={setActiveModule}>
+            {renderModule()}
+          </MainLayout>
+          <Toaster position="top-right" />
+        </SettingsProvider>
       </ImportDataProvider>
     </ClientProvider>
   );

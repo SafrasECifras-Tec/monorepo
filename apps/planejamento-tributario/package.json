@@ -16,6 +16,7 @@
   "dependencies": {
     "@socios/auth": "workspace:*",
     "@socios/database": "workspace:*",
+    "@socios/ui": "workspace:*",
     "@socios/utils": "workspace:*",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "^1.2.11",

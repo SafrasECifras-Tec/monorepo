@@ -263,10 +263,4 @@
   .page-header p {
     @apply text-sm text-muted-foreground mt-1;
   }
-  .kpi-card {
-    @apply metric-pill;
-  }
-  .kpi-card-gradient {
-    @apply metric-pill-accent;
-  }
 }
