@@ -1,4 +1,5 @@
 import { Cloud, Loader2, Users, Plus, CheckCircle, BarChart3, Truck, Receipt, Package } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -12,6 +13,17 @@ export function TopBar() {
   const { role } = useAuth();
   const { saving, analises, analiseId, setAnaliseId, state, selectedParceiroId, setSelectedParceiroId, dispatch } = useCalcir();
   const location = useLocation();
+
+  // Floating save indicator: visible while saving, then lingers 2s after saved
+  const [showFloat, setShowFloat] = useState(false);
+  useEffect(() => {
+    if (saving) {
+      setShowFloat(true);
+    } else if (showFloat) {
+      const t = setTimeout(() => setShowFloat(false), 2000);
+      return () => clearTimeout(t);
+    }
+  }, [saving]);
 
   const showParceiroSelector = PARCEIRO_ROUTES.includes(location.pathname) && state.parceiros.length > 0;
   const isReceitas = location.pathname === "/receitas";
@@ -87,7 +99,7 @@ export function TopBar() {
             <div
               aria-label={saving ? "Salvando" : "Salvo"}
               title={saving ? "Salvando alterações..." : "Todas as alterações salvas"}
-              className="h-9 w-9 shrink-0 rounded-full bg-primary/10 flex items-center justify-center"
+              className="hidden sm:flex h-9 w-9 shrink-0 rounded-full bg-primary/10 items-center justify-center"
             >
               {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" /> : <Cloud className="h-3.5 w-3.5 text-primary" />}
             </div>
@@ -179,6 +191,19 @@ export function TopBar() {
             </Select>
           </div>
         )}
+      </div>
+
+      {/* Floating save indicator — mobile only */}
+      <div
+        className={[
+          "sm:hidden fixed bottom-6 right-6 z-50 h-11 w-11 rounded-full bg-card border border-border/70 shadow-card flex items-center justify-center transition-all duration-300",
+          showFloat ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none",
+        ].join(" ")}
+      >
+        {saving
+          ? <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+          : <Cloud className="h-4 w-4 text-primary" />
+        }
       </div>
     </header>
   );
