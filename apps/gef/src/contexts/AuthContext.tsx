@@ -91,6 +91,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = useCallback(() => {
     localStorage.removeItem(STORAGE_KEY);
     setUser(null);
+    // Redirect to Sócios do Agro portal login (not GEF's own login page)
+    const portalUrl = (import.meta as any).env?.VITE_PORTAL_URL ?? 'http://localhost:4000';
+    window.location.href = `${portalUrl}/auth`;
   }, []);
 
   return (

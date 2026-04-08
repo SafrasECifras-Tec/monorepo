@@ -49,6 +49,7 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
           VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
+          VITE_PORTAL_URL: https://sociosdoagro.pages.dev
 
       - name: Deploy PLT → Cloudflare Workers
         if: steps.plt-check.outcome == 'failure'
@@ -69,6 +70,7 @@ jobs:
         env:
           VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          VITE_PORTAL_URL: https://sociosdoagro.pages.dev
 
       - name: Deploy GEF → Cloudflare Workers
         if: steps.gef-check.outcome == 'failure'

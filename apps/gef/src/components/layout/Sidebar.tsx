@@ -4,6 +4,7 @@ import {
   PieChart,
   Settings,
   LogOut,
+  LayoutGrid,
   Wallet,
   FileText,
   TrendingDown,
@@ -290,6 +291,17 @@ export function Sidebar({
                   </button>
                   <div className="border-t border-border/60" />
                   <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      const portalUrl = (import.meta as any).env?.VITE_PORTAL_URL ?? 'http://localhost:4000';
+                      window.location.href = portalUrl;
+                    }}
+                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-foreground hover:bg-accent transition-colors text-left"
+                  >
+                    <LayoutGrid className="h-4 w-4 text-muted-foreground" />
+                    Voltar ao Portal
+                  </button>
+                  <button
                     onClick={() => { setUserMenuOpen(false); onLogout?.(); }}
                     className="w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-destructive hover:bg-destructive/5 transition-colors text-left"
                   >
@@ -312,6 +324,17 @@ export function Sidebar({
                     Ajustes
                   </button>
                   <div className="border-t border-border/60" />
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      const portalUrl = (import.meta as any).env?.VITE_PORTAL_URL ?? 'http://localhost:4000';
+                      window.location.href = portalUrl;
+                    }}
+                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-foreground hover:bg-accent transition-colors text-left"
+                  >
+                    <LayoutGrid className="h-4 w-4 text-muted-foreground" />
+                    Voltar ao Portal
+                  </button>
                   <button
                     onClick={() => { setUserMenuOpen(false); onLogout?.(); }}
                     className="w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-destructive hover:bg-destructive/5 transition-colors text-left"

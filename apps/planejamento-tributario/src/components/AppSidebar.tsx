@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import {
   FileText, Calculator, Users, TrendingUp, TrendingDown,
   User, Building2, Scale, ShieldCheck, LayoutDashboard, ChevronLeft,
-  ChevronDown, Wallet, Layers, CreditCard,
+  ChevronDown, Wallet, Layers, CreditCard, LayoutGrid,
   MessageSquareText, ArrowLeftRight, LogOut, Compass, Settings, Link2, FileUp, Share2
 } from "lucide-react";
 import logoSafrasCifras from "@/assets/logo-safras-cifras.png";
@@ -93,9 +93,17 @@ export function AppSidebar() {
     if (isMobile) toggleSidebar();
   };
 
-  const handleSair = () => {
-    signOut();
+  const PORTAL_URL = import.meta.env.VITE_PORTAL_URL ?? 'http://localhost:4000';
+
+  const handleVoltar = () => {
     if (isMobile) toggleSidebar();
+    window.location.href = PORTAL_URL;
+  };
+
+  const handleSair = async () => {
+    if (isMobile) toggleSidebar();
+    await signOut();
+    window.location.href = `${PORTAL_URL}/auth`;
   };
 
   const userInitials = user?.email ? user.email.slice(0, 2).toUpperCase() : "??";
@@ -313,6 +321,11 @@ export function AppSidebar() {
                   <DropdownMenuSeparator />
                 </>
               )}
+              <DropdownMenuItem onClick={handleVoltar}>
+                <LayoutGrid className="h-4 w-4 mr-2" />
+                Voltar ao Portal
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleSair} className="text-destructive focus:text-destructive">
                 <LogOut className="h-4 w-4 mr-2" />
                 Sair
