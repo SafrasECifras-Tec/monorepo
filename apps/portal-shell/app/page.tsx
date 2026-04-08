@@ -59,7 +59,7 @@ export default async function LaunchpadPage() {
           <div className="grid gap-5 sm:grid-cols-2">
             <AppLauncherCard
               tag="GEF"
-              title="Gestão Estratégica de Fazendas"
+              title="Gestão Econômica e Financeira"
               description="Análise econômico-financeira, DRE, fluxo de caixa, estoque e indicadores de desempenho da fazenda."
               icon={<BarChart3 className="h-5 w-5" />}
               accentGradient="from-teal-600 to-cyan-500"
