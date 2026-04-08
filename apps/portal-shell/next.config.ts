@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import path from "path";
 
 const nextConfig: NextConfig = {
   // In pnpm monorepos, webpack follows symlinks into the .pnpm store and
@@ -11,9 +10,6 @@ const nextConfig: NextConfig = {
     config.resolve.symlinks = false;
     return config;
   },
-
-  // Tell Next.js the monorepo root so file-tracing covers shared packages.
-  outputFileTracingRoot: path.join(__dirname, "../../"),
 
   transpilePackages: [
     "@socios/auth",
