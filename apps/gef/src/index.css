@@ -1,239 +1,77 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   GEF — Gestão Econômica e Financeira
+   Design tokens from @socios/ui/theme.css (single source of truth)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 1. Font */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* 2. Design tokens — HSL channel format, shared with PLT */
+@import "@socios/ui/theme.css";
+
+/* 3. Tailwind v4 + shadcn */
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* 4. Shared utility classes (metric-pill, data-panel, etc.) */
+@import "@socios/ui/tailwind.css";
+
+/* 5. Dark mode variant */
 @custom-variant dark (&:is(.dark *));
 
-@theme {
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-}
-
-body {
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-image:
-    radial-gradient(circle at top left, oklch(0.445 0.108 155 / 0.05), transparent 28%),
-    radial-gradient(circle at 85% 12%, oklch(0.78 0.155 70 / 0.06), transparent 22%),
-    linear-gradient(180deg, var(--background), oklch(0.955 0.005 240));
-  min-height: 100vh;
-}
-
-/* ── Global Scrollbar ─────────────────────────────────────── */
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: oklch(0.82 0.02 155); border-radius: 100px; }
-::-webkit-scrollbar-thumb:hover { background: oklch(0.65 0.06 155); }
-[data-sidebar] ::-webkit-scrollbar-thumb { background: oklch(0.87 0.02 155); }
-[data-sidebar] ::-webkit-scrollbar-thumb:hover { background: oklch(0.58 0.08 155); }
-* { scrollbar-width: thin; scrollbar-color: oklch(0.80 0.04 155) transparent; }
-
-/* ── Recharts hover effects ───────────────────────────────── */
-g.recharts-bar-rectangle {
-  transition: opacity 0.5s ease !important;
-  cursor: pointer;
-}
-g.recharts-bar-rectangles:has(g.recharts-bar-rectangle:hover) g.recharts-bar-rectangle:not(:hover) {
-  opacity: 0.3 !important;
-}
-.recharts-tooltip-cursor {
-  pointer-events: none !important;
-  animation: fadeInChart 0.5s ease-out forwards;
-}
-@keyframes fadeInChart {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-.recharts-tooltip-wrapper {
-  pointer-events: none !important;
-  transition: opacity 0.5s ease, transform 0.5s ease !important;
-}
-
-/* ── Date picker ──────────────────────────────────────────── */
-input[type="date"]::-webkit-calendar-picker-indicator {
-  opacity: 0;
-  cursor: pointer;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-}
-input[type="date"] {
-  position: relative;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   DESIGN TOKENS — Safras & Cifras (OKLCH)
-   Referencia: PLT hsl → OKLCH conversion
-   ═══════════════════════════════════════════════════════════ */
-
-:root {
-  /* Surfaces */
-  --background: oklch(0.965 0.005 240);
-  --foreground: oklch(0.22 0.025 240);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.22 0.025 240);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.22 0.025 240);
-
-  /* Brand */
-  --primary: oklch(0.445 0.108 155);
-  --primary-foreground: oklch(1 0 0);
-
-  /* Neutrals */
-  --secondary: oklch(0.95 0.004 240);
-  --secondary-foreground: oklch(0.22 0.025 240);
-  --muted: oklch(0.955 0.004 240);
-  --muted-foreground: oklch(0.535 0.015 250);
-  --accent: oklch(0.945 0.005 240);
-  --accent-foreground: oklch(0.38 0.09 155);
-
-  /* Semantic */
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  --success: oklch(0.50 0.12 155);
-  --success-foreground: oklch(1 0 0);
-  --warning: oklch(0.75 0.16 70);
-  --warning-foreground: oklch(1 0 0);
-
-  /* Borders & inputs */
-  --border: oklch(0.91 0.005 240);
-  --input: oklch(0.93 0.004 240);
-  --ring: oklch(0.445 0.108 155);
-
-  /* Radius */
-  --radius: 1.2rem;
-
-  /* Charts */
-  --chart-1: oklch(0.445 0.108 155);
-  --chart-2: oklch(0.65 0.18 25);
-  --chart-3: oklch(0.78 0.155 70);
-  --chart-4: oklch(0.60 0.10 220);
-  --chart-5: oklch(0.55 0.18 290);
-
-  /* Panels */
-  --panel: oklch(1 0 0);
-  --panel-soft: oklch(0.975 0.003 240);
-  --panel-strong: oklch(0.95 0.004 240);
-  --panel-dark: oklch(0.33 0.03 240);
-  --panel-dark-foreground: oklch(1 0 0);
-
-  /* Sidebar */
-  --sidebar: oklch(1 0 0);
-  --sidebar-foreground: oklch(0.22 0.025 240);
-  --sidebar-primary: oklch(0.445 0.108 155);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.955 0.005 240);
-  --sidebar-accent-foreground: oklch(0.34 0.07 155);
-  --sidebar-border: oklch(0.93 0.004 240);
-  --sidebar-ring: oklch(0.445 0.108 155);
-  --sidebar-muted: oklch(0.58 0.015 240);
-}
-
-.dark {
-  --background: oklch(0.16 0.015 240);
-  --foreground: oklch(0.965 0.005 155);
-  --card: oklch(0.20 0.015 240);
-  --card-foreground: oklch(0.965 0.005 155);
-  --popover: oklch(0.20 0.015 240);
-  --popover-foreground: oklch(0.965 0.005 155);
-
-  --primary: oklch(0.53 0.12 155);
-  --primary-foreground: oklch(1 0 0);
-
-  --secondary: oklch(0.25 0.01 240);
-  --secondary-foreground: oklch(0.965 0.005 155);
-  --muted: oklch(0.25 0.01 240);
-  --muted-foreground: oklch(0.62 0.01 240);
-  --accent: oklch(0.25 0.04 155);
-  --accent-foreground: oklch(0.84 0.06 155);
-
-  --destructive: oklch(0.42 0.17 25);
-  --destructive-foreground: oklch(0.985 0 0);
-  --success: oklch(0.55 0.12 155);
-  --success-foreground: oklch(1 0 0);
-  --warning: oklch(0.75 0.16 70);
-  --warning-foreground: oklch(1 0 0);
-
-  --border: oklch(0.27 0.01 240);
-  --input: oklch(0.27 0.01 240);
-  --ring: oklch(0.53 0.12 155);
-
-  --chart-1: oklch(0.445 0.108 155);
-  --chart-2: oklch(0.65 0.18 25);
-  --chart-3: oklch(0.78 0.155 70);
-  --chart-4: oklch(0.60 0.10 220);
-  --chart-5: oklch(0.55 0.18 290);
-
-  --panel: oklch(0.20 0.015 240);
-  --panel-soft: oklch(0.18 0.012 240);
-  --panel-strong: oklch(0.23 0.01 240);
-  --panel-dark: oklch(0.14 0.01 240);
-  --panel-dark-foreground: oklch(1 0 0);
-
-  --sidebar: oklch(0.18 0.012 240);
-  --sidebar-foreground: oklch(0.93 0.005 155);
-  --sidebar-primary: oklch(0.53 0.12 155);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.22 0.03 155);
-  --sidebar-accent-foreground: oklch(0.84 0.06 155);
-  --sidebar-border: oklch(0.25 0.01 240);
-  --sidebar-ring: oklch(0.53 0.12 155);
-  --sidebar-muted: oklch(0.62 0.01 240);
-}
-
-/* ═══════════════════════════════════════════════════════════
-   TAILWIND v4 THEME — shadows, animations, color mappings
-   ═══════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════════════
+   TAILWIND v4 @theme — Bridge CSS vars → Tailwind utilities
+   Tokens come from @socios/ui/theme.css (HSL channels).
+   @theme inline registers them as Tailwind color/shadow/radius utilities.
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 @theme inline {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 
-  /* ── Color mappings ── */
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-success: var(--success);
-  --color-success-foreground: var(--success-foreground);
-  --color-warning: var(--warning);
-  --color-warning-foreground: var(--warning-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-panel: var(--panel);
-  --color-panel-soft: var(--panel-soft);
-  --color-panel-strong: var(--panel-strong);
-  --color-panel-dark: var(--panel-dark);
-  --color-panel-dark-foreground: var(--panel-dark-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-muted: var(--sidebar-muted);
+  /* ── Color mappings (HSL channels → Tailwind colors) ── */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+  --color-panel: hsl(var(--panel));
+  --color-panel-soft: hsl(var(--panel-soft));
+  --color-panel-strong: hsl(var(--panel-strong));
+  --color-panel-dark: hsl(var(--panel-dark));
+  --color-panel-dark-foreground: hsl(var(--panel-dark-foreground));
+  --color-sidebar: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+  --color-sidebar-muted: hsl(var(--sidebar-muted));
 
   /* ── Border radius ── */
   --radius-sm: calc(var(--radius) - 8px);
@@ -294,6 +132,10 @@ input[type="date"] {
   --animate-shimmer: shimmer 2s linear infinite;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   BASE LAYER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -306,170 +148,78 @@ input[type="date"] {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   UTILITY CLASSES — Design System Safras & Cifras
-   ═══════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════════════
+   BODY — Subtle gradient background (tokens, not hardcoded)
+   ═══════════════════════════════════════════════════════════════════════════ */
 
-@layer components {
-
-  /* ── Section header with icon ── */
-  .section-header {
-    @apply relative flex items-center gap-4 rounded-[2rem] border border-border/70 bg-card/70 px-5 py-4 shadow-card backdrop-blur-xl;
-  }
-  .section-header .section-icon {
-    @apply h-12 w-12 rounded-[1.35rem] flex items-center justify-center shrink-0 shadow-card;
-    background: linear-gradient(145deg, oklch(0.445 0.108 155), oklch(0.50 0.09 160));
-  }
-  .section-header .section-icon svg { @apply h-5 w-5 text-white; }
-  .section-header h1 { @apply text-[1.25rem] font-extrabold tracking-tight text-foreground leading-tight; }
-  .section-header p  { @apply text-sm text-muted-foreground; }
-
-  /* ── Metric pill (KPI card) ── */
-  .metric-pill {
-    @apply relative flex min-h-[8.75rem] flex-col justify-between overflow-hidden rounded-[2rem] border border-border/70 bg-card/80 p-5 shadow-card backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-float hover:border-primary/20;
-    background-image: linear-gradient(180deg, var(--panel), var(--panel-soft));
-  }
-  .metric-pill-accent {
-    @apply relative flex min-h-[8.75rem] flex-col justify-between overflow-hidden rounded-[2rem] border p-5 shadow-float transition-all duration-300 hover:-translate-y-1.5;
-    border-color: oklch(0.445 0.108 155 / 0.14);
-    background:
-      radial-gradient(circle at top right, oklch(1 0 0 / 0.12), transparent 28%),
-      linear-gradient(145deg, var(--panel-dark) 0%, var(--primary) 100%);
-    color: var(--panel-dark-foreground);
-  }
-  .metric-pill-negative {
-    @apply relative flex min-h-[8.75rem] flex-col justify-between overflow-hidden rounded-[2rem] border p-5 transition-all duration-300 hover:-translate-y-1;
-    border-color: oklch(0.577 0.245 27.325 / 0.22);
-    background: oklch(0.577 0.245 27.325 / 0.04);
-  }
-
-  /* Labels & values inside metric-pills */
-  .metric-pill .metric-label,
-  .metric-pill-accent .metric-label,
-  .metric-pill-negative .metric-label {
-    @apply text-[10px] font-semibold uppercase tracking-[0.22em];
-  }
-  .metric-pill .metric-label         { @apply text-muted-foreground; }
-  .metric-pill-accent .metric-label  { color: oklch(0.85 0.08 155); }
-  .metric-pill-negative .metric-label { color: oklch(0.577 0.245 27.325 / 0.65); }
-
-  .metric-pill .metric-value,
-  .metric-pill-accent .metric-value,
-  .metric-pill-negative .metric-value {
-    @apply text-[1.85rem] font-extrabold leading-none tabular-nums tracking-[-0.04em];
-  }
-  .metric-pill-accent .metric-value  { @apply text-white; }
-  .metric-pill-negative .metric-value { color: var(--destructive); }
-
-  .metric-pill .metric-sub           { @apply text-[11px] leading-relaxed text-muted-foreground; }
-  .metric-pill-accent .metric-sub    { @apply text-[11px] leading-relaxed; color: oklch(0.85 0.08 155); }
-  .metric-pill-negative .metric-sub  { @apply text-[11px] leading-relaxed; color: oklch(0.577 0.245 27.325 / 0.55); }
-
-  /* ── Data panel ── */
-  .data-panel {
-    @apply overflow-hidden rounded-[2rem] border border-border/70 bg-card/80 shadow-card backdrop-blur-sm;
-    background-image: linear-gradient(180deg, var(--panel), var(--panel-soft));
-  }
-  .data-panel-header {
-    @apply flex items-center justify-between gap-3 px-5 py-4 border-b border-border/50;
-    background: linear-gradient(180deg, var(--panel-soft), transparent);
-  }
-  .data-panel-header h3 { @apply text-sm font-bold tracking-tight text-foreground; }
-  .data-panel-body      { @apply p-0; }
-
-  /* ── Config bar / filters ── */
-  .config-bar {
-    @apply rounded-[1.75rem] border border-primary/15 p-4 shadow-soft;
-    background: linear-gradient(135deg, var(--panel-soft), var(--panel-strong));
-  }
-
-  /* ── Table modern ── */
-  .table-modern { @apply border-0 bg-transparent p-0; }
-  .table-modern table { border-collapse: separate; border-spacing: 0; }
-  .table-modern thead tr {
-    background: linear-gradient(180deg, var(--muted), var(--accent));
-  }
-  .table-modern th {
-    @apply border-b border-border/50 bg-transparent text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground;
-  }
-  .table-modern td { @apply border-b border-border/35 text-[13px] leading-relaxed; }
-  .table-modern tbody tr:last-child td { @apply border-b-0; }
-  .table-modern .row-total {
-    @apply border-t-2 border-primary/15 font-bold;
-    background: linear-gradient(90deg, oklch(0.445 0.108 155 / 0.08), transparent);
-  }
-
-  /* ── Table shell ── */
-  .table-shell { @apply overflow-hidden rounded-[2rem] border border-border/70 bg-card/80 shadow-card backdrop-blur-sm; }
-  .table-shell-header {
-    @apply flex flex-col gap-4 border-b border-border/50 px-5 py-5;
-    background: linear-gradient(180deg, var(--panel-soft), transparent);
-  }
-  .table-shell-meta { @apply flex flex-wrap items-center gap-2 text-[11px] text-muted-foreground; }
-  .table-shell-body { @apply p-3; }
-
-  /* ── Chart container ── */
-  .chart-container {
-    @apply overflow-hidden rounded-[2rem] border border-border/70 bg-card/80 shadow-card backdrop-blur-sm;
-    background-image: linear-gradient(180deg, var(--panel), var(--panel-soft));
-  }
-  .chart-header      { @apply px-5 py-4 border-b border-border/30; }
-  .chart-header h3   { @apply text-sm font-bold text-foreground; }
-  .chart-header p    { @apply text-[10px] text-muted-foreground mt-0.5; }
-  .chart-body        { @apply p-4; }
-
-  /* ── Chart switch (toggle) ── */
-  .chart-switch { @apply inline-flex items-center gap-1 rounded-full border border-border/60 bg-background/80 p-1 shadow-soft; }
-  .chart-switch button { @apply flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-all duration-200 hover:text-foreground; }
-  .chart-switch button[data-active="true"] { @apply bg-card text-foreground shadow-soft; }
-
-  /* ── Stat chips (inline — base styles inlined to avoid @apply circular) ── */
-  .stat-chip             { @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold border; }
-  .stat-chip-success     { @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold border bg-success/10 text-success border-success/20; }
-  .stat-chip-destructive { @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold border bg-destructive/10 text-destructive border-destructive/20; }
-  .stat-chip-warning     { @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold border bg-warning/10 text-warning border-warning/20; }
-
-  /* ── Hero board ── */
-  .hero-board { @apply grid gap-4 rounded-[2rem] border border-border/70 bg-card/75 p-4 shadow-card backdrop-blur-xl lg:grid-cols-[1.4fr_0.9fr]; }
-  .hero-copy  { @apply rounded-[1.6rem] border border-border/60 bg-background/70 p-5 shadow-soft; }
-  .hero-copy-title    { @apply text-xl font-extrabold tracking-tight text-foreground; }
-  .hero-copy-subtitle { @apply mt-2 text-sm leading-relaxed text-muted-foreground; }
-  .hero-insight {
-    @apply flex flex-col justify-between rounded-[1.6rem] border border-primary/15 p-5 shadow-soft;
-    background: linear-gradient(145deg, var(--panel-dark) 0%, var(--primary) 100%);
-  }
-  .hero-insight-label { @apply text-[10px] font-semibold uppercase tracking-[0.22em]; color: oklch(1 0 0 / 0.70); }
-  .hero-insight-value { @apply mt-3 text-[2rem] font-black tracking-[-0.05em] text-white; }
-  .hero-insight-sub   { @apply mt-2 text-xs leading-relaxed; color: oklch(1 0 0 / 0.72); }
-
-  /* ── Control pills ── */
-  .control-pill      { @apply inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/80 px-3 py-1.5 text-xs font-semibold text-foreground shadow-soft; }
-  .control-pill-muted { @apply inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/80 px-3 py-1.5 text-xs font-semibold text-muted-foreground shadow-soft; }
-
-  /* ── Gradients ── */
-  .gradient-primary { background: linear-gradient(145deg, oklch(0.445 0.108 155), oklch(0.50 0.09 160)); }
-  .gradient-gold    { background: linear-gradient(145deg, oklch(0.78 0.155 70), oklch(0.80 0.13 55)); }
-  .gradient-card    { background: linear-gradient(145deg, var(--panel-dark), oklch(0.445 0.108 155) 82%); }
-
-  /* ── Typography utilities ── */
-  .text-currency  { @apply font-mono tabular-nums text-right; }
-  .label-uppercase { @apply text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground; }
-
-  /* ── Glass card ── */
-  .glass-card {
-    background: oklch(1 0 0 / 0.62);
-    backdrop-filter: blur(18px);
-    border: 1px solid oklch(0.91 0.005 240 / 0.8);
-    box-shadow: 0 12px 34px -18px oklch(0.445 0.108 155 / 0.28);
-  }
-  .dark .glass-card { background: oklch(0.20 0.015 240 / 0.7); }
-
-  /* ── Layout helpers ── */
-  .page-shell     { @apply space-y-6; }
-  .dashboard-grid { @apply grid gap-4 xl:grid-cols-[1.2fr_0.8fr]; }
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image:
+    radial-gradient(circle at top left, hsl(var(--primary) / 0.05), transparent 28%),
+    radial-gradient(circle at 85% 12%, hsl(var(--chart-3) / 0.06), transparent 22%),
+    linear-gradient(180deg, hsl(var(--background)), hsl(220 13% 95%));
+  min-height: 100vh;
 }
 
-/* ── Fullscreen mode: hides sidebar ── */
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCROLLBAR — Using token-derived HSL values
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: hsl(150 10% 80%); border-radius: 100px; }
+::-webkit-scrollbar-thumb:hover { background: hsl(151 22% 58%); }
+[data-sidebar] ::-webkit-scrollbar-thumb { background: hsl(150 10% 85%); }
+[data-sidebar] ::-webkit-scrollbar-thumb:hover { background: hsl(152 30% 50%); }
+* { scrollbar-width: thin; scrollbar-color: hsl(151 16% 76%) transparent; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RECHARTS — Hover effects for interactive charts
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+g.recharts-bar-rectangle {
+  transition: opacity 0.5s ease !important;
+  cursor: pointer;
+}
+g.recharts-bar-rectangles:has(g.recharts-bar-rectangle:hover) g.recharts-bar-rectangle:not(:hover) {
+  opacity: 0.3 !important;
+}
+.recharts-tooltip-cursor {
+  pointer-events: none !important;
+  animation: fadeInChart 0.5s ease-out forwards;
+}
+@keyframes fadeInChart {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.recharts-tooltip-wrapper {
+  pointer-events: none !important;
+  transition: opacity 0.5s ease, transform 0.5s ease !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DATE PICKER — Hide native calendar icon
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+input[type="date"] {
+  position: relative;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FULLSCREEN MODE — Hides sidebar for cashflow presentations
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 body.cashflow-fullscreen aside,
 body.cashflow-fullscreen nav {
   display: none !important;

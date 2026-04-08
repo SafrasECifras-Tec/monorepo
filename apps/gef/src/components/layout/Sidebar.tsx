@@ -202,7 +202,7 @@ export function Sidebar({
                     <ChevronDown className={cn('h-3.5 w-3.5 text-sidebar-muted shrink-0 transition-transform duration-200', clientMenuOpen && 'rotate-180')} />
                   )}
                 </div>
-                <p className="text-[11px] text-sidebar-muted truncate mt-0.5">Gestão Estratégica de Fazenda</p>
+                <p className="text-[11px] text-sidebar-muted truncate mt-0.5">Gestão Econômica e Financeira</p>
               </div>
             </button>
 

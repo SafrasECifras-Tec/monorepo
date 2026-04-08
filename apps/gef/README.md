@@ -1,4 +1,4 @@
-# GEF — Gestão Estratégica de Fazenda
+# GEF — Gestão Econômica e Financeira
 
 Dashboard financeiro para análise estratégica de fazendas. Importa planilhas Excel de fluxo de caixa, endividamento, balanço patrimonial e DRE, gerando visualizações e projeções para consultores e produtores rurais.
 

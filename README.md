@@ -9,7 +9,7 @@ Consolida múltiplos sistemas independentes em uma base de código única, compa
 | App | Descrição | Deploy |
 |-----|-----------|--------|
 | `apps/planejamento-tributario` | Planejamento tributário para produtores rurais | Cloudflare Workers |
-| `apps/gef` | Gestão Estratégica de Fazenda — dashboards financeiros | Cloudflare Workers |
+| `apps/gef` | Gestão Econômica e Financeira — dashboards financeiros | Cloudflare Workers |
 
 | Package | Descrição |
 |---------|-----------|
