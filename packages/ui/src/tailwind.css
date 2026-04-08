@@ -181,10 +181,10 @@
 
   /* ── Hero board ── */
   .hero-board {
-    @apply grid gap-4 rounded-[2rem] border border-border/70 bg-card/75 p-4 shadow-card backdrop-blur-xl lg:grid-cols-[1.4fr_0.9fr];
+    @apply grid overflow-hidden rounded-[2rem] border border-border/70 bg-card/75 shadow-card backdrop-blur-xl lg:grid-cols-[1.4fr_0.9fr];
   }
   .hero-copy {
-    @apply rounded-[1.6rem] border border-border/60 bg-background/70 p-5 shadow-soft;
+    @apply bg-background/50 p-6;
   }
   .hero-copy-title {
     @apply text-xl font-extrabold tracking-tight text-foreground;
@@ -193,7 +193,7 @@
     @apply mt-2 text-sm leading-relaxed text-muted-foreground;
   }
   .hero-insight {
-    @apply flex flex-col justify-between rounded-[1.6rem] border border-primary/15 p-5 shadow-soft;
+    @apply flex flex-col justify-between p-6;
     background: linear-gradient(145deg, hsl(var(--panel-dark)) 0%, hsl(var(--primary)) 100%);
   }
   .hero-insight-label {
