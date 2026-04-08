@@ -4,6 +4,7 @@
  */
 
 import { useState } from 'react';
+import { Wrench } from 'lucide-react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { DREDashboard } from '@/modules/dre/DREDashboard';
@@ -61,8 +62,32 @@ function AppContent() {
         return <AjustesDashboard />;
       default:
         return (
-          <div className="flex items-center justify-center h-full">
-            <h2 className="text-2xl font-bold text-muted-foreground">Módulo em desenvolvimento</h2>
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <div className="flex flex-col items-center gap-6 text-center max-w-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
+              {/* Ícone com halo */}
+              <div className="relative">
+                <div className="absolute inset-0 rounded-2xl bg-primary/15 blur-xl scale-125" />
+                <div className="relative h-16 w-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center shadow-card">
+                  <Wrench className="h-7 w-7 text-primary" strokeWidth={1.5} />
+                </div>
+              </div>
+
+              {/* Texto */}
+              <div className="space-y-2">
+                <h2 className="text-lg font-bold text-foreground tracking-tight">
+                  Em desenvolvimento
+                </h2>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Este módulo está sendo construído e estará disponível em breve.
+                </p>
+              </div>
+
+              {/* Badge de status */}
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold text-primary">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                Em breve
+              </div>
+            </div>
           </div>
         );
     }
