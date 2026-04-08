@@ -178,13 +178,15 @@ export default function RecNaoRurais() {
           <CardTitle className="text-base text-primary-foreground">Resultado Final Mensal — {parceiro.nome}</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-12 gap-2 pb-2">
-            {MESES.map((m, i) => (
-              <div key={m} className="flex flex-col items-center px-2 py-2 rounded-lg bg-primary-foreground/10 backdrop-blur-sm">
-                <span className="text-[10px] text-primary-foreground/60 uppercase font-medium">{m}</span>
-                <span className="text-xs font-bold mt-0.5">{formatCurrency(totalMensal[i])}</span>
-              </div>
-            ))}
+          <div className="overflow-x-auto -mx-6 px-6">
+            <div className="grid grid-cols-12 gap-2 pb-2 min-w-[560px]">
+              {MESES.map((m, i) => (
+                <div key={m} className="flex flex-col items-center px-1 py-2 rounded-lg bg-primary-foreground/10 backdrop-blur-sm">
+                  <span className="text-[10px] text-primary-foreground/60 uppercase font-medium">{m}</span>
+                  <span className="text-[11px] font-bold mt-0.5 tabular-nums">{formatCurrency(totalMensal[i])}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>

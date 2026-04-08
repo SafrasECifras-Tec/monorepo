@@ -105,7 +105,7 @@ export default function SimulacaoIBSCBS() {
       {/* Timeline + Aliquota */}
       <div className="data-panel animate-fade-in">
         <div className="p-5 space-y-4">
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
               <ArrowRight className="h-4 w-4 text-primary" />
               <div>
@@ -113,7 +113,7 @@ export default function SimulacaoIBSCBS() {
                 <p className="text-[11px] text-muted-foreground">Selecione o ano para ver o impacto.</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 bg-muted/40 pl-3 pr-1 py-1.5 rounded-2xl border border-border/50">
+            <div className="flex items-center gap-2 bg-muted/40 pl-3 pr-1 py-1.5 rounded-2xl border border-border/50 self-start sm:self-auto">
               <span className="text-xs text-muted-foreground whitespace-nowrap">Alíquota Base:</span>
               <div className="flex items-center bg-background rounded-xl border border-border/60 px-2 py-1">
                 <EditableCell value={aliquotaBase} type="number" onSave={(v) => setAliquotaBase(Number(v))} className="font-bold text-foreground text-sm w-8 text-center" />
@@ -122,29 +122,31 @@ export default function SimulacaoIBSCBS() {
             </div>
           </div>
 
-          <div className="grid grid-cols-9 gap-2">
-            {anosDisponiveis.map((ano) => {
-              const t = TRANSICAO[ano];
-              const isSelected = anoSelecionado === ano;
-              return (
-                <button
-                  key={ano}
-                  onClick={() => setAnoSelecionado(ano)}
-                  className={`flex flex-col items-center justify-center py-3 rounded-2xl transition-all duration-200 border ${
-                    isSelected
-                      ? "border-primary bg-primary/10 shadow-soft ring-1 ring-primary/20"
-                      : "border-border/40 bg-muted/20 hover:bg-muted/50 hover:border-primary/30"
-                  }`}
-                >
-                  <span className={`font-bold leading-none ${isSelected ? "text-primary text-sm" : "text-foreground text-xs"}`}>
-                    {ano === 2025 ? "Hoje" : ano}
-                  </span>
-                  <span className={`text-[10px] mt-1 leading-none ${isSelected ? "text-primary/80 font-medium" : "text-muted-foreground"}`}>
-                    {t.total.toFixed(1)}% repasse
-                  </span>
-                </button>
-              );
-            })}
+          <div className="overflow-x-auto -mx-5 px-5">
+            <div className="grid grid-cols-9 gap-2 min-w-[520px]">
+              {anosDisponiveis.map((ano) => {
+                const t = TRANSICAO[ano];
+                const isSelected = anoSelecionado === ano;
+                return (
+                  <button
+                    key={ano}
+                    onClick={() => setAnoSelecionado(ano)}
+                    className={`flex flex-col items-center justify-center py-3 rounded-2xl transition-all duration-200 border ${
+                      isSelected
+                        ? "border-primary bg-primary/10 shadow-soft ring-1 ring-primary/20"
+                        : "border-border/40 bg-muted/20 hover:bg-muted/50 hover:border-primary/30"
+                    }`}
+                  >
+                    <span className={`font-bold leading-none ${isSelected ? "text-primary text-sm" : "text-foreground text-xs"}`}>
+                      {ano === 2025 ? "Hoje" : ano}
+                    </span>
+                    <span className={`text-[10px] mt-1 leading-none ${isSelected ? "text-primary/80 font-medium" : "text-muted-foreground"}`}>
+                      {t.total.toFixed(1)}%
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

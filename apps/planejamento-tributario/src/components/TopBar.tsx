@@ -1,4 +1,5 @@
 import { Cloud, Loader2, Users, Plus, CheckCircle, BarChart3, Truck, Receipt, Package } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -12,6 +13,17 @@ export function TopBar() {
   const { role } = useAuth();
   const { saving, analises, analiseId, setAnaliseId, state, selectedParceiroId, setSelectedParceiroId, dispatch } = useCalcir();
   const location = useLocation();
+
+  // Floating save indicator: visible while saving, then lingers 2s after saved
+  const [showFloat, setShowFloat] = useState(false);
+  useEffect(() => {
+    if (saving) {
+      setShowFloat(true);
+    } else if (showFloat) {
+      const t = setTimeout(() => setShowFloat(false), 2000);
+      return () => clearTimeout(t);
+    }
+  }, [saving]);
 
   const showParceiroSelector = PARCEIRO_ROUTES.includes(location.pathname) && state.parceiros.length > 0;
   const isReceitas = location.pathname === "/receitas";
@@ -66,14 +78,14 @@ export function TopBar() {
   };
 
   return (
-    <header className="glass-card flex h-14 items-center justify-between rounded-[2rem] px-5 shrink-0 shadow-float">
-      <div className="flex items-center gap-3 min-w-0">
-        <SidebarTrigger className="lg:hidden rounded-full border border-border/60 bg-background/70 text-foreground shadow-soft" />
+    <header className="glass-card flex h-14 items-center justify-between rounded-[2rem] px-3 sm:px-5 shrink-0 shadow-float">
+      <div className="flex items-center gap-2 min-w-0">
+        <SidebarTrigger className="lg:hidden rounded-full border border-border/60 bg-background/70 text-foreground shadow-soft shrink-0" />
 
         {analises.length > 0 && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 min-w-0">
             <Select value={analiseId ?? undefined} onValueChange={setAnaliseId}>
-              <SelectTrigger className="h-9 w-[200px] rounded-full border-border/60 bg-background/70 text-xs shadow-soft">
+              <SelectTrigger className="h-9 w-[120px] sm:w-[200px] rounded-full border-border/60 bg-background/70 text-xs shadow-soft">
                 <SelectValue placeholder="Selecionar análise" />
               </SelectTrigger>
               <SelectContent className="rounded-2xl">
@@ -87,7 +99,7 @@ export function TopBar() {
             <div
               aria-label={saving ? "Salvando" : "Salvo"}
               title={saving ? "Salvando alterações..." : "Todas as alterações salvas"}
-              className="h-9 w-9 shrink-0 rounded-full bg-primary/10 flex items-center justify-center"
+              className="hidden sm:flex h-9 w-9 shrink-0 rounded-full bg-primary/10 items-center justify-center"
             >
               {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" /> : <Cloud className="h-3.5 w-3.5 text-primary" />}
             </div>
@@ -102,33 +114,33 @@ export function TopBar() {
               variant="ghost"
               size="sm"
               onClick={addReceitaRealizacao}
-              className="h-7 rounded-full text-xs px-3 gap-1.5 hover:bg-primary/15 hover:text-primary font-medium"
+              className="h-7 rounded-full text-xs px-2 sm:px-3 gap-1 sm:gap-1.5 hover:bg-primary/15 hover:text-primary font-medium"
             >
               <Plus className="h-3 w-3" />
               <CheckCircle className="h-3 w-3 opacity-60" />
-              Realização
+              <span className="hidden sm:inline">Realização</span>
             </Button>
             <div className="h-4 w-px bg-border/50 mx-0.5" />
             <Button
               variant="ghost"
               size="sm"
               onClick={addReceitaProjecao}
-              className="h-7 rounded-full text-xs px-3 gap-1.5 hover:bg-primary/15 hover:text-primary font-medium"
+              className="h-7 rounded-full text-xs px-2 sm:px-3 gap-1 sm:gap-1.5 hover:bg-primary/15 hover:text-primary font-medium"
             >
               <Plus className="h-3 w-3" />
               <BarChart3 className="h-3 w-3 opacity-60" />
-              Projeção
+              <span className="hidden sm:inline">Projeção</span>
             </Button>
             <div className="h-4 w-px bg-border/50 mx-0.5" />
             <Button
               variant="ghost"
               size="sm"
               onClick={addVendaImobilizado}
-              className="h-7 rounded-full text-xs px-3 gap-1.5 hover:bg-primary/15 hover:text-primary font-medium"
+              className="h-7 rounded-full text-xs px-2 sm:px-3 gap-1 sm:gap-1.5 hover:bg-primary/15 hover:text-primary font-medium"
             >
               <Plus className="h-3 w-3" />
               <Truck className="h-3 w-3 opacity-60" />
-              Imobilizado
+              <span className="hidden sm:inline">Imobilizado</span>
             </Button>
           </div>
         )}
@@ -139,22 +151,22 @@ export function TopBar() {
               variant="ghost"
               size="sm"
               onClick={addDespesaOperacional}
-              className="h-7 rounded-full text-xs px-3 gap-1.5 hover:bg-destructive/15 hover:text-destructive font-medium"
+              className="h-7 rounded-full text-xs px-2 sm:px-3 gap-1 sm:gap-1.5 hover:bg-destructive/15 hover:text-destructive font-medium"
             >
               <Plus className="h-3 w-3" />
               <Receipt className="h-3 w-3 opacity-60" />
-              Operacional
+              <span className="hidden sm:inline">Operacional</span>
             </Button>
             <div className="h-4 w-px bg-border/50 mx-0.5" />
             <Button
               variant="ghost"
               size="sm"
               onClick={addImobilizadoAquisicao}
-              className="h-7 rounded-full text-xs px-3 gap-1.5 hover:bg-destructive/15 hover:text-destructive font-medium"
+              className="h-7 rounded-full text-xs px-2 sm:px-3 gap-1 sm:gap-1.5 hover:bg-destructive/15 hover:text-destructive font-medium"
             >
               <Plus className="h-3 w-3" />
               <Package className="h-3 w-3 opacity-60" />
-              Investimento
+              <span className="hidden sm:inline">Investimento</span>
             </Button>
           </div>
         )}
@@ -179,6 +191,19 @@ export function TopBar() {
             </Select>
           </div>
         )}
+      </div>
+
+      {/* Floating save indicator — mobile only */}
+      <div
+        className={[
+          "sm:hidden fixed bottom-6 right-6 z-50 h-11 w-11 rounded-full bg-card border border-border/70 shadow-card flex items-center justify-center transition-all duration-300",
+          showFloat ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none",
+        ].join(" ")}
+      >
+        {saving
+          ? <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+          : <Cloud className="h-4 w-4 text-primary" />
+        }
       </div>
     </header>
   );
