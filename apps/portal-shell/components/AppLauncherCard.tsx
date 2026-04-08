@@ -80,12 +80,17 @@ export function AppLauncherCard({
     return base;
   }
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.open(buildLaunchUrl(), "_blank", "noopener,noreferrer");
+  };
+
   const Wrapper = locked ? "div" : "a";
   const wrapperProps = locked
     ? {}
     : {
-        href: buildLaunchUrl(),
-        target: "_blank" as const,
+        href: href ?? "#",
+        onClick: handleClick,
         rel: "noopener noreferrer" as const,
       };
 
