@@ -22,12 +22,16 @@ export async function middleware(request: NextRequest) {
   if (!user && !isPublic) {
     const loginUrl = new URL("/auth", request.url);
     loginUrl.searchParams.set("next", pathname);
-    return NextResponse.redirect(loginUrl);
+    const res = NextResponse.redirect(loginUrl, { status: 302 });
+    res.headers.set("Cache-Control", "no-store");
+    return res;
   }
 
   // Redirect already-authenticated users away from the login page
   if (user && pathname.startsWith("/auth") && !pathname.startsWith("/auth/callback")) {
-    return NextResponse.redirect(new URL("/", request.url));
+    const res = NextResponse.redirect(new URL("/", request.url), { status: 302 });
+    res.headers.set("Cache-Control", "no-store");
+    return res;
   }
 
   // IMPORTANT: return the response object that carries refreshed cookie headers

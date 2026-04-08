@@ -12,9 +12,13 @@ export async function GET(request: NextRequest) {
     const supabase = await createSupabaseServerClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
+      const res = NextResponse.redirect(`${origin}${next}`, { status: 302 });
+      res.headers.set("Cache-Control", "no-store");
+      return res;
     }
   }
 
-  return NextResponse.redirect(`${origin}/auth?error=auth_callback_failed`);
+  const res = NextResponse.redirect(`${origin}/auth?error=auth_callback_failed`, { status: 302 });
+  res.headers.set("Cache-Control", "no-store");
+  return res;
 }
