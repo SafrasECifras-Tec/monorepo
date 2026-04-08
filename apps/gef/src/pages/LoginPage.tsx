@@ -1,30 +1,27 @@
 import { useState } from 'react';
-import { GoogleLogin, type CredentialResponse } from '@react-oauth/google';
-import { useAuth } from '@/contexts/AuthContext';
 import { AlertCircle, Lock } from 'lucide-react';
+import { getSupabaseClient } from '@socios/auth';
 
 export function LoginPage() {
-  const { login } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const supabase = getSupabaseClient();
 
-  const handleSuccess = (response: CredentialResponse) => {
-    if (!response.credential) {
-      setError('Não foi possível obter as credenciais. Tente novamente.');
-      return;
-    }
+  const handleGoogleLogin = async () => {
     setLoading(true);
     setError(null);
-    const result = login(response.credential);
-    if (!result.success) {
-      setError(result.error ?? 'Erro desconhecido.');
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/`,
+      },
+    });
+
+    if (error) {
+      setError(error.message);
       setLoading(false);
     }
-  };
-
-  const handleError = () => {
-    setError('O login com Google falhou. Tente novamente.');
-    setLoading(false);
   };
 
   return (
@@ -92,16 +89,13 @@ export function LoginPage() {
                 </div>
               ) : (
                 <div className="w-full flex justify-center">
-                  <GoogleLogin
-                    onSuccess={handleSuccess}
-                    onError={handleError}
-                    useOneTap={false}
-                    theme="outline"
-                    size="large"
-                    width="320"
-                    text="signin_with"
-                    shape="pill"
-                  />
+                  <button
+                    type="button"
+                    onClick={handleGoogleLogin}
+                    className="inline-flex h-11 items-center justify-center rounded-full border border-border bg-background px-6 text-sm font-medium text-foreground transition hover:bg-accent"
+                  >
+                    Entrar com Google
+                  </button>
                 </div>
               )}
 

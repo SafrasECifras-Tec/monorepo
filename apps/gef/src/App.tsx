@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { DREDashboard } from '@/modules/dre/DREDashboard';
@@ -88,7 +88,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <AuthProvider>
+    <AuthProvider
+      allowedDomain="safrasecifras.com.br"
+      onSignIn={() => window.location.replace('/')}
+    >
       <TooltipProvider delayDuration={0}>
         <AppContent />
       </TooltipProvider>
