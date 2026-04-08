@@ -66,14 +66,14 @@ export function TopBar() {
   };
 
   return (
-    <header className="glass-card flex h-14 items-center justify-between rounded-[2rem] px-5 shrink-0 shadow-float">
-      <div className="flex items-center gap-3 min-w-0">
-        <SidebarTrigger className="lg:hidden rounded-full border border-border/60 bg-background/70 text-foreground shadow-soft" />
+    <header className="glass-card flex h-14 items-center justify-between rounded-[2rem] px-3 sm:px-5 shrink-0 shadow-float">
+      <div className="flex items-center gap-2 min-w-0">
+        <SidebarTrigger className="lg:hidden rounded-full border border-border/60 bg-background/70 text-foreground shadow-soft shrink-0" />
 
         {analises.length > 0 && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 min-w-0">
             <Select value={analiseId ?? undefined} onValueChange={setAnaliseId}>
-              <SelectTrigger className="h-9 w-[200px] rounded-full border-border/60 bg-background/70 text-xs shadow-soft">
+              <SelectTrigger className="h-9 w-[120px] sm:w-[200px] rounded-full border-border/60 bg-background/70 text-xs shadow-soft">
                 <SelectValue placeholder="Selecionar análise" />
               </SelectTrigger>
               <SelectContent className="rounded-2xl">
@@ -102,7 +102,7 @@ export function TopBar() {
               variant="ghost"
               size="sm"
               onClick={addReceitaRealizacao}
-              className="h-7 rounded-full text-xs px-3 gap-1.5 hover:bg-primary/15 hover:text-primary font-medium"
+              className="h-7 rounded-full text-xs px-2 sm:px-3 gap-1 sm:gap-1.5 hover:bg-primary/15 hover:text-primary font-medium"
             >
               <Plus className="h-3 w-3" />
               <CheckCircle className="h-3 w-3 opacity-60" />
@@ -113,7 +113,7 @@ export function TopBar() {
               variant="ghost"
               size="sm"
               onClick={addReceitaProjecao}
-              className="h-7 rounded-full text-xs px-3 gap-1.5 hover:bg-primary/15 hover:text-primary font-medium"
+              className="h-7 rounded-full text-xs px-2 sm:px-3 gap-1 sm:gap-1.5 hover:bg-primary/15 hover:text-primary font-medium"
             >
               <Plus className="h-3 w-3" />
               <BarChart3 className="h-3 w-3 opacity-60" />
@@ -124,7 +124,7 @@ export function TopBar() {
               variant="ghost"
               size="sm"
               onClick={addVendaImobilizado}
-              className="h-7 rounded-full text-xs px-3 gap-1.5 hover:bg-primary/15 hover:text-primary font-medium"
+              className="h-7 rounded-full text-xs px-2 sm:px-3 gap-1 sm:gap-1.5 hover:bg-primary/15 hover:text-primary font-medium"
             >
               <Plus className="h-3 w-3" />
               <Truck className="h-3 w-3 opacity-60" />
@@ -139,7 +139,7 @@ export function TopBar() {
               variant="ghost"
               size="sm"
               onClick={addDespesaOperacional}
-              className="h-7 rounded-full text-xs px-3 gap-1.5 hover:bg-destructive/15 hover:text-destructive font-medium"
+              className="h-7 rounded-full text-xs px-2 sm:px-3 gap-1 sm:gap-1.5 hover:bg-destructive/15 hover:text-destructive font-medium"
             >
               <Plus className="h-3 w-3" />
               <Receipt className="h-3 w-3 opacity-60" />
@@ -150,7 +150,7 @@ export function TopBar() {
               variant="ghost"
               size="sm"
               onClick={addImobilizadoAquisicao}
-              className="h-7 rounded-full text-xs px-3 gap-1.5 hover:bg-destructive/15 hover:text-destructive font-medium"
+              className="h-7 rounded-full text-xs px-2 sm:px-3 gap-1 sm:gap-1.5 hover:bg-destructive/15 hover:text-destructive font-medium"
             >
               <Plus className="h-3 w-3" />
               <Package className="h-3 w-3 opacity-60" />
