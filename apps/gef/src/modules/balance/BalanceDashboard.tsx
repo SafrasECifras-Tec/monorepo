@@ -4,7 +4,7 @@ import { useImportedData } from '@/contexts/ImportDataContext';
 import { useUniversalImport } from '@/hooks/useUniversalImport';
 import { ImportButton } from '@/components/ui/ImportButton';
 import { EmptyDataState } from '@/components/ui/EmptyDataState';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { GlassCard } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import { ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';

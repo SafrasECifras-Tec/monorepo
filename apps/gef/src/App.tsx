@@ -5,6 +5,7 @@
 
 import { useState } from 'react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { DREDashboard } from '@/modules/dre/DREDashboard';
 import { DebtDashboard } from '@/modules/debt/DebtDashboard';
@@ -30,7 +31,7 @@ function EstoqueModule() {
     <div className="flex flex-col space-y-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 pb-6">
       <header>
         <h1 className="text-3xl font-bold text-foreground tracking-tight">Estoque</h1>
-        <p className="text-muted-foreground mt-1">Gestão e comercialização de grãos</p>
+        <p className="text-muted-foreground mt-1">Gestao e comercializacao de graos</p>
       </header>
       <EstoqueTab stockData={estoqueData ?? []} />
     </div>
@@ -62,7 +63,7 @@ function AppContent() {
       default:
         return (
           <div className="flex items-center justify-center h-full">
-            <h2 className="text-2xl font-bold text-muted-foreground">Módulo em desenvolvimento</h2>
+            <h2 className="text-2xl font-bold text-muted-foreground">Modulo em desenvolvimento</h2>
           </div>
         );
     }
@@ -71,12 +72,12 @@ function AppContent() {
   return (
     <ClientProvider>
       <ImportDataProvider>
-      <SettingsProvider>
-        <MainLayout activeModule={activeModule} onNavigate={setActiveModule}>
-          {renderModule()}
-        </MainLayout>
-        <Toaster position="top-right" />
-      </SettingsProvider>
+        <SettingsProvider>
+          <MainLayout activeModule={activeModule} onNavigate={setActiveModule}>
+            {renderModule()}
+          </MainLayout>
+          <Toaster position="top-right" />
+        </SettingsProvider>
       </ImportDataProvider>
     </ClientProvider>
   );
@@ -86,7 +87,9 @@ export default function App() {
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <AuthProvider>
-        <AppContent />
+        <TooltipProvider delayDuration={0}>
+          <AppContent />
+        </TooltipProvider>
         <Toaster position="top-right" />
       </AuthProvider>
     </GoogleOAuthProvider>

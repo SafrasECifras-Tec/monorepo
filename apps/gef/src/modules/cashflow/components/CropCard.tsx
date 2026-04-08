@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { GlassCard } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import { formatSacas } from '@/lib/formatters';
 import type { CropStock } from '@/data/cashflow/estoqueData';

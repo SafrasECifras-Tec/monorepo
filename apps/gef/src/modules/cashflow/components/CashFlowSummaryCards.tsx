@@ -1,6 +1,6 @@
 import React from 'react';
 import { Wallet, ArrowUpRight, ArrowDownRight, Calculator } from 'lucide-react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { GlassCard } from '@socios/ui';
 import { formatCurrency } from '@/lib/formatters';
 import type { CurrencyMode } from '@/lib/formatters';
 

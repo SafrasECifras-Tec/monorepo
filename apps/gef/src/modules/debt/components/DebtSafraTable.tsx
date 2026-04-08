@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { GlassCard } from '@socios/ui';
 import { formatCurrency } from '@/lib/formatters';
 import type { IndicatorRow } from '@/data/debt/debtDashboardData';
 import { safraDetalhesData } from '@/data/debt/debtDashboardData';

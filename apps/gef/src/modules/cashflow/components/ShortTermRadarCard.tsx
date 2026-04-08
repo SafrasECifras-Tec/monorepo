@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { GlassCard } from '@socios/ui';
 import { formatCurrency } from '@/lib/formatters';
 import type { CurrencyMode } from '@/lib/formatters';
 import { shortTermLiquidity } from '@/data/cashflow/cashFlowChartData';

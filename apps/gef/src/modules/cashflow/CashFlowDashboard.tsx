@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { GlassCard } from '@/components/ui/GlassCard';
-import { TabNav } from '@/components/ui/TabNav';
+import { GlassCard } from '@socios/ui';
+import { TabNav } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import { RealizedProjectedTable } from './RealizedProjectedTable';
 import { EstoqueTab } from './EstoqueTab';

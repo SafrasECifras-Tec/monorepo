@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { GlassCard } from '@socios/ui';
 import { motion } from 'motion/react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Cell, LineChart, Line, ReferenceLine, LabelList } from 'recharts';
 import { Info, TrendingDown, TrendingUp } from 'lucide-react';

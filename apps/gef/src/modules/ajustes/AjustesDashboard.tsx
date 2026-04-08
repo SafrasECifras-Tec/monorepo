@@ -5,7 +5,7 @@ import {
   Wallet, BarChart2, Package, CheckCircle2, CircleDashed,
   Trash2, X,
 } from 'lucide-react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { GlassCard } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import { useSettings, DEBT_INDICADOR_ITEMS, BALANCE_INDICADOR_ITEMS } from '@/contexts/SettingsContext';
 import { useImportedData } from '@/contexts/ImportDataContext';

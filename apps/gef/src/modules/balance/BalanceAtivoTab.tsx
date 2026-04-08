@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { GlassCard } from '@socios/ui';
 import type { BalanceTableRow } from '@/contexts/ImportDataContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { DollarSign, Home, Maximize2, Minimize2, Wallet, ArrowDown, ArrowUp, ChevronDown, ChevronRight } from 'lucide-react';

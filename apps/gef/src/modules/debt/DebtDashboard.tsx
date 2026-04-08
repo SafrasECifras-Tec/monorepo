@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { GlassCard } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import { formatCurrency } from '@/lib/formatters';
 import { Wallet, DollarSign, Percent, TrendingDown } from 'lucide-react';

@@ -8,8 +8,8 @@ import {
   TrendingUp, TrendingDown, AlertTriangle, Lightbulb, Info,
   ArrowUpRight, ArrowDownRight, Minus, ChevronDown, AlertCircle,
 } from 'lucide-react';
-import { GlassCard } from '@/components/ui/GlassCard';
-import { TabNav } from '@/components/ui/TabNav';
+import { GlassCard } from '@socios/ui';
+import { TabNav } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import {
   FAZENDAS, alertasData,
