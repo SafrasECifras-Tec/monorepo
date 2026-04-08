@@ -106,7 +106,7 @@ export function TopBar() {
             >
               <Plus className="h-3 w-3" />
               <CheckCircle className="h-3 w-3 opacity-60" />
-              Realização
+              <span className="hidden sm:inline">Realização</span>
             </Button>
             <div className="h-4 w-px bg-border/50 mx-0.5" />
             <Button
@@ -117,7 +117,7 @@ export function TopBar() {
             >
               <Plus className="h-3 w-3" />
               <BarChart3 className="h-3 w-3 opacity-60" />
-              Projeção
+              <span className="hidden sm:inline">Projeção</span>
             </Button>
             <div className="h-4 w-px bg-border/50 mx-0.5" />
             <Button
@@ -128,7 +128,7 @@ export function TopBar() {
             >
               <Plus className="h-3 w-3" />
               <Truck className="h-3 w-3 opacity-60" />
-              Imobilizado
+              <span className="hidden sm:inline">Imobilizado</span>
             </Button>
           </div>
         )}
@@ -143,7 +143,7 @@ export function TopBar() {
             >
               <Plus className="h-3 w-3" />
               <Receipt className="h-3 w-3 opacity-60" />
-              Operacional
+              <span className="hidden sm:inline">Operacional</span>
             </Button>
             <div className="h-4 w-px bg-border/50 mx-0.5" />
             <Button
@@ -154,7 +154,7 @@ export function TopBar() {
             >
               <Plus className="h-3 w-3" />
               <Package className="h-3 w-3 opacity-60" />
-              Investimento
+              <span className="hidden sm:inline">Investimento</span>
             </Button>
           </div>
         )}

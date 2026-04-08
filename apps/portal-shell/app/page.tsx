@@ -9,7 +9,6 @@ import { BarChart3, Calculator, Landmark, ShieldCheck } from "lucide-react";
 export const runtime = "edge";
 
 import type { Fazenda } from "@socios/database";
-import { Header } from "@/components/Header";
 import { AppLauncherCard } from "@/components/AppLauncherCard";
 import { UserMenu } from "@/components/UserMenu";
 
@@ -40,12 +39,6 @@ export default async function LaunchpadPage() {
 
   return (
     <div className="min-h-screen w-full flex flex-col">
-      <Header
-        user={user}
-        fazendas={fazendas ?? []}
-        currentTenantId={currentTenantId}
-      />
-
       <main className="flex-1 p-6 lg:p-10">
         <div className="max-w-5xl mx-auto">
           {/* Page header */}
