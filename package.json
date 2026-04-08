@@ -16,6 +16,9 @@
     "node": ">=18"
   },
   "pnpm": {
+    "overrides": {
+      "vite": "6.4.2"
+    },
     "onlyBuiltDependencies": [
       "@swc/core",
       "esbuild",
