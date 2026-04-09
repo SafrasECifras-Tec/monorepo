@@ -41,9 +41,9 @@ export default async function LaunchpadPage() {
   return (
     <div className="min-h-screen w-full flex flex-col relative overflow-hidden">
 
-      {/* Decorative plow-furrow lines — brand element, bottom of page */}
+      {/* Decorative plow-furrow lines — brand element, passes behind lower cards */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-52 pointer-events-none opacity-[0.18]"
+        className="absolute bottom-0 left-0 right-0 h-[26rem] pointer-events-none opacity-[0.22]"
         aria-hidden="true"
       >
         <PlowLines />
