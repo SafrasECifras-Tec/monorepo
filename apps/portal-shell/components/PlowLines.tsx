@@ -1,33 +1,28 @@
 /**
  * Decorative plow-furrow lines — Safras & Cifras brand element.
  *
- * Each of the 4 lines makes the SAME path:
- *   horizontal ─── 90° turn down ─── straight down ─── 90° turn right ─── horizontal
+ * Shape per line — smooth cubic Bézier S-curve with horizontal tangents:
  *
- * Because all paths use identical geometry (same x1, R, D) just shifted by
- * a constant y, the lines stay perfectly parallel (constant 36 px gap)
- * throughout both curves and the straight section.
+ *   ─────────────╮
+ *                 ╲  ← steep diagonal middle (≈ 48° from horizontal)
+ *                  ╰─────────────
  *
- *   ─────────╮
- *             │   ← Q bezier right→down
- *             │   ← straight vertical (D px)
- *             ╰─────────
- *                 ← Q bezier down→right
+ * Path: M 0 y  H x1  C (x1+t) y  (x2-t) (y+dY)  x2 (y+dY)  H viewW
+ *
+ * All 4 lines are identical — only y shifts by `spacing`, keeping
+ * the lines perfectly parallel throughout the curve.
  */
 export function PlowLines() {
   const COLORS = ['#0062a3', '#467f5f', '#a9bf9a', '#f4af2d']; // blue → gold
 
-  const spacing = 36;  // px between lines (constant throughout)
-  const y0 = 24;       // y of top (blue) line
-  const R  = 80;       // corner radius for both 90° turns
-  const D  = 32;       // straight vertical depth between the two turns
-  const x1 = 680;      // x where the step begins (~47 % of 1440 viewBox)
+  const spacing = 32;   // vertical gap between lines
+  const y0  = 30;       // y of top (blue) line
+  const x1  = 640;      // S-curve begins here  (~44 % of viewBox)
+  const x2  = 800;      // S-curve ends here    (~56 % of viewBox)
+  const t   = 35;       // Bézier handle length — short = steep visible middle
+  const dY  = 180;      // total vertical drop per line
   const viewW = 1440;
-  const viewH = 370;
-
-  // Vertical sections (at x = x1+R = 760):
-  //   line i: from (y0+i*spacing)+R  to  (y0+i*spacing)+R+D
-  // Gap between adjacent vertical sections = spacing − D = 36−32 = 4 px (non-overlapping ✓)
+  const viewH = y0 + (COLORS.length - 1) * spacing + dY + 90; // ≈ 410
 
   return (
     <svg
@@ -39,8 +34,7 @@ export function PlowLines() {
       preserveAspectRatio="none"
     >
       {COLORS.map((color, i) => {
-        const y    = y0 + i * spacing;       // 24 | 60 | 96 | 132
-        const yEnd = y + 2 * R + D;          // 216 | 252 | 288 | 324
+        const y = y0 + i * spacing; // 30 | 62 | 94 | 126
 
         return (
           <path
@@ -48,19 +42,15 @@ export function PlowLines() {
             d={[
               `M 0 ${y}`,
               `H ${x1}`,
-              // Q1 — smooth 90° turn: going RIGHT → going DOWN
-              `Q ${x1 + R} ${y} ${x1 + R} ${y + R}`,
-              // Straight vertical section
-              `V ${y + R + D}`,
-              // Q2 — smooth 90° turn: going DOWN → going RIGHT
-              `Q ${x1 + R} ${yEnd} ${x1 + 2 * R} ${yEnd}`,
+              // Cubic Bézier: horizontal handle at start, horizontal handle at end,
+              // short handles → steep ~48° diagonal in the middle
+              `C ${x1 + t} ${y}  ${x2 - t} ${y + dY}  ${x2} ${y + dY}`,
               `H ${viewW}`,
             ].join(' ')}
             stroke={color}
-            strokeWidth="5"
+            strokeWidth="4.5"
             fill="none"
             strokeLinecap="round"
-            strokeLinejoin="round"
           />
         );
       })}
