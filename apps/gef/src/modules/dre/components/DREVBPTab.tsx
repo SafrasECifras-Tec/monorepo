@@ -24,7 +24,7 @@ const fmtNum = (v: number) => v.toLocaleString('pt-BR');
 
 // ── Paleta ────────────────────────────────────────────────────────────────────
 
-const CULTURA_COLORS = ['#6366f1', '#f59e0b', '#0ea5e9', '#8b5cf6', '#f43f5e'];
+const CULTURA_COLORS = ['#6366f1', '#f59e0b', '#0ea5e9', '#f4af2d', '#f43f5e'];
 
 // ── KpiCard ───────────────────────────────────────────────────────────────────
 

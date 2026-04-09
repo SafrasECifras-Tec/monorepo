@@ -418,7 +418,7 @@ export function ProjectionDashboard({ hideTitle = false }: { hideTitle?: boolean
                 </div>
                 {simulatedEvents.length > 0 && (
                   <div className="flex items-center gap-1.5">
-                    <div className="w-3 h-0.5 bg-purple-500 border-t border-dashed" />
+                    <div className="w-3 h-0.5 bg-[#f4af2d] border-t border-dashed" />
                     <span className="text-slate-500">Com Simulação</span>
                   </div>
                 )}
@@ -522,10 +522,10 @@ export function ProjectionDashboard({ hideTitle = false }: { hideTitle?: boolean
                     <Line 
                       type="monotone" 
                       dataKey="projectedWithEvent" 
-                      stroke="#8b5cf6" 
-                      strokeWidth={3} 
+                      stroke="#f4af2d"
+                      strokeWidth={3}
                       strokeDasharray="8 5"
-                      dot={{ fill: '#8b5cf6', strokeWidth: 2, r: 4, stroke: '#fff' }}
+                      dot={{ fill: '#f4af2d', strokeWidth: 2, r: 4, stroke: '#fff' }}
                       activeDot={{ r: 6, strokeWidth: 0 }}
                     />
                   )}

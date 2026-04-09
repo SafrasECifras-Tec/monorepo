@@ -13,7 +13,7 @@ export const CHART_COLORS = {
   chart2: '#e06050',  // coral
   chart3: '#d4a017',  // gold
   chart4: '#3b82f6',  // blue
-  chart5: '#8b5cf6',  // purple
+  chart5: '#f4af2d',  // gold
 } as const;
 
 /** Ordered palette for series/slices — use with .map((_, i) => PALETTE[i % PALETTE.length]) */
