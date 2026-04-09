@@ -291,29 +291,140 @@ export async function downloadTemplateUniversal() {
   // ══════════════════════════════════════════════════════════════════════════
   // ABA "DRE" — Demonstrativo de Resultado
   // ══════════════════════════════════════════════════════════════════════════
-  const wsDRE = XLSX.utils.aoa_to_sheet([
-    [
-      'safra', 'areaTotal', 'producaoTotal', 'produtividadeMedia', 'precoMedioVenda',
-      'receitaBruta', 'custoTotal', 'lucroBruto', 'despesasOperacionais', 'ebitda',
-      'resultadoLiquido', 'margemBruta', 'margemLiquida', 'pontoEquilibrio', 'roi',
-      'orcadoVbp', 'orcadoCusto', 'orcadoResultado',
-    ],
-    ['2023/24', 2200, 149600, 68.0, 132, 19747200, 14300000, 5447200, 2000000, 4600000,
-     3447200, 27.6, 17.5, 46.5, 24.1, 20000000, 15000000, 5000000],
-    ['2024/25', 2350, 161650, 68.8, 128, 20691200, 15050000, 5641200, 2200000, 4800000,
-     3441200, 27.3, 16.6, 47.2, 22.9, 21500000, 15800000, 5700000],
-  ]);
-  setCols(wsDRE, [10,10,13,18,16,13,11,11,22,10,15,12,13,15,8,10,11,16]);
+  // Cabeçalho completo — inclui custoInsumos/Operacao/Juros para habilitar indicadores
+  const dreHeader = [
+    'safra', 'fazenda', 'atividade',
+    'areaTotal', 'producaoTotal', 'produtividadeMedia', 'precoMedioVenda',
+    'receitaBruta', 'custoTotal', 'custoInsumos', 'custoOperacao', 'custoJuros',
+    'lucroBruto', 'despesasOperacionais', 'ebitda',
+    'resultadoLiquido', 'margemBruta', 'margemLiquida', 'pontoEquilibrio', 'roi',
+    'orcadoVbp', 'orcadoCusto', 'orcadoResultado',
+  ];
+
+  // Dados de 2019/20 a 2024/25 — tendência ascendente com picos e leves variações
+  // Formato: safra | fazenda | atividade | area | prod | produtiv | preco |
+  //          recBruta | custoTotal | custoInsumos | custoOper | custoJuros |
+  //          lucroBruto | despOper | ebitda |
+  //          resultLiq | margBruta | margLiq | pontEq | roi |
+  //          orcVBP | orcCusto | orcResult
+  // Formato: safra | fazenda | atividade | area | prod | produtiv | preco |
+  //          recBruta | custoTotal | custoInsumos | custoOper | custoJuros |
+  //          lucroBruto | despOper | ebitda |
+  //          resultLiq | margBruta | margLiq | pontEq | roi |
+  //          orcVBP | orcCusto | orcResult
+  const dreRows = [
+    // ── 2019/20 — ano base, preço baixo, margens apertadas ───────────────────
+    ['2019/20', 'Fazenda Santa Fé', 'Soja',
+      1800, 106200, 59.0,  80,
+      8496000,  6800000, 3740000, 2040000, 1020000,
+      1696000,  780000, 1300000,
+       916000,  20.0, 10.8, 52.6, 13.5,
+      8800000, 7000000, 1800000],
+    ['2019/20', 'Fazenda Santa Fé', 'Milho',
+       600,  48000, 80.0,  42,
+      2016000,  1400000,  700000,  490000,  210000,
+       616000,  100800,  515200,
+       515200,  30.6, 25.6, 29.2, 36.8,
+      1900000, 1450000,  450000],
+
+    // ── 2020/21 — pico: disparada de preços (COVID + China) ──────────────────
+    ['2020/21', 'Fazenda Santa Fé', 'Soja',
+      1900, 124700, 65.6, 140,
+     17458000,  9100000, 5005000, 2730000, 1365000,
+      8358000, 1100000, 7600000,
+      7258000,  47.9, 41.6, 38.3, 45.2,
+     16000000, 9500000, 6500000],
+    ['2020/21', 'Fazenda Santa Fé', 'Milho',
+       650,  55250, 85.0,  65,
+      3591250,  1900000,  950000,  665000,  285000,
+      1691250,  179563, 1511687,
+      1511687,  47.1, 42.1, 34.4, 79.6,
+      3200000, 1950000, 1250000],
+
+    // ── 2021/22 — preços altos, custos sobem com insumos ─────────────────────
+    ['2021/22', 'Fazenda Santa Fé', 'Soja',
+      1980, 132660, 67.0, 148,
+     19633680, 13200000, 7260000, 3960000, 1980000,
+      6433680, 2100000, 5200000,
+      4333680,  32.8, 22.1, 52.5, 24.1,
+     20000000, 14000000, 6000000],
+    ['2021/22', 'Fazenda Santa Fé', 'Milho',
+       700,  61600, 88.0,  72,
+      4435200,  2700000, 1350000,  945000,  405000,
+      1735200,  221760, 1513440,
+      1513440,  39.1, 34.1, 43.8, 56.1,
+      4000000, 2750000, 1250000],
+
+    // ── 2022/23 — leve retração: preços caem, custos permanecem altos ────────
+    ['2022/23', 'Fazenda Santa Fé', 'Soja',
+      2050, 136325, 66.5, 133,
+     18139225, 13800000, 7590000, 4140000, 2070000,
+      4339225, 1800000, 3500000,
+      2539225,  23.9, 14.0, 57.2, 18.4,
+     19500000, 14500000, 5000000],
+    ['2022/23', 'Fazenda Santa Fé', 'Milho',
+       750,  67500, 90.0,  68,
+      4590000,  3100000, 1550000, 1085000,  465000,
+      1490000,  229500, 1260500,
+      1260500,  32.5, 27.5, 45.9, 40.7,
+      4300000, 3200000, 1100000],
+
+    // ── 2023/24 — recuperação: produtividade cresce, margem melhora ──────────
+    ['2023/24', 'Fazenda Santa Fé', 'Soja',
+      2200, 149600, 68.0, 132,
+     19747200, 14300000, 7865000, 4290000, 2145000,
+      5447200, 2000000, 4600000,
+      3447200,  27.6, 17.5, 52.9, 24.1,
+     20000000, 15000000, 5000000],
+    ['2023/24', 'Fazenda Santa Fé', 'Milho',
+       800,  73600, 92.0,  65,
+      4784000,  3300000, 1650000, 1155000,  495000,
+      1484000,  239200, 1244800,
+      1244800,  31.0, 26.0, 44.8, 37.7,
+      4500000, 3400000, 1100000],
+
+    // ── 2024/25 — crescimento sustentado: maior área e eficiência ────────────
+    ['2024/25', 'Fazenda Santa Fé', 'Soja',
+      2350, 161650, 68.8, 128,
+     20691200, 15050000, 8277500, 4515000, 2257500,
+      5641200, 2200000, 4800000,
+      3441200,  27.3, 16.6, 57.0, 22.9,
+     21500000, 15800000, 5700000],
+    ['2024/25', 'Fazenda Santa Fé', 'Milho',
+       850,  80750, 95.0,  62,
+      5006500,  3500000, 1750000, 1225000,  525000,
+      1506500,  250325, 1256175,
+      1256175,  30.1, 25.1, 43.3, 35.9,
+      4800000, 3600000, 1200000],
+  ];
+
+  const wsDRE = XLSX.utils.aoa_to_sheet([dreHeader, ...dreRows]);
+  setCols(wsDRE, [10,18,12, 10,13,13,14, 13,12,13,13,12, 12,20,12, 12,11,10,10,8, 12,12,13]);
   XLSX.utils.book_append_sheet(wb, wsDRE, 'DRE');
 
   // ── Culturas (opcional) ──────────────────────────────────────────────────
+  // Detalhamento por cultura para cada safra — reflete os agregados da aba DRE
   const wsCulturas = XLSX.utils.aoa_to_sheet([
     ['safra',   'nome',  'area', 'producao', 'produtividade', 'precoMedio',
      'receitaBruta', 'custoTotal', 'margemLiquida', 'variacaoMargem'],
-    ['2024/25', 'Soja',   1650, 116820, 70.8, 128, 14952960, 10500000, 29.8,  2.1],
-    ['2024/25', 'Milho',   700,  44030, 62.9, 128,  5638240,  4550000, 19.3, -1.2],
-    ['2023/24', 'Soja',   1540, 105336, 68.4, 132, 13904352,  9800000, 29.5,  0.0],
-    ['2023/24', 'Milho',   660,  44264, 67.1, 132,  5842848,  4500000, 23.0,  1.5],
+    // 2019/20 — base: apenas soja, margens apertadas
+    ['2019/20', 'Soja',  1260,  74340, 59.0,  80,  5947200,  4760000, 19.9,  0.0],
+    ['2019/20', 'Milho',  540,  31860, 59.0,  80,  2548800,  2040000, 19.9,  0.0],
+    // 2020/21 — pico de preço (COVID + China)
+    ['2020/21', 'Soja',  1330,  87290, 65.6, 140, 12220600,  6370000, 47.9, 28.0],
+    ['2020/21', 'Milho',  570,  37410, 65.6, 140,  5237400,  2730000, 47.9, 28.0],
+    // 2021/22 — preços altos, custos sobem
+    ['2021/22', 'Soja',  1386,  92862, 67.0, 148, 13743576,  9240000, 32.8, -15.1],
+    ['2021/22', 'Milho',  594,  39798, 67.0, 148,  5890104,  3960000, 32.8, -15.1],
+    // 2022/23 — leve retração: preço cai, custos permanecem altos
+    ['2022/23', 'Soja',  1435,  95428, 66.5, 133, 12691924,  9660000, 23.9,  -8.9],
+    ['2022/23', 'Milho',  615,  40898, 66.5, 133,  5439434,  4140000, 23.9,  -8.9],
+    // 2023/24 — recuperação: produtividade cresce, margem melhora
+    ['2023/24', 'Soja',  1540, 105336, 68.4, 132, 13904352,  9800000, 29.5,   0.0],
+    ['2023/24', 'Milho',  660,  44264, 67.1, 132,  5842848,  4500000, 23.0,   1.5],
+    // 2024/25 — crescimento sustentado: maior área e eficiência
+    ['2024/25', 'Soja',  1650, 116820, 70.8, 128, 14952960, 10500000, 29.8,   2.1],
+    ['2024/25', 'Milho',  700,  44030, 62.9, 128,  5638240,  4550000, 19.3,  -1.2],
   ]);
   setCols(wsCulturas, [10,12,8,10,14,12,13,11,14,14]);
   XLSX.utils.book_append_sheet(wb, wsCulturas, 'Culturas');

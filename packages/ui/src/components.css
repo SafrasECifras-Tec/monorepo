@@ -507,7 +507,7 @@
   -webkit-backdrop-filter: blur(18px);
   border: 1px solid hsl(var(--border) / 0.8);
   box-shadow: 0 12px 34px -18px hsl(var(--primary) / 0.28);
-  border-radius: 2rem;
+  border-radius: 16px;
 }
 
 .dark .sc-glass-card {

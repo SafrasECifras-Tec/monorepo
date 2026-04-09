@@ -97,9 +97,9 @@ export function DebtIndicadoresTab({
                       </Bar>
 
                       {hasAquisicoes && (
-                        <Bar dataKey="aquisicoes" name="Aquisições de Terras" stackId="a" fill="#8b5cf6" isAnimationActive={false} activeBar={false}>
+                        <Bar dataKey="aquisicoes" name="Aquisições de Terras" stackId="a" fill="#f4af2d" isAnimationActive={false} activeBar={false}>
                           {ebitdaData.map((_, i) => (
-                            <Cell key={i} fill="#8b5cf6" opacity={activeBarIndex === null || activeBarIndex === i ? 1 : 0.3} />
+                            <Cell key={i} fill="#f4af2d" opacity={activeBarIndex === null || activeBarIndex === i ? 1 : 0.3} />
                           ))}
                         </Bar>
                       )}
