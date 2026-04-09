@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Wheat, X } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import type { CurrencyMode } from '@/lib/formatters';
 
@@ -155,20 +156,21 @@ export function CropDrawer({ isOpen, onClose, cropName, cropStock, currencyMode,
                 <div className="grid grid-cols-3 gap-3">
                   <div className="space-y-1">
                     <label className="text-xs font-medium text-slate-600">Mês</label>
-                    <select
-                      value={simMonth}
-                      onChange={(e) => setSimMonth(e.target.value)}
-                      className="w-full text-sm border border-slate-200 rounded-lg p-2 bg-slate-50 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
-                    >
-                      {months.map((m, i) => {
-                        const isRealized = i <= currentMonthIndex;
-                        return (
-                          <option key={i} value={i} disabled={isRealized}>
-                            {isRealized ? `${m} (Realizado)` : m}
-                          </option>
-                        );
-                      })}
-                    </select>
+                    <Select value={String(simMonth)} onValueChange={setSimMonth}>
+                      <SelectTrigger className="h-9 w-full rounded-lg border-border/60 bg-background/70 text-sm shadow-soft">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-xl">
+                        {months.map((m, i) => {
+                          const isRealized = i <= currentMonthIndex;
+                          return (
+                            <SelectItem key={i} value={String(i)} disabled={isRealized}>
+                              {isRealized ? `${m} (Realizado)` : m}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className="space-y-1">
                     <label className="text-xs font-medium text-slate-600">Quantidade</label>

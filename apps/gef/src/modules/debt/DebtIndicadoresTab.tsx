@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar, Cell, LabelList } from 'recharts';
-import { ChevronDown, BarChart3 } from 'lucide-react';
+import { BarChart3 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { GlassCard } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import { formatCurrency } from '@/lib/formatters';
@@ -230,17 +231,15 @@ export function DebtIndicadoresTab({
               <GlassCard className="p-6 flex-1 flex flex-col hover:shadow-md transition-all duration-300 min-h-[300px]">
                 <div className="mb-6 flex flex-col gap-3">
                   <h3 className="text-lg font-semibold text-slate-800">Custo Financeiro vs:</h3>
-                  <div className="relative w-full sm:w-fit">
-                    <select
-                      className="w-full sm:w-60 appearance-none bg-white/60 border border-slate-200/60 shadow-sm text-slate-700 hover:bg-white/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500"
-                      value={custoFinanceiroVs}
-                      onChange={e => setCustoFinanceiroVs(e.target.value as 'Desembolso Operacional' | 'EBITDA')}
-                    >
-                      <option value="Desembolso Operacional">Desembolso Operacional</option>
-                      <option value="EBITDA">EBITDA</option>
-                    </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
-                  </div>
+                  <Select value={custoFinanceiroVs} onValueChange={v => setCustoFinanceiroVs(v as 'Desembolso Operacional' | 'EBITDA')}>
+                    <SelectTrigger className="h-10 w-full sm:w-60 rounded-xl border-border/60 bg-background/70 text-sm shadow-soft">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl">
+                      <SelectItem value="Desembolso Operacional">Desembolso Operacional</SelectItem>
+                      <SelectItem value="EBITDA">EBITDA</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="flex-1 w-full relative">
                   <ResponsiveContainer width="100%" height="100%">

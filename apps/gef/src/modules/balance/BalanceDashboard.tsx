@@ -7,6 +7,7 @@ import { EmptyDataState } from '@/components/ui/EmptyDataState';
 import { GlassCard } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import { ChevronDown } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { motion, AnimatePresence } from 'motion/react';
 import { BalanceInicioTab } from './BalanceInicioTab';
 import { BalanceAtivoTab } from './BalanceAtivoTab';
@@ -84,56 +85,48 @@ export function BalanceDashboard() {
           {/* View Mode Filter (Only for Ativo and Passivo) */}
           {(activeTab === 'ativo' || activeTab === 'passivo') && (
             <div className="flex flex-col gap-1.5 w-full lg:w-auto">
-              <span className="text-sm font-medium text-slate-600">Visualização:</span>
-              <div className="relative">
-                <select 
-                  value={viewMode}
-                  onChange={(e) => setViewMode(e.target.value)}
-                  className="w-full lg:w-48 appearance-none bg-white/60 border border-slate-200/60 shadow-sm text-slate-700 hover:bg-white/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500"
-                >
-                  <option value="Detalhamento">Detalhamento</option>
-                  <option value="Tabela">Tabela</option>
-                  <option value="Árvore Hierárquica">Árvore Hierárquica</option>
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
-              </div>
+              <span className="text-sm font-medium text-muted-foreground">Visualização:</span>
+              <Select value={viewMode} onValueChange={setViewMode}>
+                <SelectTrigger className="h-10 w-full lg:w-48 rounded-xl border-border/60 bg-background/70 text-sm shadow-soft">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl">
+                  <SelectItem value="Detalhamento">Detalhamento</SelectItem>
+                  <SelectItem value="Tabela">Tabela</SelectItem>
+                  <SelectItem value="Árvore Hierárquica">Árvore Hierárquica</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           )}
 
           {/* Fazenda Filter */}
           <div className="flex flex-col gap-1.5 w-full lg:w-auto">
-            <span className="text-sm font-medium text-slate-600">Fazenda:</span>
-            <div className="relative">
-              <select 
-                value={selectedFazenda}
-                onChange={(e) => setSelectedFazenda(e.target.value)}
-                className="w-full lg:w-48 appearance-none bg-white/60 border border-slate-200/60 shadow-sm text-slate-700 hover:bg-white/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500"
-              >
-                <option value="Todas">Todas</option>
-                <option value="Fazenda Boa Vista">Fazenda Boa Vista</option>
-                <option value="Fazenda São João">Fazenda São João</option>
-                <option value="Fazenda Santa Rita">Fazenda Santa Rita</option>
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
-            </div>
+            <span className="text-sm font-medium text-muted-foreground">Fazenda:</span>
+            <Select value={selectedFazenda} onValueChange={setSelectedFazenda}>
+              <SelectTrigger className="h-10 w-full lg:w-48 rounded-xl border-border/60 bg-background/70 text-sm shadow-soft">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl">
+                <SelectItem value="Todas">Todas</SelectItem>
+                <SelectItem value="Fazenda Boa Vista">Fazenda Boa Vista</SelectItem>
+                <SelectItem value="Fazenda São João">Fazenda São João</SelectItem>
+                <SelectItem value="Fazenda Santa Rita">Fazenda Santa Rita</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Avaliação Filter — populado dinamicamente pelas colunas importadas */}
           {columns.length > 0 && (
             <div className="flex flex-col gap-1.5 w-full lg:w-auto">
-              <span className="text-sm font-medium text-slate-600">Coluna:</span>
-              <div className="relative">
-                <select
-                  value={selectedAvaliacao}
-                  onChange={(e) => setSelectedAvaliacao(e.target.value)}
-                  className="w-full lg:w-48 appearance-none bg-white/60 border border-slate-200/60 shadow-sm text-slate-700 hover:bg-white/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500"
-                >
-                  {columns.map(col => (
-                    <option key={col} value={col}>{col}</option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
-              </div>
+              <span className="text-sm font-medium text-muted-foreground">Coluna:</span>
+              <Select value={selectedAvaliacao} onValueChange={setSelectedAvaliacao}>
+                <SelectTrigger className="h-10 w-full lg:w-48 rounded-xl border-border/60 bg-background/70 text-sm shadow-soft">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl">
+                  {columns.map(col => <SelectItem key={col} value={col}>{col}</SelectItem>)}
+                </SelectContent>
+              </Select>
             </div>
           )}
         </div>
