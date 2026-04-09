@@ -705,9 +705,8 @@
 }
 
 .sc-table-modern .row-total {
-  border-top: 2px solid hsl(var(--primary) / 0.15);
+  border-top: 1px solid hsl(var(--border) / 0.6);
   font-weight: 700;
-  background: linear-gradient(90deg, hsl(var(--primary) / 0.08), transparent);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

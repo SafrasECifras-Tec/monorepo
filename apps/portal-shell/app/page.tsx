@@ -49,9 +49,8 @@ export default async function LaunchpadPage() {
             <h1 className="text-2xl font-extrabold tracking-tight text-foreground">
               Módulos
             </h1>
-            <p className="text-sm text-muted-foreground mt-1.5 max-w-lg">
-              Acesse os módulos da plataforma Sócios do Agro. Selecione uma
-              fazenda acima para contextualizá-los automaticamente.
+            <p className="text-sm text-muted-foreground mt-1.5 whitespace-nowrap">
+              Acesse os módulos da plataforma Sócios do Agro. Selecione uma fazenda acima para contextualizá-los automaticamente.
             </p>
           </div>
 

@@ -117,8 +117,7 @@
     @apply border-b-0;
   }
   .table-modern .row-total {
-    @apply border-t-2 border-primary/15 font-bold;
-    background: linear-gradient(90deg, hsl(var(--primary) / 0.08), transparent);
+    @apply border-t border-border/60 font-bold;
   }
 
   /* ── Table shell ── */

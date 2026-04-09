@@ -661,7 +661,7 @@ export function RealizedProjectedTable({
             ))}
           </tbody>
 
-          <tfoot className="sticky bottom-0 z-40 bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+          <tfoot className="sticky bottom-0 z-40 bg-white border-t border-slate-200/60">
             {/* Saldo Inicial */}
             <tr className="text-slate-800">
               <td className="sticky left-0 z-50 bg-slate-50 py-3 px-3 font-semibold border-r border-t-2 border-t-emerald-600 border-r-slate-200">
