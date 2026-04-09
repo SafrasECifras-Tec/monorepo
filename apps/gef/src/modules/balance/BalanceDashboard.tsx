@@ -43,8 +43,8 @@ export function BalanceDashboard() {
       {/* Header Row: Title */}
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Balanço Patrimonial</h1>
-          <p className="text-slate-600 mt-1 text-lg">Visão geral do ativo, passivo e patrimônio líquido</p>
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">Balanço Patrimonial</h1>
+          <p className="text-muted-foreground mt-1">Visão geral do ativo, passivo e patrimônio líquido</p>
         </div>
         <ImportButton
           hasData={hasImportedData}

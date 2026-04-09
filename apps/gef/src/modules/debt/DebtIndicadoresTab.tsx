@@ -8,6 +8,36 @@ import { formatCurrency } from '@/lib/formatters';
 import { useSettings } from '@/contexts/SettingsContext';
 import { GaugeChart } from './components/GaugeChart';
 import type { EbitdaRow, CustoFinanceiroRow } from '@/data/debt/debtIndicadoresData';
+import { gefTooltipClass, gefTooltipTitleClass, CHART_CURSOR } from '@/lib/chartTheme';
+
+const EbitdaTooltip = ({ active, payload, label }: any) => {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className={gefTooltipClass}>
+      <p className={gefTooltipTitleClass}>{label}</p>
+      {payload.map((entry: any, i: number) =>
+        entry.value > 0 ? (
+          <p key={i} className="text-[13px] text-popover-foreground">
+            <span style={{ color: entry.color }}>{entry.name}: </span>
+            <span className="font-semibold">{entry.value}%</span>
+          </p>
+        ) : null
+      )}
+    </div>
+  );
+};
+
+const PercentTooltip = ({ active, payload, label }: any) => {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className={gefTooltipClass}>
+      <p className={gefTooltipTitleClass}>{label}</p>
+      <p className="text-[13px] text-popover-foreground">
+        <span className="font-semibold">{payload[0].value}%</span>
+      </p>
+    </div>
+  );
+};
 
 interface Props {
   currencyMode: 'BRL' | 'SOJA';
@@ -87,7 +117,7 @@ export function DebtIndicadoresTab({
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" opacity={0.5} />
                       <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fill: '#64748B', fontSize: 12 }} dy={10} />
                       <YAxis hide />
-                      <Tooltip cursor={{ fill: '#F1F5F9', opacity: 0.4 }} formatter={(value: number) => `${value}%`} />
+                      <Tooltip cursor={CHART_CURSOR} content={<EbitdaTooltip />} />
                       <Legend verticalAlign="top" align="left" height={36} iconType="circle" wrapperStyle={{ paddingBottom: '20px', fontSize: '12px' }} />
 
                       <Bar dataKey="investimentos" name="Investimentos" stackId="a" fill="#3b82f6" isAnimationActive={false} activeBar={false}>
@@ -246,7 +276,7 @@ export function DebtIndicadoresTab({
                     <BarChart data={currentCustoFinanceiroData} margin={{ top: 20, right: 0, left: 0, bottom: 20 }}>
                       <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fill: '#64748B', fontSize: 10, angle: -45, textAnchor: 'end' }} dy={10} />
                       <YAxis hide />
-                      <Tooltip cursor={{ fill: '#F1F5F9', opacity: 0.4 }} formatter={(value: number) => `${value}%`} />
+                      <Tooltip cursor={CHART_CURSOR} content={<PercentTooltip />} />
                       <Bar dataKey="value" fill="#3b82f6" radius={[6, 6, 0, 0]}>
                         <LabelList dataKey="value" position="top" fill="#475569" formatter={(v: number) => `${v}%`} fontSize={10} fontWeight={500} />
                       </Bar>

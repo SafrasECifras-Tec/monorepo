@@ -250,8 +250,8 @@ export function DebtDashboard() {
     <div className="flex flex-col h-full space-y-6">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Endividamento</h1>
-          <p className="text-slate-500 mt-1">Visão geral e projeção de dívidas</p>
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">Endividamento</h1>
+          <p className="text-muted-foreground mt-1">Visão geral e projeção de dívidas</p>
         </div>
         <ImportButton
           hasData={hasImportedData}

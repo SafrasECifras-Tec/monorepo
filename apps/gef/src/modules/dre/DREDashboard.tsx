@@ -328,8 +328,8 @@ export function DREDashboard() {
       {/* Header */}
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">DRE</h1>
-          <p className="text-slate-500 mt-1">Demonstrativo de Resultado por Safra — Fazenda Santa Fé</p>
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">DRE</h1>
+          <p className="text-muted-foreground mt-1">Demonstrativo de Resultado por Safra — Fazenda Santa Fé</p>
         </div>
         <ImportButton
           hasData={hasImportedData}
