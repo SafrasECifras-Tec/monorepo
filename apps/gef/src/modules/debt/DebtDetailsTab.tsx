@@ -92,7 +92,7 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         {/* Por Tipo de Financiamento */}
-        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-float transition-all duration-300">
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-slate-800">por Tipo de Financiamento</h3>
             <p className="text-xs text-slate-500 italic">(Endividamento | % do Total)</p>
@@ -127,7 +127,7 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
         </GlassCard>
 
         {/* Por Descrição */}
-        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-float transition-all duration-300">
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-slate-800">por Descrição</h3>
             <p className="text-xs text-slate-500 italic">(Endividamento | % do Total)</p>
@@ -160,7 +160,7 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
         </GlassCard>
 
         {/* Por Banco */}
-        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-float transition-all duration-300">
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-slate-800">por Banco</h3>
             <p className="text-xs text-slate-500 italic">(Endividamento | % do Total)</p>
@@ -195,7 +195,7 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
       </div>
 
       {/* Parcelas Table */}
-      <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
+      <GlassCard className="p-6 flex flex-col hover:shadow-float transition-all duration-300">
         <div className="mb-6">
           <h3 className="text-lg font-semibold text-slate-800">por Parcelas</h3>
         </div>

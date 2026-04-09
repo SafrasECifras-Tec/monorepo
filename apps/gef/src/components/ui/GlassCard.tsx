@@ -7,17 +7,20 @@ interface GlassCardProps extends React.HTMLAttributes<HTMLDivElement> {
   hoverEffect?: boolean;
 }
 
-export function GlassCard({ children, className, hoverEffect = false, ...props }: GlassCardProps) {
+export function GlassCard({ children, className, hoverEffect = false, style, ...props }: GlassCardProps) {
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-2xl border border-white/40 bg-white/60 backdrop-blur-xl shadow-sm transition-all duration-300",
-        hoverEffect && "hover:bg-white/70 hover:shadow-md hover:-translate-y-1",
+        "gef-card relative overflow-hidden rounded-[2rem] border border-border/70 bg-card backdrop-blur-sm shadow-elevated transition-all duration-300",
+        hoverEffect && "hover:-translate-y-1.5 hover:shadow-float hover:border-primary/20",
         className
       )}
+      style={{
+        backgroundImage: "linear-gradient(180deg, hsl(var(--panel-soft)) 0%, hsl(var(--panel-strong)) 100%)",
+        ...style,
+      }}
       {...props}
     >
-      {/* Optional: Noise texture or subtle gradient overlay could go here */}
       {children}
     </div>
   );

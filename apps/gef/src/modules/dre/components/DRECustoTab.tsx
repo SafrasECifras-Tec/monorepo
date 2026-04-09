@@ -40,7 +40,7 @@ function KpiCard({ label, value, sub, trend, badge, invertTrend, delay = 0 }: {
   const isNegative = invertTrend ? raw > 0 : raw < 0;
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay }}>
-      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-md transition-all duration-300 h-full">
+      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-float transition-all duration-300 h-full">
         <span className="text-[14px] font-semibold text-slate-500 uppercase tracking-wider">{label}</span>
         <span className="text-[24px] font-black text-slate-800 leading-tight">{value}</span>
         {sub && <span className="text-xs text-slate-400">{sub}</span>}
@@ -241,7 +241,7 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
         {/* Esquerda — Barras horizontais */}
         <motion.div className="lg:col-span-3"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}>
-          <GlassCard className="p-5 h-full hover:shadow-md transition-all duration-300">
+          <GlassCard className="p-5 h-full hover:shadow-float transition-all duration-300">
             <h3 className="text-sm font-bold text-slate-700 mb-0.5">Custo por Cultura</h3>
             <p className="text-xs text-slate-400 mb-4">Custo total desembolsado por atividade</p>
             <div style={{ height: Math.max(culturaSorted.length * 56, 180) }}>
@@ -271,7 +271,7 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
         {/* Direita — Donut */}
         <motion.div className="lg:col-span-2"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.15 }}>
-          <GlassCard className="p-5 h-full hover:shadow-md transition-all duration-300">
+          <GlassCard className="p-5 h-full hover:shadow-float transition-all duration-300">
             <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-4">Composição do Custo</h3>
             <div className="flex flex-col items-center gap-3">
               <div className="h-44 w-44">
@@ -309,7 +309,7 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
         {/* Esquerda — Evolução */}
         <motion.div className="lg:col-span-3"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.15 }}>
-          <GlassCard className="p-5 h-full hover:shadow-md transition-all duration-300">
+          <GlassCard className="p-5 h-full hover:shadow-float transition-all duration-300">
             <h3 className="text-sm font-bold text-slate-700 mb-0.5">Evolução do Custo</h3>
             <p className="text-xs text-slate-400 mb-4">Custo total por safra + custo por hectare</p>
             <div className="h-56">
@@ -353,7 +353,7 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
         {/* Direita — Orçado + Breakdown */}
         <motion.div className="lg:col-span-2"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.2 }}>
-          <GlassCard className="p-5 h-full hover:shadow-md transition-all duration-300">
+          <GlassCard className="p-5 h-full hover:shadow-float transition-all duration-300">
             <h3 className="text-sm font-bold text-slate-700 mb-0.5">Custo — Orçado vs. Realizado</h3>
             <p className="text-xs text-slate-400 mb-4">Meta de custo planejada</p>
             <BulletBar label="Custo Total" realizado={data.custoTotal} orcado={data.orcadoCusto} delay={0.25} />
@@ -374,7 +374,7 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
 
       {/* ── Linha 4: Tabela detalhada por cultura ───────────────────── */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.2 }}>
-        <GlassCard className="p-5 hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-5 hover:shadow-float transition-all duration-300">
           <h3 className="text-sm font-bold text-slate-700 mb-4">Detalhamento por Cultura</h3>
           <div className="overflow-x-auto custom-scrollbar">
             <table className="w-full text-sm">

@@ -426,7 +426,7 @@ export function DREAnalisesTab({
       {/* ── Gráfico de Barras Empilhadas ──────────────────────────────────── */}
       <motion.div
         initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}>
-        <GlassCard className="p-5 hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-5 hover:shadow-float transition-all duration-300">
           <h3 className="text-sm font-bold text-foreground mb-0.5">Análise Comparativa por Safra</h3>
           <p className="text-xs text-muted-foreground mb-4">VBP, custo e resultado em sc/ha — empilhados por safra</p>
           <div className="h-72">

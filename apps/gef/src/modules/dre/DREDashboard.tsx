@@ -60,7 +60,7 @@ function KpiCard({ label, value, sub, trend, delay = 0 }: {
   const down = trend && trend.value < 0;
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay }}>
-      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-md transition-all duration-300 h-full">
+      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-float transition-all duration-300 h-full">
         <span className="text-[14px] font-semibold text-slate-500 uppercase tracking-wider">{label}</span>
         <span className="text-[24px] font-black text-slate-800 leading-tight">{value}</span>
         {sub && <span className="text-xs text-slate-400">{sub}</span>}
@@ -83,7 +83,7 @@ function CulturaCard({ cultura, idx, ...rest }: { cultura: any; idx: number; [k:
   const down = cultura.variacaoMargem < 0;
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 * idx }}>
-      <GlassCard className="p-5 hover:shadow-md transition-all duration-300">
+      <GlassCard className="p-5 hover:shadow-float transition-all duration-300">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <span className="text-2xl">{cultura.emoji}</span>

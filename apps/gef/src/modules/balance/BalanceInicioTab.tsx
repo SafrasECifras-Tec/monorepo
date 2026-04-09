@@ -114,7 +114,7 @@ const PieSection = ({
   setHovered: (v: string | null) => void;
   currencyMode: 'BRL' | 'SOJA';
 }) => (
-  <GlassCard className="p-4 md:p-6 flex flex-col hover:shadow-md transition-all duration-300 border-slate-200/60 min-h-[280px]">
+  <GlassCard className="p-4 md:p-6 flex flex-col hover:shadow-float transition-all duration-300 border-slate-200/60 min-h-[280px]">
     <div className="flex items-center gap-2 mb-6">
       <Icon className="h-6 w-6 text-slate-800" />
       <h3 className="text-lg font-semibold text-slate-800">{title}</h3>

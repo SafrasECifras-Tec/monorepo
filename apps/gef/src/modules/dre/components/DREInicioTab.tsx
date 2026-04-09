@@ -44,7 +44,7 @@ function KpiCard({ label, value, sub, trend, delay = 0 }: {
   const down = trend && trend.value < 0;
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay }}>
-      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-md transition-all duration-300 h-full">
+      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-float transition-all duration-300 h-full">
         <span className="text-[14px] font-semibold text-slate-500 uppercase tracking-wider">{label}</span>
         <span className="text-[24px] font-black text-slate-800 leading-tight">{value}</span>
         {sub && <span className="text-xs text-slate-400">{sub}</span>}
@@ -240,7 +240,7 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
         {/* Esquerda — Saúde Financeira */}
         <motion.div className="lg:col-span-3"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}>
-          <GlassCard className="p-5 h-full hover:shadow-md transition-all duration-300">
+          <GlassCard className="p-5 h-full hover:shadow-float transition-all duration-300">
             <h3 className="text-sm font-bold text-slate-700 mb-0.5">Saúde Financeira</h3>
             <p className="text-xs text-slate-400 mb-4">Realizado vs. Orçado — clique em uma categoria para ver detalhes</p>
             <div className="h-56">
@@ -297,7 +297,7 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
         {/* Direita — Insights da Safra */}
         <motion.div className="lg:col-span-2"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.15 }}>
-          <GlassCard className="p-5 h-full hover:shadow-md transition-all duration-300">
+          <GlassCard className="p-5 h-full hover:shadow-float transition-all duration-300">
             <h3 className="text-sm font-bold text-slate-700 mb-0.5">Insights da Safra</h3>
             <p className="text-xs text-slate-400 mb-4">Análise automática dos indicadores de performance</p>
             <div className="flex flex-col gap-2.5">
@@ -316,7 +316,7 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
         {/* Card 1 — Donut: Percentual de Área */}
         <motion.div
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.2 }}>
-          <GlassCard className="p-5 hover:shadow-md transition-all duration-300">
+          <GlassCard className="p-5 hover:shadow-float transition-all duration-300">
             <h3 className="text-sm font-bold text-slate-700 mb-0.5">Percentual de Área</h3>
             <p className="text-xs text-slate-400 mb-3">Distribuição das {fmtNum(data.areaTotal)} ha por atividade</p>
             <div className="h-56">
@@ -366,7 +366,7 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
         {/* Card 2 — ComposedChart: ROI (barras) + Peso Fertilizantes + Peso Defensivos (linhas) */}
         <motion.div
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.25 }}>
-          <GlassCard className="p-5 hover:shadow-md transition-all duration-300">
+          <GlassCard className="p-5 hover:shadow-float transition-all duration-300">
             <h3 className="text-sm font-bold text-slate-700 mb-0.5">Retorno sobre a Margem Bruta</h3>
             <p className="text-xs text-slate-400 mb-3">ROI (%) e peso de insumos no custo total — por safra</p>
             <div className="h-56">
@@ -427,7 +427,7 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
         {/* Card 3 — Receita vs Custo empilhado por tipo (full width) */}
         <motion.div className="sm:col-span-2"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.3 }}>
-          <GlassCard className="p-5 hover:shadow-md transition-all duration-300">
+          <GlassCard className="p-5 hover:shadow-float transition-all duration-300">
             <h3 className="text-sm font-bold text-slate-700 mb-0.5">Receita vs. Custo por Atividade</h3>
             <p className="text-xs text-slate-400 mb-3">VBP realizado vs. custo total desembolsado por cultura</p>
             <div className="h-56">

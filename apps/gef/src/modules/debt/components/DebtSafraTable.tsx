@@ -26,7 +26,7 @@ export function DebtSafraTable({ data, currencyMode }: Props) {
     setExpandedSafra(prev => (prev === safra ? null : safra));
 
   return (
-    <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
+    <GlassCard className="p-6 flex flex-col hover:shadow-float transition-all duration-300">
       <div className="flex items-center justify-between mb-6 shrink-0">
         <h3 className="text-lg font-bold text-slate-800">Por Safra</h3>
       </div>
