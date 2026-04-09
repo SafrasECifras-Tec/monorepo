@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import path from "path";
 
 const nextConfig: NextConfig = {
   // In pnpm monorepos, webpack follows symlinks into the .pnpm store and
@@ -12,8 +11,13 @@ const nextConfig: NextConfig = {
     return config;
   },
 
-  // Tell Next.js the monorepo root so file-tracing covers shared packages.
-  outputFileTracingRoot: path.join(__dirname, "../../"),
+  // NOTE: outputFileTracingRoot is intentionally omitted.
+  // Setting it to the monorepo root causes Vercel CLI v50+ to compute distDir
+  // as "apps/portal-shell/.next" (relative to monorepo root), which then gets
+  // resolved relative to the portal-shell CWD, doubling the path and breaking
+  // @cloudflare/next-on-pages. All @socios/* packages are covered by
+  // transpilePackages (compiled at build time), so runtime file tracing
+  // of the monorepo root is not needed for Cloudflare Pages deployments.
 
   transpilePackages: [
     "@socios/auth",
