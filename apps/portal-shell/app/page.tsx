@@ -11,6 +11,7 @@ export const runtime = "edge";
 import type { Fazenda } from "@socios/database";
 import { AppLauncherCard } from "@/components/AppLauncherCard";
 import { UserMenu } from "@/components/UserMenu";
+import { PlowLines } from "@/components/PlowLines";
 
 const GEF_URL =
   process.env.NODE_ENV === "development"
@@ -38,8 +39,17 @@ export default async function LaunchpadPage() {
   const currentTenantId = await getServerTenantId();
 
   return (
-    <div className="min-h-screen w-full flex flex-col">
-      <main className="flex-1 p-6 lg:p-10">
+    <div className="min-h-screen w-full flex flex-col relative overflow-hidden">
+
+      {/* Decorative plow-furrow lines — brand element, bottom of page */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-52 pointer-events-none opacity-[0.18]"
+        aria-hidden="true"
+      >
+        <PlowLines />
+      </div>
+
+      <main className="flex-1 p-6 lg:p-10 relative">
         <div className="max-w-5xl mx-auto">
           {/* Page header */}
           <div className="mb-10">
