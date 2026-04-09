@@ -20,6 +20,7 @@ export function UserMenu({ user }: UserMenuProps) {
   const initials = user.email
     ? user.email.slice(0, 2).toUpperCase()
     : "??";
+  const picture = (user.user_metadata?.avatar_url as string | undefined) || "";
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -43,8 +44,8 @@ export function UserMenu({ user }: UserMenuProps) {
       {/* Popup panel */}
       <div
         className={cn(
-          "overflow-hidden rounded-2xl border border-white/20 transition-all duration-200 origin-bottom-right",
-          "bg-white/70 backdrop-blur-2xl shadow-float",
+          "overflow-hidden rounded-2xl border border-border transition-all duration-200 origin-bottom-left",
+          "bg-popover shadow-float",
           open
             ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
             : "opacity-0 scale-95 translate-y-1 pointer-events-none"
@@ -52,20 +53,15 @@ export function UserMenu({ user }: UserMenuProps) {
         style={{ minWidth: "220px" }}
       >
         {/* Email row */}
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-black/5">
-          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center shrink-0">
-            <span className="text-[11px] font-bold text-white">{initials}</span>
-          </div>
-          <span className="text-[13px] text-foreground/80 truncate font-medium">
-            {user.email}
-          </span>
+        <div className="px-2 py-1.5 border-b border-border/50">
+          <p className="text-[11px] text-muted-foreground truncate px-1">{user.email}</p>
         </div>
 
         {/* Actions */}
-        <div className="p-1.5">
+        <div className="p-1.5 space-y-0.5">
           <button
             onClick={handleSignOut}
-            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] font-medium text-red-600 hover:bg-red-50 transition-colors text-left"
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-[13px] font-medium text-destructive hover:bg-destructive/10 transition-colors text-left"
           >
             <LogOut className="h-3.5 w-3.5" />
             Sair
@@ -77,16 +73,20 @@ export function UserMenu({ user }: UserMenuProps) {
       <button
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "h-12 w-12 rounded-full flex items-center justify-center shrink-0",
-          "bg-white/70 backdrop-blur-2xl border border-white/30 shadow-float",
-          "hover:scale-105 active:scale-95 transition-all duration-150",
-          open && "ring-2 ring-primary/40 ring-offset-2"
+          "h-11 w-11 rounded-2xl flex items-center justify-center shrink-0",
+          "bg-popover border border-border shadow-float",
+          "hover:bg-accent transition-all duration-150",
+          open && "ring-2 ring-primary/30 ring-offset-2"
         )}
         title={user.email ?? "Usuário"}
       >
-        <div className="h-8 w-8 rounded-full bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center">
-          <span className="text-[11px] font-bold text-white">{initials}</span>
-        </div>
+        {picture ? (
+          <img src={picture} alt={user.email ?? ""} className="h-7 w-7 rounded-lg object-cover" referrerPolicy="no-referrer" />
+        ) : (
+          <div className="h-7 w-7 rounded-lg bg-primary/15 flex items-center justify-center">
+            <span className="text-[10px] font-bold text-primary">{initials}</span>
+          </div>
+        )}
       </button>
     </div>
   );

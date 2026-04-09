@@ -6,6 +6,7 @@ import {
 } from 'recharts';
 import { formatCurrency } from '@/lib/formatters';
 import type { ParcelaRow } from '@/contexts/ImportDataContext';
+import { gefTooltipClass, gefTooltipTitleClass, CHART_CURSOR } from '@/lib/chartTheme';
 
 interface Props {
   currencyMode: 'BRL' | 'SOJA';
@@ -26,13 +27,13 @@ const formatPercent = (percent: number) => `${percent.toFixed(1)}%`;
 const CustomTooltip = ({ active, payload, label, currencyMode }: any) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-slate-800/95 backdrop-blur-md border border-slate-700 p-3 rounded-lg shadow-xl">
-      <p className="font-medium text-slate-100 mb-1">{label}</p>
-      <p className="text-sm text-slate-300">
-        Endividamento: <span className="font-semibold text-white">{formatValue(payload[0].value, currencyMode)}</span>
+    <div className={gefTooltipClass}>
+      <p className={gefTooltipTitleClass}>{label}</p>
+      <p className="text-[13px] text-popover-foreground">
+        Endividamento: <span className="font-semibold">{formatValue(payload[0].value, currencyMode)}</span>
       </p>
-      <p className="text-sm text-slate-300">
-        % do Total: <span className="font-semibold text-white">{formatPercent(payload[0].payload.percent)}</span>
+      <p className="text-[13px] text-popover-foreground">
+        % do Total: <span className="font-semibold">{formatPercent(payload[0].payload.percent)}</span>
       </p>
     </div>
   );
@@ -92,7 +93,7 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         {/* Por Tipo de Financiamento */}
-        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-float transition-all duration-300">
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-slate-800">por Tipo de Financiamento</h3>
             <p className="text-xs text-slate-500 italic">(Endividamento | % do Total)</p>
@@ -104,8 +105,8 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" opacity={0.5} />
                   <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#64748B', fontSize: 12 }} dy={10} />
                   <YAxis hide />
-                  <Tooltip content={<CustomTooltip currencyMode={currencyMode} />} cursor={{ fill: '#F1F5F9', opacity: 0.4 }} />
-                  <Bar dataKey="value" radius={[4, 4, 0, 0]} maxBarSize={40}>
+                  <Tooltip content={<CustomTooltip currencyMode={currencyMode} />} cursor={CHART_CURSOR} />
+                  <Bar dataKey="value" radius={[6, 6, 0, 0]} maxBarSize={40}>
                     {tipoFinanciamentoData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
                     <LabelList
                       dataKey="value"
@@ -127,7 +128,7 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
         </GlassCard>
 
         {/* Por Descrição */}
-        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-float transition-all duration-300">
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-slate-800">por Descrição</h3>
             <p className="text-xs text-slate-500 italic">(Endividamento | % do Total)</p>
@@ -138,8 +139,8 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
                 <BarChart data={descricaoData} layout="vertical" margin={{ top: 0, right: 100, left: 0, bottom: 0 }} barSize={20}>
                   <XAxis type="number" hide />
                   <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={truncatedYAxis} width={160} />
-                  <Tooltip content={<CustomTooltip currencyMode={currencyMode} />} cursor={{ fill: '#F1F5F9', opacity: 0.4 }} />
-                  <Bar dataKey="value" fill="#3b82f6" radius={[0, 4, 4, 0]}>
+                  <Tooltip content={<CustomTooltip currencyMode={currencyMode} />} cursor={CHART_CURSOR} />
+                  <Bar dataKey="value" fill="#3b82f6" radius={[0, 6, 6, 0]}>
                     <LabelList
                       dataKey="value"
                       position="right"
@@ -160,7 +161,7 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
         </GlassCard>
 
         {/* Por Banco */}
-        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col h-[450px] hover:shadow-float transition-all duration-300">
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-slate-800">por Banco</h3>
             <p className="text-xs text-slate-500 italic">(Endividamento | % do Total)</p>
@@ -171,8 +172,8 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
                 <BarChart data={bancoData} layout="vertical" margin={{ top: 0, right: 100, left: 0, bottom: 0 }} barSize={24}>
                   <XAxis type="number" hide />
                   <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={truncatedYAxis} width={160} />
-                  <Tooltip content={<CustomTooltip currencyMode={currencyMode} />} cursor={{ fill: '#F1F5F9', opacity: 0.4 }} />
-                  <Bar dataKey="value" fill="#3b82f6" radius={[0, 4, 4, 0]}>
+                  <Tooltip content={<CustomTooltip currencyMode={currencyMode} />} cursor={CHART_CURSOR} />
+                  <Bar dataKey="value" fill="#3b82f6" radius={[0, 6, 6, 0]}>
                     <LabelList
                       dataKey="value"
                       position="right"
@@ -195,7 +196,7 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
       </div>
 
       {/* Parcelas Table */}
-      <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
+      <GlassCard className="p-6 flex flex-col hover:shadow-float transition-all duration-300">
         <div className="mb-6">
           <h3 className="text-lg font-semibold text-slate-800">por Parcelas</h3>
         </div>

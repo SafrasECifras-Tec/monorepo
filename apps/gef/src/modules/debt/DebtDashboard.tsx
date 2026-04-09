@@ -250,8 +250,8 @@ export function DebtDashboard() {
     <div className="flex flex-col h-full space-y-6">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Endividamento</h1>
-          <p className="text-slate-500 mt-1">Visão geral e projeção de dívidas</p>
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">Endividamento</h1>
+          <p className="text-muted-foreground mt-1">Visão geral e projeção de dívidas</p>
         </div>
         <ImportButton
           hasData={hasImportedData}
@@ -297,7 +297,7 @@ export function DebtDashboard() {
       {/* KPI Cards */}
       {hasImportedData && (<>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-float transition-all duration-300">
           <div className="flex items-center gap-2 mb-4">
             <TrendingDown className="h-5 w-5 text-slate-800" />
             <span className="text-sm font-semibold text-slate-800 uppercase tracking-wider">Endividamento</span>
@@ -306,7 +306,7 @@ export function DebtDashboard() {
             {formatCurrency(totalEndividamento, currencyMode)}
           </div>
         </GlassCard>
-        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-float transition-all duration-300">
           <div className="flex items-center gap-2 mb-4">
             <DollarSign className="h-5 w-5 text-slate-800" />
             <span className="text-sm font-semibold text-slate-800 uppercase tracking-wider">Valor Principal</span>
@@ -315,7 +315,7 @@ export function DebtDashboard() {
             {formatCurrency(totalPrincipal, currencyMode)}
           </div>
         </GlassCard>
-        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-float transition-all duration-300">
           <div className="flex items-center gap-2 mb-4">
             <Wallet className="h-5 w-5 text-slate-800" />
             <span className="text-sm font-semibold text-slate-800 uppercase tracking-wider">Juros</span>
@@ -324,7 +324,7 @@ export function DebtDashboard() {
             {formatCurrency(totalJuros, currencyMode)}
           </div>
         </GlassCard>
-        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-float transition-all duration-300">
           <div className="flex items-center gap-2 mb-4">
             <Percent className="h-5 w-5 text-slate-800" />
             <span className="text-sm font-semibold text-slate-800 uppercase tracking-wider">Taxa Efetiva</span>
@@ -343,7 +343,7 @@ export function DebtDashboard() {
               <EndividamentoPorSafraChart data={endividamentoPorSafraChartData} currencyMode={currencyMode} sojaPrice={sojaPrice} />
 
               {/* Valores por Horizonte */}
-              <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
+              <GlassCard className="p-6 flex flex-col hover:shadow-float transition-all duration-300">
                 <div className="mb-8">
                   <h3 className="text-lg font-bold text-[#1e3a29]">Valores por Horizonte</h3>
                   <p className="text-sm text-slate-400 mt-1">Principal sem juros por prazo</p>

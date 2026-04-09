@@ -18,7 +18,7 @@ export default function ApuracaoFinal() {
       {/* Hero Board */}
       <div className="hero-board animate-fade-in" style={{ animationDelay: "80ms", animationFillMode: "both" }}>
         <div className="hero-copy">
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {[
               { title: "Receitas Totais", value: derived.totalReceitasPF, icon: TrendingUp },
               { title: "Despesas Totais", value: derived.totalDespesasPF, icon: TrendingDown },
@@ -29,7 +29,7 @@ export default function ApuracaoFinal() {
                   <span className="label-uppercase">{c.title}</span>
                   <c.icon className="h-3.5 w-3.5 text-muted-foreground/40" />
                 </div>
-                <p className="text-lg font-extrabold tabular-nums"><ExpandableValue>{formatCurrency(c.value)}</ExpandableValue></p>
+                <p className="text-sm sm:text-lg font-extrabold tabular-nums"><ExpandableValue>{formatCurrency(c.value)}</ExpandableValue></p>
               </div>
             ))}
           </div>

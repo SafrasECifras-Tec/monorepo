@@ -8,6 +8,7 @@ import {
   AlertTriangle, Lightbulb, Info,
   ArrowUpRight, ArrowDownRight, Minus, ChevronDown,
 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@socios/ui';
 import { GlassCard } from '@socios/ui';
 import { TabNav } from '@socios/ui';
 import { cn } from '@/lib/utils';
@@ -58,7 +59,7 @@ function KpiCard({ label, value, sub, trend, delay = 0 }: {
   const down = trend && trend.value < 0;
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay }}>
-      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-md transition-all duration-300 h-full">
+      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-float transition-all duration-300 h-full">
         <span className="text-[14px] font-semibold text-slate-500 uppercase tracking-wider">{label}</span>
         <span className="text-[24px] font-black text-slate-800 leading-tight">{value}</span>
         {sub && <span className="text-xs text-slate-400">{sub}</span>}
@@ -153,7 +154,7 @@ function HistoricoTab({ dreDataRecord, safras }: { dreDataRecord: Record<string,
                   tickFormatter={v => `${(v / 1000).toFixed(0)}k sc`} />
                 <Tooltip formatter={(v: number) => [`${fmtNum(v)} sc`, 'Produção']}
                   contentStyle={{ borderRadius: 12, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
-                <Bar dataKey="producaoTotal" fill="#10b981" radius={[4, 4, 0, 0]} name="Produção" />
+                <Bar dataKey="producaoTotal" fill="#10b981" radius={[6, 6, 0, 0]} name="Produção" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -289,8 +290,8 @@ export function DREDashboard() {
       {/* Header */}
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">DRE</h1>
-          <p className="text-slate-500 mt-1">Demonstrativo de Resultado por Safra — Fazenda Santa Fé</p>
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">DRE</h1>
+          <p className="text-muted-foreground mt-1">Demonstrativo de Resultado por Safra — Fazenda Santa Fé</p>
         </div>
         <ImportButton
           hasData={hasImportedData}
@@ -318,14 +319,15 @@ export function DREDashboard() {
           )}
           {activeTab !== 'analises' && (
             <div className="flex flex-col gap-1.5">
-              <span className="text-sm font-medium text-slate-600">Safra:</span>
-              <div className="relative">
-                <select value={safraAtual} onChange={e => setSafraAtual(e.target.value)}
-                  className="appearance-none bg-white/60 border border-slate-200/60 shadow-sm text-slate-700 hover:bg-white/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500">
-                  {(safras ?? []).map(s => <option key={s} value={s}>{s}</option>)}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
-              </div>
+              <span className="text-sm font-medium text-muted-foreground">Safra:</span>
+              <Select value={safraAtual} onValueChange={setSafraAtual}>
+                <SelectTrigger className="h-10 w-36 rounded-xl border-border/60 bg-background/70 text-sm shadow-soft">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl">
+                  {(safras ?? []).map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                </SelectContent>
+              </Select>
             </div>
           )}
           {atividadeOptions.length > 0 && (

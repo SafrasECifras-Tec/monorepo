@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@socios/ui';
 import type { CreditoIBSCBS } from "@/contexts/CalcirContext";
 import { formatNumber } from "@/lib/format";
 

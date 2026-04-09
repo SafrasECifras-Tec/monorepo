@@ -6,7 +6,7 @@ import { FileText, TrendingUp, TrendingDown, DollarSign, SlidersHorizontal, User
 import { calcularIRPF } from "@/lib/calcirEngine";
 
 import ConfigPanel from "@/components/ConfigPanel";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@socios/ui';
 
 
 export default function RelatorioFinal() {

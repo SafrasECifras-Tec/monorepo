@@ -17,6 +17,7 @@ import { formatCurrency, formatCompactCurrency } from '@/lib/formatters';
 import type { CurrencyMode } from '@/lib/formatters';
 import { cashFlowData, monthFullNames } from '@/data/cashflow/cashFlowChartData';
 import { cn } from '@/lib/utils';
+import { CHART_GRID_PROPS, CHART_AXIS_TICK, CHART_CURSOR, gefTooltipClass, gefTooltipTitleClass } from '@/lib/chartTheme';
 
 interface EvoluçaoMensalChartProps {
   data: typeof cashFlowData;
@@ -88,10 +89,10 @@ export function EvoluçaoMensalChart({
       <div className="flex items-start justify-between mb-6">
         <div>
           <div className="flex items-center gap-3">
-            <h2 className="text-lg font-bold text-slate-800">Evolução Mensal</h2>
-            <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-500 px-2 py-1 rounded-full">Clique no mês para detalhar</span>
+            <h2 className="text-lg font-bold text-foreground">Evolução Mensal</h2>
+            <span className="text-[10px] font-bold uppercase tracking-wider bg-muted text-muted-foreground px-2 py-1 rounded-full">Clique no mês para detalhar</span>
           </div>
-          <p className="text-sm text-slate-500 mt-1">Entradas, Saídas e Saldo Acumulado</p>
+          <p className="text-sm text-muted-foreground mt-1">Entradas, Saídas e Saldo Acumulado</p>
         </div>
 
         <div className="flex flex-col items-end gap-2">
@@ -104,15 +105,15 @@ export function EvoluçaoMensalChart({
           <div className="flex items-center gap-4 text-sm">
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-[#10b981]"></div>
-              <span className="text-slate-600 font-medium">Entradas</span>
+              <span className="text-muted-foreground font-medium">Entradas</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-[#ef4444]"></div>
-              <span className="text-slate-600 font-medium">Saídas</span>
+              <span className="text-muted-foreground font-medium">Saídas</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-[#3b82f6]"></div>
-              <span className="text-slate-600 font-medium">Saldo</span>
+              <span className="text-muted-foreground font-medium">Saldo</span>
             </div>
           </div>
         </div>
@@ -134,19 +135,19 @@ export function EvoluçaoMensalChart({
             }}
             onMouseLeave={() => setActiveIndex(null)}
           >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+            <CartesianGrid {...CHART_GRID_PROPS} />
             <XAxis
               dataKey="month"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#64748b', fontSize: 12 }}
+              tick={CHART_AXIS_TICK}
               dy={10}
             />
             <YAxis
               yAxisId="left"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#64748b', fontSize: 12 }}
+              tick={CHART_AXIS_TICK}
               tickFormatter={(value) => value < 0 ? '' : formatCompactCurrency(value, currencyMode)}
               width={80}
               domain={[leftMin, leftMax]}
@@ -157,14 +158,14 @@ export function EvoluçaoMensalChart({
               orientation="right"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#3b82f6', fontSize: 12, fontWeight: 600 }}
+              tick={{ fill: '#3b82f6', fontSize: 11, fontWeight: 600 }}
               tickFormatter={(value) => formatCompactCurrency(value, currencyMode)}
               width={80}
               domain={[rightMin, rightMax]}
               ticks={rightTicks}
             />
             <Tooltip
-              cursor={{ fill: 'rgba(241, 245, 249, 0.5)' }}
+              cursor={CHART_CURSOR}
               content={({ active, payload, label }) => {
                 if (active && payload && payload.length) {
                   const entries = payload.filter(p => p.dataKey !== 'saldoAcumulado');
@@ -173,19 +174,19 @@ export function EvoluçaoMensalChart({
                   const displayYear = periodMode === '2026' ? '2026' : (['Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'].includes(label as string) ? `20${periodMode.split('/')[0]}` : `20${periodMode.split('/')[1]}`);
 
                   return (
-                    <div className="bg-white/95 backdrop-blur-sm border border-slate-200 p-4 rounded-xl shadow-xl min-w-[200px]">
-                      <p className="font-bold text-slate-900 mb-3 text-base border-b border-slate-100 pb-2">
+                    <div className={gefTooltipClass}>
+                      <p className={gefTooltipTitleClass}>
                         {fullMonth} {displayYear}
                       </p>
 
-                      <div className="space-y-2">
+                      <div className="space-y-1.5">
                         {entries.map((entry, index) => (
-                          <div key={index} className="flex items-center justify-between gap-4">
-                            <span className="text-sm text-slate-600 flex items-center gap-2">
-                              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
+                          <div key={index} className="flex justify-between items-center text-xs gap-4">
+                            <span className="text-muted-foreground flex items-center gap-1.5">
+                              <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: entry.color }} />
                               {entry.name}
                             </span>
-                            <span className="text-sm font-semibold text-slate-800">
+                            <span className="font-semibold tabular-nums">
                               {formatCurrency(entry.value as number, currencyMode)}
                             </span>
                           </div>
@@ -194,13 +195,13 @@ export function EvoluçaoMensalChart({
 
                       {saldo && (
                         <>
-                          <div className="my-3 border-t border-slate-200" />
-                          <div className="flex items-center justify-between gap-4">
-                            <span className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: saldo.color }} />
+                          <div className="my-2 border-t border-border/50" />
+                          <div className="flex justify-between items-center text-xs gap-4">
+                            <span className="text-foreground font-bold flex items-center gap-1.5">
+                              <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: saldo.color }} />
                               {saldo.name}
                             </span>
-                            <span className="text-sm font-extrabold text-slate-900">
+                            <span className="font-bold tabular-nums">
                               {formatCurrency(saldo.value as number, currencyMode)}
                             </span>
                           </div>
@@ -222,7 +223,7 @@ export function EvoluçaoMensalChart({
               dataKey="entradas"
               name="Entradas"
               fill="#10b981"
-              radius={[4, 4, 0, 0]}
+              radius={[6, 6, 0, 0]}
               maxBarSize={30}
               animationDuration={2500}
               isAnimationActive={false}
@@ -244,7 +245,7 @@ export function EvoluçaoMensalChart({
               dataKey="saidas"
               name="Saídas"
               fill="#ef4444"
-              radius={[4, 4, 0, 0]}
+              radius={[6, 6, 0, 0]}
               maxBarSize={30}
               animationDuration={2500}
               isAnimationActive={false}

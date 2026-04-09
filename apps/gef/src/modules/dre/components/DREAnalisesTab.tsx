@@ -7,6 +7,14 @@ import {
 } from 'recharts';
 import { GlassCard } from '@socios/ui';
 import { cn } from '@/lib/utils';
+import {
+  CHART_GRID_PROPS,
+  CHART_AXIS_TICK,
+  CHART_CURSOR,
+  stackedTopRadius,
+  gefTooltipClass,
+  gefTooltipTitleClass,
+} from '@/lib/chartTheme';
 import type { SafraImportData } from '@/contexts/ImportDataContext';
 
 // ── Formatters ─────────────────────────────────────────────────────────────────
@@ -177,7 +185,7 @@ function VbpTopLabel(props: any) {
   return (
     <text x={x + width / 2} y={y - 6}
       textAnchor="middle" dominantBaseline="auto"
-      fontSize={10} fontWeight={700} fill="#475569">
+      fontSize={10} fontWeight={700} fill="hsl(var(--muted-foreground))">
       {value.toFixed(1)} sc/ha
     </text>
   );
@@ -186,6 +194,7 @@ function VbpTopLabel(props: any) {
 // ── Constantes ─────────────────────────────────────────────────────────────────
 
 const DEFAULT_EXPANDED = new Set(['vbp', 'custo', 'resultado']);
+const DRE_STACK_KEYS = ['insumos', 'operacao', 'resultado'] as const;
 
 // ── Main ───────────────────────────────────────────────────────────────────────
 
@@ -421,54 +430,70 @@ export function DREAnalisesTab({
       {/* ── Gráfico de Barras Empilhadas ──────────────────────────────────── */}
       <motion.div
         initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}>
-        <GlassCard className="p-5 hover:shadow-md transition-all duration-300">
-          <h3 className="text-sm font-bold text-slate-700 mb-0.5">Análise Comparativa por Safra</h3>
-          <p className="text-xs text-slate-400 mb-4">VBP, custo e resultado em sc/ha — empilhados por safra</p>
+        <GlassCard className="p-5 hover:shadow-float transition-all duration-300">
+          <h3 className="text-sm font-bold text-foreground mb-0.5">Análise Comparativa por Safra</h3>
+          <p className="text-xs text-muted-foreground mb-4">VBP, custo e resultado em sc/ha — empilhados por safra</p>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} margin={{ top: 28, right: 16, left: -10, bottom: 0 }} barCategoryGap="30%">
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#CBD5E1" opacity={0.4} />
+                <CartesianGrid {...CHART_GRID_PROPS} />
                 <XAxis dataKey="safra" axisLine={false} tickLine={false}
-                  tick={{ fill: '#64748B', fontSize: 11, fontWeight: 600 }} />
+                  tick={{ ...CHART_AXIS_TICK, fontWeight: 600 }} />
                 <YAxis axisLine={false} tickLine={false}
-                  tick={{ fill: '#64748B', fontSize: 10 }}
+                  tick={CHART_AXIS_TICK}
                   tickFormatter={v => `${v.toFixed(0)} sc`} />
                 <Tooltip
-                  formatter={(v: number, name: string) => [
-                    `${v.toFixed(1)} sc/ha`,
-                    name === 'insumos'  ? 'Custo com Insumos' :
-                    name === 'operacao' ? 'Custo com Operação' :
-                                         'Resultado Operacional',
-                  ]}
-                  contentStyle={{ borderRadius: 12, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.12)' }}
-                  cursor={{ fill: 'rgba(148,163,184,0.08)' }}
+                  cursor={CHART_CURSOR}
+                  content={({ active, payload, label }: any) => {
+                    if (!active || !payload?.length) return null;
+                    return (
+                      <div className={gefTooltipClass}>
+                        <p className={gefTooltipTitleClass}>Safra {label}</p>
+                        <div className="space-y-1.5">
+                          {payload.map((entry: any, i: number) => (
+                            <div key={i} className="flex justify-between items-center text-xs gap-4">
+                              <span className="text-muted-foreground flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: entry.fill }} />
+                                {entry.name === 'insumos'  ? 'Custo com Insumos'
+                                  : entry.name === 'operacao' ? 'Custo com Operação'
+                                  : 'Resultado Operacional'}
+                              </span>
+                              <span className="font-semibold tabular-nums">
+                                {(entry.value as number).toFixed(1)} sc/ha
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  }}
                 />
-                <Bar dataKey="insumos"  name="insumos"  stackId="a" fill="#4db6ac" maxBarSize={72}>
+                <Bar dataKey="insumos"   name="insumos"   stackId="a" fill="#4db6ac" shape={stackedTopRadius(chartData, 'insumos',   DRE_STACK_KEYS)} maxBarSize={72}>
                   <LabelList content={<BarSegmentLabel />} />
                 </Bar>
-                <Bar dataKey="operacao" name="operacao" stackId="a" fill="#f59e0b" maxBarSize={72}>
+                <Bar dataKey="operacao"  name="operacao"  stackId="a" fill="#f59e0b" shape={stackedTopRadius(chartData, 'operacao',  DRE_STACK_KEYS)} maxBarSize={72}>
                   <LabelList content={<BarSegmentLabel />} />
                 </Bar>
-                <Bar dataKey="resultado" name="resultado" stackId="a" fill="#86efac" radius={[4, 4, 0, 0]} maxBarSize={72}>
+                <Bar dataKey="resultado" name="resultado" stackId="a" fill="#86efac" shape={stackedTopRadius(chartData, 'resultado', DRE_STACK_KEYS)} maxBarSize={72}>
                   <LabelList content={<BarSegmentLabel />} />
                   <LabelList dataKey="vbp" content={<VbpTopLabel />} />
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-1.5 mt-3 pt-3 border-t border-slate-100">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-1.5 mt-3 pt-3 border-t border-border/50">
             {[
               { color: '#4db6ac', label: 'Custo com Insumos' },
               { color: '#f59e0b', label: 'Custo com Operação' },
               { color: '#86efac', label: 'Resultado Operacional', border: true },
             ].map(l => (
-              <div key={l.label} className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+              <div key={l.label} className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
                 <span className={cn('w-3 h-3 rounded-sm shrink-0', l.border && 'border border-green-300')}
                   style={{ backgroundColor: l.color }} />
                 {l.label}
               </div>
             ))}
-            <span className="text-xs text-slate-400 ml-auto italic">Número no topo = VBP total (sc/ha)</span>
+            <span className="text-xs text-muted-foreground/60 ml-auto italic">Número no topo = VBP total (sc/ha)</span>
           </div>
         </GlassCard>
       </motion.div>

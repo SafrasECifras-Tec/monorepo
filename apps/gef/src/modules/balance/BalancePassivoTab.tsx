@@ -135,7 +135,7 @@ const HorizontalBarChart = ({ detailedData, title, subtitle, icon: Icon, classNa
   };
 
   return (
-    <GlassCard className={cn("p-6 flex flex-col border-slate-200/60 hover:shadow-md transition-all duration-300", className)}>
+    <GlassCard className={cn("p-6 flex flex-col border-slate-200/60 hover:shadow-float transition-all duration-300", className)}>
       <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-6 gap-4">
         <div className="flex items-center gap-3">
           <Icon className="h-6 w-6 text-slate-800 shrink-0" />
@@ -300,7 +300,7 @@ export function BalancePassivoTab({ viewMode = 'Detalhamento', importedTableData
         {/* Horizontal line to this node */}
         <div className="absolute left-0 top-1/2 w-8 h-px bg-slate-200" />
         
-        <GlassCard className="p-3 inline-flex flex-col gap-1 border-slate-200/60 shadow-sm hover:shadow-md transition-all relative z-10 bg-white/80">
+        <GlassCard className="p-3 inline-flex flex-col gap-1 border-slate-200/60 shadow-sm hover:shadow-float transition-all relative z-10 bg-white/80">
           <span className="font-semibold text-slate-700 text-sm">{node.name}</span>
           <div className="flex gap-4 text-xs">
             {TABLE_COLUMNS.map((col, i) => (

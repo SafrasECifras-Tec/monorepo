@@ -7,7 +7,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
 } from "recharts";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@socios/ui';
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -150,7 +150,7 @@ export default function DashboardAnalises() {
       {/* Hero Board */}
       <div className="hero-board animate-fade-in" style={{ animationDelay: "80ms", animationFillMode: "both" }}>
         <div className="hero-copy space-y-4">
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {[
               { title: "Receita Total", value: derived.totalReceitasGeral, icon: TrendingUp },
               { title: "Despesas", value: derived.totalDespesas, icon: TrendingDown },
@@ -161,7 +161,7 @@ export default function DashboardAnalises() {
                   <c.icon className="h-3.5 w-3.5 text-muted-foreground/40" />
                   <span className="label-uppercase">{c.title}</span>
                 </div>
-                <p className="text-lg font-extrabold tabular-nums">{formatCurrency(c.value)}</p>
+                <p className="text-sm sm:text-lg font-extrabold tabular-nums">{formatCurrency(c.value)}</p>
                 {c.sub && <p className="text-[10px] text-muted-foreground mt-0.5">{c.sub}</p>}
               </div>
             ))}

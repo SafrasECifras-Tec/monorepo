@@ -487,7 +487,7 @@ export function ProjectionDashboard({ hideTitle = false }: { hideTitle?: boolean
                   {/* Simulated Event Bar */}
                   <Bar 
                     dataKey="simulatedEvent" 
-                    radius={[4, 4, 0, 0]} 
+                    radius={[6, 6, 0, 0]} 
                     maxBarSize={40}
                   >
                     {data.map((entry, index) => (
