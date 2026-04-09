@@ -4,7 +4,6 @@ const nextConfig: NextConfig = {
   transpilePackages: [
     "@socios/auth",
     "@socios/database",
-    "@socios/ui",
     "@socios/utils",
   ],
 };
