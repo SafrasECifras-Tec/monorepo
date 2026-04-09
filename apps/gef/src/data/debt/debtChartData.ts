@@ -38,7 +38,7 @@ export const historicoEndividamentoData: HistoricoEndividamentoItem[] = [
 
 // ─── Cores por categoria ──────────────────────────────────────────────────────
 export const DEBT_CHART_COLORS = {
-  custeios:           '#f4af2d',  // gold    — padrão da tela
+  custeios:           '#f4af2d',  // yellow  — padrão da tela
   investimentos:      '#3b82f6',  // blue    — padrão da tela
   investimentosDolar: '#10b981',  // emerald — dólar/moeda estrangeira
   compraDeTerras:     '#64748b',  // slate   — ativos fixos

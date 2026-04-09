@@ -522,8 +522,8 @@ export function ProjectionDashboard({ hideTitle = false }: { hideTitle?: boolean
                     <Line 
                       type="monotone" 
                       dataKey="projectedWithEvent" 
-                      stroke="#f4af2d"
-                      strokeWidth={3}
+                      stroke="#f4af2d" 
+                      strokeWidth={3} 
                       strokeDasharray="8 5"
                       dot={{ fill: '#f4af2d', strokeWidth: 2, r: 4, stroke: '#fff' }}
                       activeDot={{ r: 6, strokeWidth: 0 }}

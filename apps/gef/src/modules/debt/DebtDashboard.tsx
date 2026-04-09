@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { GlassCard } from '@socios/ui';
+import { GlassCard, TabNav } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import { formatCurrency } from '@/lib/formatters';
 import { Wallet, DollarSign, Percent, TrendingDown } from 'lucide-react';
@@ -263,24 +263,7 @@ export function DebtDashboard() {
       {/* Tabs + Filters */}
       <div className="flex flex-col gap-3 2xl:flex-row 2xl:items-end 2xl:justify-between">
         {/* Linha 1 / esquerda em 2xl: Tab nav */}
-        <div className="flex overflow-x-auto custom-scrollbar shrink-0">
-          <GlassCard className="p-1 flex items-center gap-1 w-fit bg-white/60 border border-slate-200/60 shadow-sm rounded-xl shrink-0">
-            {TABS.map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={cn(
-                  'px-4 py-1.5 rounded-lg font-medium transition-all duration-200 text-sm whitespace-nowrap cursor-pointer',
-                  activeTab === tab.id
-                    ? 'bg-white text-[#059669] shadow-sm border border-slate-200/50'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/40',
-                )}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </GlassCard>
-        </div>
+        <TabNav tabs={TABS} activeTab={activeTab} onChange={setActiveTab} />
 
         {/* Linha 2: Filtros */}
         <DebtFilters

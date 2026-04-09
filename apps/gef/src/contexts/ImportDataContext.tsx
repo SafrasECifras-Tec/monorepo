@@ -70,6 +70,8 @@ export interface CulturaImportData {
 
 export interface SafraImportData {
   safra: string;
+  fazenda?: string;
+  atividade?: string;
   areaTotal: number;
   producaoTotal: number;
   produtividadeMedia: number;
