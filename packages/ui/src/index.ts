@@ -41,3 +41,17 @@ export { TabNav } from "./TabNav";
 export type { TabNavProps, TabItem } from "./TabNav";
 
 export { PageShell } from "./PageShell";
+
+// ── Form Components ──
+export {
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectLabel,
+  SelectItem,
+  SelectSeparator,
+  SelectScrollUpButton,
+  SelectScrollDownButton,
+} from "./Select";

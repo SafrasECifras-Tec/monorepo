@@ -1,7 +1,7 @@
 import { Cloud, Loader2, Users, Plus, CheckCircle, BarChart3, Truck, Receipt, Package } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@socios/ui';
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCalcir, type CreditoIBSCBS } from "@/contexts/CalcirContext";

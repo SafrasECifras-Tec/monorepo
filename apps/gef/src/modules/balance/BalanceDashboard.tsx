@@ -7,7 +7,7 @@ import { EmptyDataState } from '@/components/ui/EmptyDataState';
 import { GlassCard } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import { ChevronDown } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@socios/ui';
 import { motion, AnimatePresence } from 'motion/react';
 import { BalanceInicioTab } from './BalanceInicioTab';
 import { BalanceAtivoTab } from './BalanceAtivoTab';

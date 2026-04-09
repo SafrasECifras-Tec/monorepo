@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@socios/ui';
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];

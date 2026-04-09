@@ -10,7 +10,11 @@
     "./tailwind.css": "./src/tailwind.css"
   },
   "peerDependencies": {
-    "react": ">=18"
+    "@radix-ui/react-select": ">=2",
+    "clsx": ">=2",
+    "lucide-react": ">=0.400.0",
+    "react": ">=18",
+    "tailwind-merge": ">=2"
   },
   "devDependencies": {
     "@socios/tsconfig": "workspace:*",

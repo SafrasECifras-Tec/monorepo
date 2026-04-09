@@ -512,9 +512,21 @@ importers:
 
   packages/ui:
     dependencies:
+      '@radix-ui/react-select':
+        specifier: '>=2'
+        version: 2.2.6(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      clsx:
+        specifier: '>=2'
+        version: 2.1.1
+      lucide-react:
+        specifier: '>=0.400.0'
+        version: 0.546.0(react@19.2.4)
       react:
         specifier: '>=18'
         version: 19.2.4
+      tailwind-merge:
+        specifier: '>=2'
+        version: 3.5.0
     devDependencies:
       '@socios/tsconfig':
         specifier: workspace:*

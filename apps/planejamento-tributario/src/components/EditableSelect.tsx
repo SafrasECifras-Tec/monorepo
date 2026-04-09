@@ -1,4 +1,4 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@socios/ui';
 import { Badge } from "@/components/ui/badge";
 
 interface EditableSelectProps {

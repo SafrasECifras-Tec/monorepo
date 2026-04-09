@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { GlassCard } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import { ChevronDown, Eraser } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@socios/ui';
 
 interface Props {
   activeTab: string;

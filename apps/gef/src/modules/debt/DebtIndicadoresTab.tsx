@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar, Cell, LabelList } from 'recharts';
 import { BarChart3 } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@socios/ui';
 import { GlassCard } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import { formatCurrency } from '@/lib/formatters';
