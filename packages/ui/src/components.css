@@ -210,17 +210,17 @@
   overflow: hidden;
   border-radius: 2rem;
   border: 1px solid hsl(var(--border) / 0.7);
-  background-color: hsl(var(--card) / 0.8);
-  background-image: linear-gradient(180deg, hsl(var(--panel)), hsl(var(--panel-soft)));
+  background-color: hsl(var(--card));
+  background-image: linear-gradient(180deg, hsl(var(--panel-soft)), hsl(var(--panel-strong)));
   padding: 1.25rem;
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-elevated);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   transition: all 300ms ease;
 }
 
 .sc-metric-pill:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
   box-shadow: var(--shadow-float);
   border-color: hsl(var(--primary) / 0.2);
 }
