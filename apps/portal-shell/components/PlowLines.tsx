@@ -1,21 +1,27 @@
 /**
  * Decorative plow-furrow lines — Safras & Cifras brand element.
- * 4 parallel lines in brand colors that run horizontally then curve 90°
- * downward at roughly the horizontal center of the page, imitating a field
- * plow (arado) pattern. Positioned to visually pass behind the lower cards.
+ * 4 parallel lines in brand colors:  horizontal → curve down →
+ * curve back to horizontal (S-curve / arado headland-turn pattern).
+ * Positioned to pass behind the lower module cards.
  */
 export function PlowLines() {
-  // Curve starts at ~50% of the 1440-unit viewBox width, with a large sweeping radius
-  const curveX = 720; // x where the horizontal ends and the arc begins
-  const R = 200;      // corner radius — large for a soft, elegant sweep
+  // Quadratic Bézier corners give perfectly smooth 90° turns.
+  //
+  //   ──────────╮
+  //              │   Q1: → turns ↓
+  //              ╰──────────
+  //                  Q2: ↓ turns →
+  //
+  const R  = 110;  // corner radius (viewBox units)
+  const x1 = 570;  // x where the step begins  (~40% of 1440px viewBox)
   const viewW = 1440;
-  const viewH = 380;
+  const viewH = 480; // tall enough for the lower horizontal to be visible
 
   const lines = [
-    { color: '#0062a3', y: 38  },  // brand blue   (top)
-    { color: '#467f5f', y: 78  },  // brand dark green
-    { color: '#a9bf9a', y: 118 },  // brand light green
-    { color: '#f4af2d', y: 158 },  // brand gold    (bottom)
+    { color: '#0062a3', y: 22  },  // brand blue       (top)
+    { color: '#467f5f', y: 58  },  // brand dark green
+    { color: '#a9bf9a', y: 94  },  // brand light green
+    { color: '#f4af2d', y: 130 },  // brand gold        (bottom)
   ];
 
   return (
@@ -30,12 +36,20 @@ export function PlowLines() {
       {lines.map(({ color, y }) => (
         <path
           key={color}
-          // Horizontal from left → large 90° arc → vertical down
-          d={`M 0 ${y} H ${curveX} A ${R} ${R} 0 0 1 ${curveX + R} ${y + R} V ${viewH}`}
+          d={[
+            `M 0 ${y}`,
+            `H ${x1}`,
+            // Q1 — going RIGHT turns to going DOWN
+            `Q ${x1 + R} ${y} ${x1 + R} ${y + R}`,
+            // Q2 — going DOWN turns back to going RIGHT
+            `Q ${x1 + R} ${y + 2 * R} ${x1 + 2 * R} ${y + 2 * R}`,
+            `H ${viewW}`,
+          ].join(' ')}
           stroke={color}
-          strokeWidth="3.5"
+          strokeWidth="5"
           fill="none"
           strokeLinecap="round"
+          strokeLinejoin="round"
         />
       ))}
     </svg>

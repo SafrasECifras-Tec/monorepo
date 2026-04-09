@@ -100,9 +100,9 @@ export function AppLauncherCard({
       className={cn(
         "group relative flex flex-col rounded-2xl border overflow-hidden transition-all duration-300",
         locked
-          ? "border-border/40 bg-card/40 cursor-default"
+          ? "border-border/40 bg-card cursor-default"
           : [
-              "border-border/60 bg-card/90 shadow-card",
+              "border-border/60 bg-card shadow-card",
               "hover:-translate-y-1 hover:shadow-float hover:border-transparent",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
             ]
