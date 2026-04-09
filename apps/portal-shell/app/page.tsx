@@ -72,8 +72,8 @@ export default async function LaunchpadPage() {
               title="Gestão Econômica e Financeira"
               description="Análise econômico-financeira, DRE, fluxo de caixa, estoque e indicadores de desempenho da fazenda."
               icon={<BarChart3 className="h-5 w-5" />}
-              accentGradient="from-teal-600 to-cyan-500"
-              accentColor="text-teal-600"
+              accentGradient="from-[#0062a3] to-[#1a84c8]"
+              accentColor="text-[#0062a3]"
               href={GEF_URL}
               currentTenantId={currentTenantId}
               ssoType="google"
