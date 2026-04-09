@@ -95,7 +95,7 @@ export default function SimulacaoIRPFM() {
       </ConfigPanel>
 
       {/* KPIs */}
-      <div className={`grid grid-cols-2 gap-3 ${totalRestituir > 0 ? "lg:grid-cols-5" : "lg:grid-cols-4"}`}>
+      <div className={`grid grid-cols-1 sm:grid-cols-2 gap-3 ${totalRestituir > 0 ? "lg:grid-cols-5" : "lg:grid-cols-4"}`}>
         {[
           { title: "Base Total IRPFM", value: totalBase, icon: ShieldCheck, sub: `${irpfmParceiros.length} parceiros` },
           { title: "Lucros Isentos", value: totalLucrosIsentos, icon: Banknote, sub: "Acumulados até 2024" },

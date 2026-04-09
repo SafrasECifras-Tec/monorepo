@@ -262,12 +262,12 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
                     contentStyle={{ borderRadius: 12, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.12)' }}
                     cursor={{ fill: 'rgba(148,163,184,0.08)' }}
                   />
-                  <Bar dataKey="realizado" name="realizado" radius={[4, 4, 0, 0]} maxBarSize={52}
+                  <Bar dataKey="realizado" name="realizado" radius={[6, 6, 0, 0]} maxBarSize={52}
                     label={{ position: 'top', fontSize: 10, fontWeight: 700, fill: '#475569',
                       formatter: (v: number) => fmtCompact(v) }}>
                     {finData.map((entry, i) => <Cell key={i} fill={entry.fillReal} />)}
                   </Bar>
-                  <Bar dataKey="orcado" name="orcado" radius={[4, 4, 0, 0]} maxBarSize={52}
+                  <Bar dataKey="orcado" name="orcado" radius={[6, 6, 0, 0]} maxBarSize={52}
                     label={{ position: 'top', fontSize: 10, fontWeight: 400, fill: '#94a3b8',
                       formatter: (v: number) => fmtCompact(v) }}>
                     {finData.map((entry, i) => (
@@ -394,7 +394,7 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
                     cursor={{ fill: 'rgba(148,163,184,0.08)' }}
                   />
                   <Bar yAxisId="roi" dataKey="roi" name="roi" fill="#1e3a5f"
-                    radius={[4, 4, 0, 0]} maxBarSize={48}
+                    radius={[6, 6, 0, 0]} maxBarSize={48}
                     label={{ position: 'top', fontSize: 10, fontWeight: 700, fill: '#475569',
                       formatter: (v: number) => `${v.toFixed(0)}%` }}
                   />
@@ -448,10 +448,10 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
                     contentStyle={{ borderRadius: 12, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.12)' }}
                     cursor={{ fill: 'rgba(148,163,184,0.08)' }}
                   />
-                  <Bar dataKey="receita" name="receita" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={56}
+                  <Bar dataKey="receita" name="receita" fill="#10b981" radius={[6, 6, 0, 0]} maxBarSize={56}
                     label={{ position: 'top', fontSize: 10, fontWeight: 700, fill: '#059669',
                       formatter: (v: number) => fmtCompact(v) }} />
-                  <Bar dataKey="custo" name="custo" fill="#f87171" radius={[4, 4, 0, 0]} maxBarSize={56}
+                  <Bar dataKey="custo" name="custo" fill="#f87171" radius={[6, 6, 0, 0]} maxBarSize={56}
                     label={{ position: 'top', fontSize: 10, fontWeight: 700, fill: '#dc2626',
                       formatter: (v: number) => fmtCompact(v) }} />
                 </BarChart>

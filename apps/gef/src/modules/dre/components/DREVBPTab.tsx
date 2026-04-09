@@ -315,7 +315,7 @@ export function DREVBPTab({ safraAtual, dreDataRecord, safras, selectedCultura =
                     contentStyle={{ borderRadius: 12, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.12)' }}
                   />
                   <Bar yAxisId="vbp" dataKey="vbp" name="VBP" fill="#10b981"
-                    radius={[4, 4, 0, 0]} maxBarSize={64} />
+                    radius={[6, 6, 0, 0]} maxBarSize={64} />
                   <Line yAxisId="preco" dataKey="precoMedio" name="Preço Médio"
                     type="monotone" stroke="#f59e0b" strokeWidth={2.5}
                     dot={{ fill: '#f59e0b', r: 4 }} activeDot={{ r: 6 }} />

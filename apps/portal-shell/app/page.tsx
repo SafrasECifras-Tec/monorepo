@@ -9,7 +9,6 @@ import { BarChart3, Calculator, Landmark, ShieldCheck } from "lucide-react";
 export const runtime = "edge";
 
 import type { Fazenda } from "@socios/database";
-import { Header } from "@/components/Header";
 import { AppLauncherCard } from "@/components/AppLauncherCard";
 import { UserMenu } from "@/components/UserMenu";
 
@@ -40,12 +39,6 @@ export default async function LaunchpadPage() {
 
   return (
     <div className="min-h-screen w-full flex flex-col">
-      <Header
-        user={user}
-        fazendas={fazendas ?? []}
-        currentTenantId={currentTenantId}
-      />
-
       <main className="flex-1 p-6 lg:p-10">
         <div className="max-w-5xl mx-auto">
           {/* Page header */}
@@ -66,7 +59,7 @@ export default async function LaunchpadPage() {
           <div className="grid gap-5 sm:grid-cols-2">
             <AppLauncherCard
               tag="GEF"
-              title="Gestão Estratégica de Fazendas"
+              title="Gestão Econômica e Financeira"
               description="Análise econômico-financeira, DRE, fluxo de caixa, estoque e indicadores de desempenho da fazenda."
               icon={<BarChart3 className="h-5 w-5" />}
               accentGradient="from-teal-600 to-cyan-500"

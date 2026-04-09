@@ -287,7 +287,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                       <Bar dataKey="Passivo Circulante" stackId="a" fill="#6366f1" radius={[0, 0, 4, 4]}>
                         <LabelList dataKey="Passivo Circulante" position="inside" fill="#ffffff" fontSize={12} formatter={(val: number) => `${val}%`} />
                       </Bar>
-                      <Bar dataKey="Passivo Não Circulante" stackId="a" fill="#cbd5e1" radius={[4, 4, 0, 0]}>
+                      <Bar dataKey="Passivo Não Circulante" stackId="a" fill="#cbd5e1" radius={[6, 6, 0, 0]}>
                         <LabelList dataKey="Passivo Não Circulante" position="inside" fill="#475569" fontSize={12} formatter={(val: number) => `${val}%`} />
                       </Bar>
                     </BarChart>
@@ -354,7 +354,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                       />
                       <ReferenceLine y={1} stroke="#94a3b8" strokeDasharray="3 3" />
                       <RechartsTooltip cursor={{ fill: 'transparent' }} />
-                      <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                      <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {liquidezImediataData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
@@ -402,7 +402,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                       />
                       <ReferenceLine y={1} stroke="#94a3b8" strokeDasharray="3 3" />
                       <RechartsTooltip cursor={{ fill: 'transparent' }} />
-                      <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                      <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {liquidezCorrenteData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
@@ -450,7 +450,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                       />
                       <ReferenceLine y={1} stroke="#94a3b8" strokeDasharray="3 3" />
                       <RechartsTooltip cursor={{ fill: 'transparent' }} />
-                      <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                      <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {liquidezGeralData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
@@ -510,7 +510,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                       />
                       <RechartsTooltip cursor={{ fill: 'transparent' }} />
                       <ReferenceLine y={50} stroke="#cbd5e1" strokeDasharray="3 3" label={{ position: 'right', value: 'Recomendado: < 50%', fill: '#64748b', fontSize: 12 }} />
-                      <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                      <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {endividamentoPLData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
@@ -568,7 +568,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                       />
                       <RechartsTooltip cursor={{ fill: 'transparent' }} />
                       <ReferenceLine y={40} stroke="#cbd5e1" strokeDasharray="3 3" label={{ position: 'right', value: 'Recomendado: < 40%', fill: '#64748b', fontSize: 12 }} />
-                      <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                      <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {grauEndividamentoData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
@@ -635,7 +635,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                         domain={['dataMin - 2', 'dataMax + 2']} 
                       />
                       <RechartsTooltip cursor={{ fill: 'transparent' }} />
-                      <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                      <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {patrimonioLiquidoData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
@@ -691,7 +691,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                         domain={['dataMin - 2', 'dataMax + 2']} 
                       />
                       <RechartsTooltip cursor={{ fill: 'transparent' }} />
-                      <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                      <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {patrimonioLiquidoTerraData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}

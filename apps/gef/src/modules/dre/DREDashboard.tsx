@@ -8,6 +8,7 @@ import {
   TrendingUp, TrendingDown, AlertTriangle, Lightbulb, Info,
   ArrowUpRight, ArrowDownRight, Minus, ChevronDown, AlertCircle,
 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@socios/ui';
 import { GlassCard } from '@socios/ui';
 import { TabNav } from '@socios/ui';
 import { cn } from '@/lib/utils';
@@ -221,7 +222,7 @@ function HistoricoTab({ dreDataRecord, safras }: { dreDataRecord: Record<string,
                   tickFormatter={v => `${(v / 1000).toFixed(0)}k sc`} />
                 <Tooltip formatter={(v: number) => [`${fmtNum(v)} sc`, 'Produção']}
                   contentStyle={{ borderRadius: 12, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
-                <Bar dataKey="producaoTotal" fill="#10b981" radius={[4, 4, 0, 0]} name="Produção" />
+                <Bar dataKey="producaoTotal" fill="#10b981" radius={[6, 6, 0, 0]} name="Produção" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -342,37 +343,40 @@ export function DREDashboard() {
         <TabNav tabs={DRE_TABS} activeTab={activeTab} onChange={setActiveTab} />
         <div className="flex items-end gap-4">
           <div className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium text-slate-600">Fazenda:</span>
-            <div className="relative">
-              <select value={fazenda} onChange={e => setFazenda(e.target.value as Fazenda)}
-                className="appearance-none bg-white/60 border border-slate-200/60 shadow-sm text-slate-700 hover:bg-white/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500">
-                {FAZENDAS.map(f => <option key={f} value={f}>{f}</option>)}
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
-            </div>
+            <span className="text-sm font-medium text-muted-foreground">Fazenda:</span>
+            <Select value={fazenda} onValueChange={v => setFazenda(v as Fazenda)}>
+              <SelectTrigger className="h-10 w-40 rounded-xl border-border/60 bg-background/70 text-sm shadow-soft">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl">
+                {FAZENDAS.map(f => <SelectItem key={f} value={f}>{f}</SelectItem>)}
+              </SelectContent>
+            </Select>
           </div>
           {activeTab !== 'analises' && (
             <div className="flex flex-col gap-1.5">
-              <span className="text-sm font-medium text-slate-600">Safra:</span>
-              <div className="relative">
-                <select value={safraAtual} onChange={e => setSafraAtual(e.target.value)}
-                  className="appearance-none bg-white/60 border border-slate-200/60 shadow-sm text-slate-700 hover:bg-white/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500">
-                  {(safras ?? []).map(s => <option key={s} value={s}>{s}</option>)}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
-              </div>
+              <span className="text-sm font-medium text-muted-foreground">Safra:</span>
+              <Select value={safraAtual} onValueChange={setSafraAtual}>
+                <SelectTrigger className="h-10 w-36 rounded-xl border-border/60 bg-background/70 text-sm shadow-soft">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl">
+                  {(safras ?? []).map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                </SelectContent>
+              </Select>
             </div>
           )}
           <div className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium text-slate-600">Atividade:</span>
-            <div className="relative">
-              <select value={selectedCultura} onChange={e => setSelectedCultura(e.target.value)}
-                className="appearance-none bg-white/60 border border-slate-200/60 shadow-sm text-slate-700 hover:bg-white/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500">
-                <option value="Todas">{activeTab === 'analises' ? 'Análise Global' : 'Todas'}</option>
-                {culturasOptions.map(c => <option key={c} value={c}>{c}</option>)}
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
-            </div>
+            <span className="text-sm font-medium text-muted-foreground">Atividade:</span>
+            <Select value={selectedCultura} onValueChange={setSelectedCultura}>
+              <SelectTrigger className="h-10 w-44 rounded-xl border-border/60 bg-background/70 text-sm shadow-soft">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl">
+                <SelectItem value="Todas">{activeTab === 'analises' ? 'Análise Global' : 'Todas'}</SelectItem>
+                {culturasOptions.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </div>
