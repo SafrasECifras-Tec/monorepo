@@ -281,7 +281,7 @@ export function CashFlowDashboard() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="flex flex-col flex-1 space-y-4 min-h-0"
+            className="flex flex-col flex-1 space-y-4 min-h-0 pb-6"
           >
             <DetalhamentoTab
               currencyMode={currencyMode}

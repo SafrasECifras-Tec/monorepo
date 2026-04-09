@@ -326,7 +326,7 @@ export function RealizedProjectedTable({
       layout
       transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       className={cn(
-        "overflow-hidden border-slate-200/60 bg-white/80 shadow-xl flex flex-col rounded-2xl",
+        "overflow-hidden border border-slate-200/60 bg-white/80 flex flex-col rounded-2xl",
         isFullscreen
           ? "fixed inset-2 z-50 rounded-xl shadow-2xl"
           : "h-full"

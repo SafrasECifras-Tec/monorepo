@@ -432,7 +432,7 @@ export function DetalhamentoTab({ currencyMode, initialMonth, periodMode = '2026
       </GlassCard>
 
       {/* Data Table */}
-      <GlassCard className="overflow-hidden border-none shadow-xl flex flex-col flex-1 min-h-[500px]">
+      <GlassCard className="overflow-hidden border border-border/60 flex flex-col flex-1 min-h-[500px]">
         <div className="overflow-x-auto overflow-y-auto flex-1 custom-scrollbar">
           <table className="w-full text-left border-collapse">
             <thead className="sticky top-0 z-10 bg-slate-50 border-b border-slate-200">
