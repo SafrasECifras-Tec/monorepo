@@ -497,31 +497,26 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   GLASS CARD — Frosted glass effect (identical to PLT)
-   backdrop-filter: blur(18px), bg: hsl(var(--card) / 0.62)
+   GLASS CARD — Design-token card, visually identical to .sc-metric-pill
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .sc-glass-card {
-  background: hsl(var(--card) / 0.62);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid hsl(var(--border) / 0.8);
-  box-shadow: 0 12px 34px -18px hsl(var(--primary) / 0.28);
+  position: relative;
+  overflow: hidden;
   border-radius: 2rem;
-}
-
-.dark .sc-glass-card {
-  background: hsl(var(--card) / 0.7);
-}
-
-.sc-glass-card--hover {
-  transition: background-color 300ms ease, box-shadow 300ms ease, transform 300ms ease;
+  border: 1px solid hsl(var(--border) / 0.7);
+  background-color: hsl(var(--card));
+  background-image: linear-gradient(180deg, hsl(var(--panel-soft)) 0%, hsl(var(--panel-strong)) 100%);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: var(--shadow-elevated);
+  transition: all 300ms ease;
 }
 
 .sc-glass-card--hover:hover {
-  background: hsl(var(--card) / 0.9);
-  box-shadow: var(--shadow-elevated);
-  transform: translateY(-2px);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-float);
+  border-color: hsl(var(--primary) / 0.2);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
