@@ -23,7 +23,7 @@ interface BalanceInicioTabProps {
   selectedColumn: string;
 }
 
-const PIE_COLORS = ['#2563eb', '#7c3aed', '#475569', '#0ea5e9', '#b45309', '#0f766e', '#dc2626', '#059669'];
+const PIE_COLORS = ['#2563eb', '#f4af2d', '#475569', '#0ea5e9', '#b45309', '#0f766e', '#dc2626', '#059669'];
 
 const norm = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -114,7 +114,7 @@ const PieSection = ({
   setHovered: (v: string | null) => void;
   currencyMode: 'BRL' | 'SOJA';
 }) => (
-  <GlassCard className="p-4 md:p-6 flex flex-col hover:shadow-md transition-all duration-300 border-slate-200/60 min-h-[280px]">
+  <GlassCard className="p-4 md:p-6 flex flex-col hover:shadow-float transition-all duration-300 border-slate-200/60 min-h-[280px]">
     <div className="flex items-center gap-2 mb-6">
       <Icon className="h-6 w-6 text-slate-800" />
       <h3 className="text-lg font-semibold text-slate-800">{title}</h3>

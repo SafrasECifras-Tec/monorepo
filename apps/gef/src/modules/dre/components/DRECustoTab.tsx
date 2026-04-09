@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, Cell, PieChart, Pie, Label,
   ComposedChart, Line,
 } from 'recharts';
-import { ArrowUpRight, ArrowDownRight, Minus, TrendingDown } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, Minus, TrendingDown, ChevronDown, ChevronRight } from 'lucide-react';
 import { GlassCard } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import type { SafraImportData } from '@/contexts/ImportDataContext';
@@ -24,9 +24,74 @@ const fmtNum = (v: number) => v.toLocaleString('pt-BR');
 
 // ── Paleta ────────────────────────────────────────────────────────────────────
 
-const CUSTO_COLORS = ['#f87171', '#fb923c', '#94a3b8', '#c084fc', '#38bdf8'];
+const CUSTO_COLORS = ['#f87171', '#fb923c', '#94a3b8', '#f4af2d', '#38bdf8'];
+
+// ── Médias S&C — substituir por dados reais quando disponíveis ────────────────
+const SC_MEDIAS_CUSTO = {
+  custoHaComArrendamento: 4_800,  // R$/ha
+  custoHaSemArrendamento: 3_900,  // R$/ha
+};
+
+const ARRENDAMENTO_POR_HA = 900; // R$/ha — custo estimado de arrendamento
 
 // ── KpiCard ───────────────────────────────────────────────────────────────────
+
+// ── DesembolsoHaCard — toggle c/ / s/ Arrendamento vs S&C ───────────────────
+
+function DesembolsoHaCard({ custoHa, custoHaSemArrend, delay = 0 }: {
+  custoHa: number;
+  custoHaSemArrend: number;
+  delay?: number;
+}) {
+  const [comArrend, setComArrend] = useState(true);
+
+  const realizado = comArrend ? custoHa : custoHaSemArrend;
+  const scMedia   = comArrend ? SC_MEDIAS_CUSTO.custoHaComArrendamento : SC_MEDIAS_CUSTO.custoHaSemArrendamento;
+  const delta     = realizado - scMedia;
+  const pct       = scMedia > 0 ? (delta / scMedia) * 100 : 0;
+  const color     = delta <= 0 ? '#10b981' : '#ef4444';
+
+  return (
+    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay }}>
+      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-md transition-all duration-300 h-full">
+        <span className="text-[13px] font-semibold text-slate-500 uppercase tracking-wider">Desembolso por ha</span>
+
+        <span className="text-[24px] font-black text-slate-800 leading-tight">
+          R$ {fmtNum(Math.round(realizado))}/ha
+        </span>
+
+        <div className="mt-auto border-t border-slate-100 pt-3 flex items-center justify-between gap-2">
+          {/* Comparação S&C — esquerda */}
+          <div className="flex items-center gap-1.5 min-w-0">
+            <span className="text-[11px] text-slate-500 truncate">S&C: <span className="font-semibold text-slate-700">R$ {scMedia.toLocaleString('pt-BR')}</span></span>
+            <span className="font-bold px-1.5 py-0.5 rounded-full text-[10px] shrink-0"
+              style={{ backgroundColor: `${color}18`, color }}>
+              {pct >= 0 ? '+' : ''}{pct.toFixed(1)}%
+            </span>
+          </div>
+
+          {/* Toggle — direita */}
+          <div className="flex bg-slate-100 rounded-lg p-0.5 text-[11px] font-semibold shrink-0">
+            <button
+              onClick={() => setComArrend(true)}
+              className={cn('px-2 py-1 rounded-md transition-all duration-200',
+                comArrend ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-400 hover:text-slate-600'
+              )}>
+              c/ Arrend.
+            </button>
+            <button
+              onClick={() => setComArrend(false)}
+              className={cn('px-2 py-1 rounded-md transition-all duration-200',
+                !comArrend ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-400 hover:text-slate-600'
+              )}>
+              s/ Arrend.
+            </button>
+          </div>
+        </div>
+      </GlassCard>
+    </motion.div>
+  );
+}
 
 function KpiCard({ label, value, sub, trend, badge, invertTrend, delay = 0 }: {
   label: string; value: string; sub?: string;
@@ -40,7 +105,7 @@ function KpiCard({ label, value, sub, trend, badge, invertTrend, delay = 0 }: {
   const isNegative = invertTrend ? raw > 0 : raw < 0;
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay }}>
-      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-md transition-all duration-300 h-full">
+      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-float transition-all duration-300 h-full">
         <span className="text-[14px] font-semibold text-slate-500 uppercase tracking-wider">{label}</span>
         <span className="text-[24px] font-black text-slate-800 leading-tight">{value}</span>
         {sub && <span className="text-xs text-slate-400">{sub}</span>}
@@ -138,6 +203,197 @@ function MetricRow({ icon, label, value, highlight, delay = 0 }: {
   );
 }
 
+// ── CustoTable ────────────────────────────────────────────────────────────────
+
+// Médias S&C por rubrica (R$/ha) — substituir por dados reais
+const SC_RUBRICAS: Record<string, number> = {
+  'Sementes':                          280,
+  'Fertilizantes':                     900,
+  'Defensivos':                        820,
+  'Mão de obra':                       180,
+  'Combustíveis e lubrificantes':      160,
+  'Manut. Máquinas e Equipamentos':    140,
+  'Manut. Benfeitorias e Aramados':     60,
+  'Secagem e Armazenagem':             200,
+  'Aplicação aérea':                   110,
+  'Serviços de Terceiros':             130,
+  'Máquinas Terceirizadas':            160,
+  'Despesas com veículos':              60,
+  'Impostos e taxas':                  100,
+  'Administração':                      80,
+  'Outros':                             40,
+  'Juros e Variações Monetárias':      200,
+};
+
+// Proporções fixas dos subitens dentro de cada categoria
+const PROP_INSUMOS = [
+  { nome: 'Sementes',      pct: 0.15 },
+  { nome: 'Fertilizantes', pct: 0.45 },
+  { nome: 'Defensivos',    pct: 0.40 },
+];
+const PROP_OPERACAO = [
+  { nome: 'Mão de obra',                      pct: 0.08 },
+  { nome: 'Combustíveis e lubrificantes',      pct: 0.12 },
+  { nome: 'Manut. Máquinas e Equipamentos',    pct: 0.10 },
+  { nome: 'Manut. Benfeitorias e Aramados',    pct: 0.05 },
+  { nome: 'Secagem e Armazenagem',             pct: 0.15 },
+  { nome: 'Aplicação aérea',                   pct: 0.08 },
+  { nome: 'Serviços de Terceiros',             pct: 0.10 },
+  { nome: 'Máquinas Terceirizadas',            pct: 0.12 },
+  { nome: 'Despesas com veículos',             pct: 0.05 },
+  { nome: 'Impostos e taxas',                  pct: 0.08 },
+  { nome: 'Administração',                     pct: 0.05 },
+  { nome: 'Outros',                            pct: 0.02 },
+];
+
+function CustoTable({ data }: { data: SafraImportData }) {
+  const [expanded, setExpanded] = useState(new Set<string>(['insumos']));
+  const toggle = (id: string) => setExpanded(prev => {
+    const next = new Set(prev);
+    next.has(id) ? next.delete(id) : next.add(id);
+    return next;
+  });
+
+  const area = data.areaTotal || 1;
+  const prod = data.producaoTotal || 1;
+  const preco = data.precoMedioVenda || 1;
+
+  // Ponto de equilíbrio de uma rubrica = custo_rubrica / producaoTotal (R$/sc)
+  const pe = (total: number) => total / prod;
+  const ha = (total: number) => total / area;
+  const vsMedia = (total: number, nome: string) => {
+    const sc = SC_RUBRICAS[nome];
+    if (!sc) return null;
+    return ((ha(total) - sc) / sc) * 100;
+  };
+
+  type Subitem = { nome: string; total: number };
+  type Secao = { id: string; label: string; total: number; bg: string; text: string; accent: string; itens: Subitem[] };
+
+  const custoInsumos  = data.custoInsumos  > 0 ? data.custoInsumos  : data.custoTotal * 0.55;
+  const custoOperacao = data.custoOperacao > 0 ? data.custoOperacao : data.custoTotal * 0.35;
+  const custoJuros    = data.custoJuros    > 0 ? data.custoJuros    : data.custoTotal * 0.10;
+
+  const secoes: Secao[] = [
+    {
+      id: 'insumos', label: 'Insumos', total: custoInsumos,
+      bg: 'bg-slate-100', text: 'text-slate-700', accent: 'border-l-slate-400',
+      itens: PROP_INSUMOS.map(p => ({ nome: p.nome, total: custoInsumos * p.pct })),
+    },
+    {
+      id: 'operacao', label: 'Operação', total: custoOperacao,
+      bg: 'bg-slate-100', text: 'text-slate-700', accent: 'border-l-slate-400',
+      itens: PROP_OPERACAO.map(p => ({ nome: p.nome, total: custoOperacao * p.pct })),
+    },
+    {
+      id: 'juros', label: 'Juros', total: custoJuros,
+      bg: 'bg-slate-100', text: 'text-slate-700', accent: 'border-l-slate-400',
+      itens: [{ nome: 'Juros e Variações Monetárias', total: custoJuros }],
+    },
+  ];
+
+  const fmtHa    = (v: number) => `R$ ${fmtNum(Math.round(v))}`;
+  const fmtPe    = (v: number) => `${v.toFixed(2).replace('.', ',')}`;
+  const fmtTotal = (v: number) => fmtCompact(v);
+
+  const thClass = 'py-3 px-4 text-right font-bold border-r border-b border-slate-200 whitespace-nowrap';
+
+  return (
+    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}>
+      <GlassCard className="flex flex-col overflow-hidden p-0 hover:shadow-md transition-all duration-300 h-[480px]">
+
+        {/* Title */}
+        <div className="shrink-0 px-4 py-3 border-b border-slate-200 bg-white">
+          <h3 className="text-sm font-bold text-slate-700">Desembolso por Rubrica</h3>
+        </div>
+
+        {/* Scrollable body */}
+        <div className="flex-1 overflow-y-auto overflow-x-auto custom-scrollbar">
+          <table className="w-full border-separate border-spacing-0 text-xs">
+            <thead className="sticky top-0 z-40">
+              <tr className="bg-white text-slate-600">
+                <th className="sticky left-0 z-50 bg-white py-3 px-4 text-left font-bold border-r border-b border-slate-200 min-w-[220px] whitespace-nowrap">Rubrica</th>
+                <th className={thClass + ' w-[120px]'}>Média S&C (R$/ha)</th>
+                <th className={thClass + ' w-[120px]'}>P. Equilíbrio (R$/sc)</th>
+                <th className={thClass + ' w-[110px]'}>R$/ha</th>
+                <th className={thClass + ' w-[110px]'}>Total</th>
+                <th className="py-3 px-4 text-right font-bold border-b border-slate-200 whitespace-nowrap w-[110px]">Vs Média S&C</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white">
+              {secoes.map(sec => (
+                <>
+                  {/* Categoria */}
+                  <tr key={sec.id} className={cn(sec.bg, 'cursor-pointer')} onClick={() => toggle(sec.id)}>
+                    <td className={cn('sticky left-0 z-20 py-3 px-4 font-bold border-l-[3px] border-r border-b border-slate-200 whitespace-nowrap', sec.bg, sec.text, sec.accent)}>
+                      <div className="flex items-center gap-1.5">
+                        {expanded.has(sec.id)
+                          ? <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-50" />
+                          : <ChevronRight className="h-3.5 w-3.5 shrink-0 opacity-50" />}
+                        {sec.label}
+                      </div>
+                    </td>
+                    <td className={cn('py-3 px-4 text-right font-bold border-r border-b border-slate-100 font-mono whitespace-nowrap', sec.text)}>—</td>
+                    <td className={cn('py-3 px-4 text-right font-bold border-r border-b border-slate-100 font-mono whitespace-nowrap', sec.text)}>{fmtPe(pe(sec.total))}</td>
+                    <td className={cn('py-3 px-4 text-right font-bold border-r border-b border-slate-100 font-mono whitespace-nowrap', sec.text)}>{fmtHa(ha(sec.total))}</td>
+                    <td className={cn('py-3 px-4 text-right font-bold border-r border-b border-slate-100 font-mono whitespace-nowrap', sec.text)}>{fmtTotal(sec.total)}</td>
+                    <td className={cn('py-3 px-4 text-right font-bold border-b border-slate-100 whitespace-nowrap', sec.text)}>—</td>
+                  </tr>
+
+                  {/* Subitens */}
+                  {expanded.has(sec.id) && sec.itens.map((item, i) => {
+                    const vs = vsMedia(item.total, item.nome);
+                    const vsColor = vs == null ? '#94a3b8' : vs <= 0 ? '#10b981' : '#ef4444';
+                    return (
+                      <tr key={item.nome} className={cn('transition-colors hover:bg-blue-50/20', i % 2 === 0 ? 'bg-white' : 'bg-slate-50')}>
+                        <td className={cn('sticky left-0 z-20 py-2.5 pl-8 pr-4 text-slate-600 font-medium border-r border-b border-slate-100 whitespace-nowrap', i % 2 === 0 ? 'bg-white' : 'bg-slate-50')}>
+                          {item.nome}
+                        </td>
+                        <td className="py-2.5 px-4 text-right text-slate-500 border-r border-b border-slate-100 font-mono whitespace-nowrap">
+                          {SC_RUBRICAS[item.nome] ? fmtHa(SC_RUBRICAS[item.nome]) : '—'}
+                        </td>
+                        <td className="py-2.5 px-4 text-right text-slate-600 font-medium border-r border-b border-slate-100 font-mono whitespace-nowrap">
+                          {fmtPe(pe(item.total))}
+                        </td>
+                        <td className="py-2.5 px-4 text-right text-slate-600 font-medium border-r border-b border-slate-100 font-mono whitespace-nowrap">
+                          {fmtHa(ha(item.total))}
+                        </td>
+                        <td className="py-2.5 px-4 text-right text-slate-600 font-medium border-r border-b border-slate-100 font-mono whitespace-nowrap">
+                          {fmtTotal(item.total)}
+                        </td>
+                        <td className="py-2.5 px-4 text-right border-b border-slate-100 whitespace-nowrap">
+                          {vs != null ? (
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                              style={{ backgroundColor: `${vsColor}18`, color: vsColor }}>
+                              {vs >= 0 ? '+' : ''}{vs.toFixed(1)}%
+                            </span>
+                          ) : '—'}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </>
+              ))}
+            </tbody>
+
+            {/* Footer */}
+            <tfoot className="sticky bottom-0 z-40">
+              <tr className="font-bold text-slate-700 text-sm">
+                <td className="sticky left-0 z-50 bg-slate-300 py-3 px-4 whitespace-nowrap border-t-2 border-slate-400 min-w-[220px] text-left">Total</td>
+                <td className="bg-slate-300 py-3 px-4 text-right font-mono font-bold whitespace-nowrap w-[120px] border-t-2 border-l border-slate-400">—</td>
+                <td className="bg-slate-300 py-3 px-4 text-right font-mono font-bold whitespace-nowrap w-[120px] border-t-2 border-l border-slate-400">{fmtPe(pe(data.custoTotal))}</td>
+                <td className="bg-slate-300 py-3 px-4 text-right font-mono font-bold whitespace-nowrap w-[110px] border-t-2 border-l border-slate-400">{fmtHa(ha(data.custoTotal))}</td>
+                <td className="bg-slate-300 py-3 px-4 text-right font-mono font-bold whitespace-nowrap w-[110px] border-t-2 border-l border-slate-400">{fmtCompact(data.custoTotal)}</td>
+                <td className="bg-slate-300 py-3 px-4 text-right font-mono font-bold whitespace-nowrap border-t-2 border-l border-slate-400">—</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </GlassCard>
+    </motion.div>
+  );
+}
+
 // ══════════════════════════════════════════════════════════════════════════════
 // ── Main Component ───────────────────────────────────────────────────────────
 // ══════════════════════════════════════════════════════════════════════════════
@@ -160,18 +416,18 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
   }, [safraAtual, safras, dreDataRecord]);
 
   // ── Métricas derivadas ──────────────────────────────────────────────────
-  const custoHa   = data.areaTotal > 0 ? data.custoTotal / data.areaTotal : 0;
-  const prevCustoHa = prev && prev.areaTotal > 0 ? prev.custoTotal / prev.areaTotal : null;
+  const custoHa            = data.areaTotal > 0 ? data.custoTotal / data.areaTotal : 0;
+  const custoHaSemArrend   = custoHa - ARRENDAMENTO_POR_HA;
+  const prevCustoHa        = prev && prev.areaTotal > 0 ? prev.custoTotal / prev.areaTotal : null;
 
   // ── Trends ──────────────────────────────────────────────────────────────
-  const trendCusto    = prev ? ((data.custoTotal - prev.custoTotal) / prev.custoTotal) * 100 : null;
-  const trendCustoHa  = prevCustoHa ? ((custoHa - prevCustoHa) / prevCustoHa) * 100 : null;
-  const trendMargem   = prev ? (data.margemBruta - prev.margemBruta) : null;
+  const trendCusto   = prev ? ((data.custoTotal - prev.custoTotal) / prev.custoTotal) * 100 : null;
+  const trendCustoHa = prevCustoHa ? ((custoHa - prevCustoHa) / prevCustoHa) * 100 : null;
+  const trendMargem  = prev ? (data.margemBruta - prev.margemBruta) : null;
 
   // ── Orçado vs Realizado ─────────────────────────────────────────────────
-  const orcadoPct = data.orcadoCusto > 0 ? (data.custoTotal / data.orcadoCusto) * 100 : 0;
-  const orcadoDiff = data.custoTotal - data.orcadoCusto;
-  // Custo abaixo do orçado = bom (verde), acima = ruim (vermelho)
+  const orcadoPct       = data.orcadoCusto > 0 ? (data.custoTotal / data.orcadoCusto) * 100 : 0;
+  const orcadoDiff      = data.custoTotal - data.orcadoCusto;
   const orcadoBadgeColor = orcadoDiff <= 0 ? '#10b981' : '#ef4444';
 
   // ── Barras — Custo por cultura ordenado decrescente ─────────────────────
@@ -215,33 +471,48 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
 
       {/* ── Linha 1: 4 KPIs ─────────────────────────────────────────── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KpiCard label="Custo Total" value={fmtBRL(data.custoTotal)}
-          sub={fmtCompact(data.custoTotal)}
+
+        {/* 1 — Desembolso Operacional */}
+        <KpiCard
+          label="Desembolso Operacional"
+          value={fmtCompact(data.custoTotal)}
+          sub={fmtBRL(data.custoTotal)}
           trend={trendCusto != null ? { value: trendCusto, label: 'vs safra ant.' } : undefined}
-          invertTrend delay={0} />
-        <KpiCard label="Custo por Hectare" value={`R$ ${fmtNum(Math.round(custoHa))}/ha`}
+          invertTrend delay={0}
+        />
+
+        {/* 2 — Desembolso /ha */}
+        <KpiCard
+          label="Desembolso /ha"
+          value={`R$ ${fmtNum(Math.round(custoHa))}/ha`}
+          sub={`Área: ${fmtNum(data.areaTotal)} ha`}
           trend={trendCustoHa != null ? { value: trendCustoHa, label: 'vs safra ant.' } : undefined}
-          invertTrend delay={0.05} />
-        <KpiCard label="Orçado vs Real" value={`${orcadoPct.toFixed(1)}%`}
-          sub={`Orçado: ${fmtCompact(data.orcadoCusto)}`}
-          badge={{
-            text: orcadoDiff <= 0 ? `${fmtCompact(Math.abs(orcadoDiff))} economizado` : `+${fmtCompact(orcadoDiff)} estourado`,
-            color: orcadoBadgeColor,
-          }}
-          delay={0.1} />
-        <KpiCard label="Margem Bruta" value={`${data.margemBruta.toFixed(1)}%`}
-          sub={`Lucro bruto: ${fmtCompact(data.lucroBruto)}`}
-          trend={trendMargem != null ? { value: trendMargem, label: 'pp vs ant.' } : undefined}
-          delay={0.15} />
+          invertTrend delay={0.05}
+        />
+
+        {/* 3 — Desembolso por Saca */}
+        <KpiCard
+          label="Desembolso por Saca"
+          value={`R$ ${(data.producaoTotal > 0 ? data.custoTotal / data.producaoTotal : 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/sc`}
+          sub={`Produção: ${fmtNum(data.producaoTotal)} sc`}
+          delay={0.1}
+        />
+
+        {/* 4 — Desembolso /ha com toggle c/ e s/ Arrendamento */}
+        <DesembolsoHaCard custoHa={custoHa} custoHaSemArrend={custoHaSemArrend} delay={0.15} />
+
       </div>
 
-      {/* ── Linha 2: Custo por Cultura (60%) + Donut (40%) ──────────── */}
+      {/* ── Linha 2: Tabela Desembolso por Rubrica ──────────────────── */}
+      <CustoTable data={data} />
+
+      {/* ── Linha 3: Custo por Cultura (60%) + Donut (40%) ──────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
 
         {/* Esquerda — Barras horizontais */}
         <motion.div className="lg:col-span-3"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}>
-          <GlassCard className="p-5 h-full hover:shadow-md transition-all duration-300">
+          <GlassCard className="p-5 h-full hover:shadow-float transition-all duration-300">
             <h3 className="text-sm font-bold text-slate-700 mb-0.5">Custo por Cultura</h3>
             <p className="text-xs text-slate-400 mb-4">Custo total desembolsado por atividade</p>
             <div style={{ height: Math.max(culturaSorted.length * 56, 180) }}>
@@ -271,7 +542,7 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
         {/* Direita — Donut */}
         <motion.div className="lg:col-span-2"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.15 }}>
-          <GlassCard className="p-5 h-full hover:shadow-md transition-all duration-300">
+          <GlassCard className="p-5 h-full hover:shadow-float transition-all duration-300">
             <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-4">Composição do Custo</h3>
             <div className="flex flex-col items-center gap-3">
               <div className="h-44 w-44">
@@ -309,7 +580,7 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
         {/* Esquerda — Evolução */}
         <motion.div className="lg:col-span-3"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.15 }}>
-          <GlassCard className="p-5 h-full hover:shadow-md transition-all duration-300">
+          <GlassCard className="p-5 h-full hover:shadow-float transition-all duration-300">
             <h3 className="text-sm font-bold text-slate-700 mb-0.5">Evolução do Custo</h3>
             <p className="text-xs text-slate-400 mb-4">Custo total por safra + custo por hectare</p>
             <div className="h-56">
@@ -353,7 +624,7 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
         {/* Direita — Orçado + Breakdown */}
         <motion.div className="lg:col-span-2"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.2 }}>
-          <GlassCard className="p-5 h-full hover:shadow-md transition-all duration-300">
+          <GlassCard className="p-5 h-full hover:shadow-float transition-all duration-300">
             <h3 className="text-sm font-bold text-slate-700 mb-0.5">Custo — Orçado vs. Realizado</h3>
             <p className="text-xs text-slate-400 mb-4">Meta de custo planejada</p>
             <BulletBar label="Custo Total" realizado={data.custoTotal} orcado={data.orcadoCusto} delay={0.25} />
@@ -374,7 +645,7 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
 
       {/* ── Linha 4: Tabela detalhada por cultura ───────────────────── */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.2 }}>
-        <GlassCard className="p-5 hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-5 hover:shadow-float transition-all duration-300">
           <h3 className="text-sm font-bold text-slate-700 mb-4">Detalhamento por Cultura</h3>
           <div className="overflow-x-auto custom-scrollbar">
             <table className="w-full text-sm">

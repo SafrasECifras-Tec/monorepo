@@ -31,7 +31,7 @@ export function SummaryCards({ stockData }: SummaryCardsProps) {
       label: 'Total Vendido',
       value: formatSacas(totalVendido),
       icon: <PackageCheck className="h-5 w-5" />,
-      iconBg: 'bg-violet-50 text-violet-600',
+      iconBg: 'bg-[#f4af2d]/10 text-[#b07d20]',
     },
     {
       label: 'Saldo a Comercializar',

@@ -28,7 +28,7 @@ export function DebtBancosTab({ currencyMode, data }: Props) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: index * 0.1 }}
         >
-          <GlassCard className="flex flex-col overflow-hidden hover:shadow-md transition-all duration-300 p-0 h-full">
+          <GlassCard className="flex flex-col overflow-hidden hover:shadow-float transition-all duration-300 p-0 h-full">
             <div className="p-5 flex flex-col gap-4 h-full">
               {/* Header */}
               <div className="flex items-center justify-between">

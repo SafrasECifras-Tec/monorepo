@@ -4,7 +4,7 @@ import { useImportedData } from '@/contexts/ImportDataContext';
 import { useUniversalImport } from '@/hooks/useUniversalImport';
 import { ImportButton } from '@/components/ui/ImportButton';
 import { EmptyDataState } from '@/components/ui/EmptyDataState';
-import { GlassCard } from '@socios/ui';
+import { GlassCard, TabNav } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import { ChevronDown } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@socios/ui';
@@ -43,8 +43,8 @@ export function BalanceDashboard() {
       {/* Header Row: Title */}
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Balanço Patrimonial</h1>
-          <p className="text-slate-600 mt-1 text-lg">Visão geral do ativo, passivo e patrimônio líquido</p>
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">Balanço Patrimonial</h1>
+          <p className="text-muted-foreground mt-1">Visão geral do ativo, passivo e patrimônio líquido</p>
         </div>
         <ImportButton
           hasData={hasImportedData}
@@ -56,29 +56,16 @@ export function BalanceDashboard() {
       {/* Controls Row: Tabs + Filters */}
       <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-4 xl:gap-6">
         {/* Tabs Navigation */}
-        <div className="flex overflow-x-auto pb-2 -mb-2 custom-scrollbar w-full xl:w-auto">
-          <GlassCard className="p-1 flex items-center gap-1 w-max bg-white/60 border border-slate-200/60 shadow-sm rounded-xl shrink-0">
-            {[
-              { id: 'inicio', label: 'Início' },
-              { id: 'ativo', label: 'Ativo' },
-              { id: 'passivo', label: 'Passivo' },
-              { id: 'indicadores', label: 'Indicadores' }
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={cn(
-                  "px-4 py-1.5 rounded-lg font-medium transition-all duration-200 text-sm whitespace-nowrap",
-                  activeTab === tab.id
-                    ? "bg-white text-[#059669] shadow-sm border border-slate-200/50"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-white/40"
-                )}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </GlassCard>
-        </div>
+        <TabNav
+          tabs={[
+            { id: 'inicio', label: 'Início' },
+            { id: 'ativo', label: 'Ativo' },
+            { id: 'passivo', label: 'Passivo' },
+            { id: 'indicadores', label: 'Indicadores' },
+          ]}
+          activeTab={activeTab}
+          onChange={setActiveTab}
+        />
 
         {/* Filters */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap items-end gap-3 xl:gap-6 w-full xl:w-auto">

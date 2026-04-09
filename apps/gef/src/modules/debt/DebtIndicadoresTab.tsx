@@ -8,6 +8,36 @@ import { formatCurrency } from '@/lib/formatters';
 import { useSettings } from '@/contexts/SettingsContext';
 import { GaugeChart } from './components/GaugeChart';
 import type { EbitdaRow, CustoFinanceiroRow } from '@/data/debt/debtIndicadoresData';
+import { gefTooltipClass, gefTooltipTitleClass, CHART_CURSOR } from '@/lib/chartTheme';
+
+const EbitdaTooltip = ({ active, payload, label }: any) => {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className={gefTooltipClass}>
+      <p className={gefTooltipTitleClass}>{label}</p>
+      {payload.map((entry: any, i: number) =>
+        entry.value > 0 ? (
+          <p key={i} className="text-[13px] text-popover-foreground">
+            <span style={{ color: entry.color }}>{entry.name}: </span>
+            <span className="font-semibold">{entry.value}%</span>
+          </p>
+        ) : null
+      )}
+    </div>
+  );
+};
+
+const PercentTooltip = ({ active, payload, label }: any) => {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className={gefTooltipClass}>
+      <p className={gefTooltipTitleClass}>{label}</p>
+      <p className="text-[13px] text-popover-foreground">
+        <span className="font-semibold">{payload[0].value}%</span>
+      </p>
+    </div>
+  );
+};
 
 interface Props {
   currencyMode: 'BRL' | 'SOJA';
@@ -22,7 +52,7 @@ interface Props {
 
 function IndicadorPlaceholder({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
-    <GlassCard className="p-6 flex flex-col items-center justify-center hover:shadow-md transition-all duration-300 min-h-[300px]">
+    <GlassCard className="p-6 flex flex-col items-center justify-center hover:shadow-float transition-all duration-300 min-h-[300px]">
       <BarChart3 className="h-10 w-10 text-slate-300 mb-3" />
       <h3 className="text-lg font-semibold text-slate-800 mb-1">{title}</h3>
       <p className="text-sm text-slate-400 text-center max-w-xs">
@@ -65,7 +95,7 @@ export function DebtIndicadoresTab({
 
           {vis.comprometimento_ebitda && (
             hasEbitdaData ? (
-              <GlassCard className="p-6 h-[450px] flex flex-col hover:shadow-md transition-all duration-300">
+              <GlassCard className="p-6 h-[450px] flex flex-col hover:shadow-float transition-all duration-300">
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold text-slate-800">Comprometimento do EBITDA</h3>
                   <p className="text-xs text-slate-500 italic mt-1">Investimentos + Aquisições de Terras + Consórcios + Juros / EBITDA</p>
@@ -87,7 +117,7 @@ export function DebtIndicadoresTab({
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" opacity={0.5} />
                       <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fill: '#64748B', fontSize: 12 }} dy={10} />
                       <YAxis hide />
-                      <Tooltip cursor={{ fill: '#F1F5F9', opacity: 0.4 }} formatter={(value: number) => `${value}%`} />
+                      <Tooltip cursor={CHART_CURSOR} content={<EbitdaTooltip />} />
                       <Legend verticalAlign="top" align="left" height={36} iconType="circle" wrapperStyle={{ paddingBottom: '20px', fontSize: '12px' }} />
 
                       <Bar dataKey="investimentos" name="Investimentos" stackId="a" fill="#3b82f6" isAnimationActive={false} activeBar={false}>
@@ -98,9 +128,9 @@ export function DebtIndicadoresTab({
                       </Bar>
 
                       {hasAquisicoes && (
-                        <Bar dataKey="aquisicoes" name="Aquisições de Terras" stackId="a" fill="#8b5cf6" isAnimationActive={false} activeBar={false}>
+                        <Bar dataKey="aquisicoes" name="Aquisições de Terras" stackId="a" fill="#f4af2d" isAnimationActive={false} activeBar={false}>
                           {ebitdaData.map((_, i) => (
-                            <Cell key={i} fill="#8b5cf6" opacity={activeBarIndex === null || activeBarIndex === i ? 1 : 0.3} />
+                            <Cell key={i} fill="#f4af2d" opacity={activeBarIndex === null || activeBarIndex === i ? 1 : 0.3} />
                           ))}
                         </Bar>
                       )}
@@ -133,7 +163,7 @@ export function DebtIndicadoresTab({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
               {vis.endividamento_receita && (
                 endividamentoReceita != null ? (
-                  <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300 min-h-[350px]">
+                  <GlassCard className="p-6 flex flex-col hover:shadow-float transition-all duration-300 min-h-[350px]">
                     <div className="mb-4">
                       <h3 className="text-lg font-semibold text-slate-800">Endividamento / Receita</h3>
                       <p className="text-xs text-slate-500 italic mt-1">*Para o calculo não se considera o Vlr Principal de Custeio</p>
@@ -156,7 +186,7 @@ export function DebtIndicadoresTab({
 
               {vis.endividamento_ebitda && (
                 endividamentoEbitda != null ? (
-                  <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300 min-h-[350px]">
+                  <GlassCard className="p-6 flex flex-col hover:shadow-float transition-all duration-300 min-h-[350px]">
                     <div className="mb-4">
                       <h3 className="text-lg font-semibold text-slate-800">Endividamento / EBITDA</h3>
                       <p className="text-xs text-slate-500 italic mt-1">*Para o calculo não se considera o Vlr Principal de Custeio</p>
@@ -184,7 +214,7 @@ export function DebtIndicadoresTab({
         <div className="lg:col-span-1 flex flex-col gap-6">
 
           {vis.renegociacao && (
-            <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
+            <GlassCard className="p-6 flex flex-col hover:shadow-float transition-all duration-300">
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-slate-800">Renegociação</h3>
                 <p className="text-xs text-slate-500 italic mt-1">Total</p>
@@ -200,7 +230,7 @@ export function DebtIndicadoresTab({
 
           {vis.custeio_custo && (
             custeioRatio != null ? (
-              <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
+              <GlassCard className="p-6 flex flex-col hover:shadow-float transition-all duration-300">
                 <div className="mb-8">
                   <h3 className="text-lg font-semibold text-slate-800">Custeio / Custo Desembolsado</h3>
                 </div>
@@ -228,7 +258,7 @@ export function DebtIndicadoresTab({
 
           {vis.custo_financeiro && (
             hasCustoFinanceiroData ? (
-              <GlassCard className="p-6 flex-1 flex flex-col hover:shadow-md transition-all duration-300 min-h-[300px]">
+              <GlassCard className="p-6 flex-1 flex flex-col hover:shadow-float transition-all duration-300 min-h-[300px]">
                 <div className="mb-6 flex flex-col gap-3">
                   <h3 className="text-lg font-semibold text-slate-800">Custo Financeiro vs:</h3>
                   <Select value={custoFinanceiroVs} onValueChange={v => setCustoFinanceiroVs(v as 'Desembolso Operacional' | 'EBITDA')}>
@@ -246,7 +276,7 @@ export function DebtIndicadoresTab({
                     <BarChart data={currentCustoFinanceiroData} margin={{ top: 20, right: 0, left: 0, bottom: 20 }}>
                       <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fill: '#64748B', fontSize: 10, angle: -45, textAnchor: 'end' }} dy={10} />
                       <YAxis hide />
-                      <Tooltip cursor={{ fill: '#F1F5F9', opacity: 0.4 }} formatter={(value: number) => `${value}%`} />
+                      <Tooltip cursor={CHART_CURSOR} content={<PercentTooltip />} />
                       <Bar dataKey="value" fill="#3b82f6" radius={[6, 6, 0, 0]}>
                         <LabelList dataKey="value" position="top" fill="#475569" formatter={(v: number) => `${v}%`} fontSize={10} fontWeight={500} />
                       </Bar>

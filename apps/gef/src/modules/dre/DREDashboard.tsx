@@ -2,22 +2,22 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer, Legend, ReferenceLine, Cell,
+  Tooltip, ResponsiveContainer,
 } from 'recharts';
 import {
-  TrendingUp, TrendingDown, AlertTriangle, Lightbulb, Info,
-  ArrowUpRight, ArrowDownRight, Minus, ChevronDown, AlertCircle,
+  AlertTriangle, Lightbulb, Info,
+  ArrowUpRight, ArrowDownRight, Minus, ChevronDown,
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@socios/ui';
 import { GlassCard } from '@socios/ui';
 import { TabNav } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import {
-  FAZENDAS, alertasData,
+  alertasData,
 } from '@/data/dre/dreData';
-import type { Fazenda, AlertaConsultor } from '@/data/dre/dreData';
+import type { AlertaConsultor } from '@/data/dre/dreData';
 import type { SafraImportData } from '@/contexts/ImportDataContext';
-import { useDREData, useDRESafras } from '@/hooks/useDREData';
+import { useDREData, useDRESafras, useDREAtividades, aggregateSafraRows, dreKey } from '@/hooks/useDREData';
 import { useImportedData } from '@/contexts/ImportDataContext';
 import { useUniversalImport } from '@/hooks/useUniversalImport';
 import { ImportButton } from '@/components/ui/ImportButton';
@@ -46,7 +46,6 @@ const DRE_TABS = [
   { id: 'analises', label: 'Análises' },
   { id: 'vbp',      label: 'VBP' },
   { id: 'custo',    label: 'Custo' },
-  { id: 'culturas', label: 'Por Cultura' },
   { id: 'historico',label: 'Histórico' },
 ];
 
@@ -60,7 +59,7 @@ function KpiCard({ label, value, sub, trend, delay = 0 }: {
   const down = trend && trend.value < 0;
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay }}>
-      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-md transition-all duration-300 h-full">
+      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-float transition-all duration-300 h-full">
         <span className="text-[14px] font-semibold text-slate-500 uppercase tracking-wider">{label}</span>
         <span className="text-[24px] font-black text-slate-800 leading-tight">{value}</span>
         {sub && <span className="text-xs text-slate-400">{sub}</span>}
@@ -73,61 +72,6 @@ function KpiCard({ label, value, sub, trend, delay = 0 }: {
             {trend.value > 0 ? '+' : ''}{trend.value.toFixed(1)}% {trend.label}
           </div>
         )}
-      </GlassCard>
-    </motion.div>
-  );
-}
-
-function CulturaCard({ cultura, idx, ...rest }: { cultura: any; idx: number; [k: string]: any }) {
-  const up = cultura.variacaoMargem > 0;
-  const down = cultura.variacaoMargem < 0;
-  return (
-    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 * idx }}>
-      <GlassCard className="p-5 hover:shadow-md transition-all duration-300">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">{cultura.emoji}</span>
-            <span className="font-bold text-slate-800 text-base">{cultura.nome}</span>
-          </div>
-          <div className={cn(
-            'flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full',
-            up ? 'bg-emerald-100 text-emerald-700' : down ? 'bg-red-100 text-red-600' : 'bg-slate-100 text-slate-500'
-          )}>
-            {up ? <TrendingUp className="h-3 w-3" /> : down ? <TrendingDown className="h-3 w-3" /> : <Minus className="h-3 w-3" />}
-            {cultura.variacaoMargem > 0 ? '+' : ''}{cultura.variacaoMargem.toFixed(1)} pp
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          {[
-            { label: 'Área', value: `${fmtNum(cultura.area)} ha` },
-            { label: 'Produção', value: `${fmtNum(cultura.producao)} sc` },
-            { label: 'Produtividade', value: `${cultura.produtividade.toFixed(1)} sc/ha` },
-            { label: 'Preço Médio', value: `R$ ${cultura.precoMedio}/sc` },
-            { label: 'Receita', value: fmtCompact(cultura.receitaBruta) },
-            { label: 'Margem Líq.', value: `${cultura.margemLiquida.toFixed(1)}%` },
-          ].map(item => (
-            <div key={item.label} className="flex flex-col gap-0.5">
-              <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">{item.label}</span>
-              <span className="text-sm font-bold text-slate-700">{item.value}</span>
-            </div>
-          ))}
-        </div>
-        <div className="mt-4">
-          <div className="flex justify-between text-[10px] text-slate-400 mb-1">
-            <span>Margem Líquida</span>
-            <span>{cultura.margemLiquida.toFixed(1)}%</span>
-          </div>
-          <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${Math.min(cultura.margemLiquida, 100)}%` }}
-              transition={{ duration: 0.8, delay: 0.2 * idx }}
-              className={cn('h-full rounded-full',
-                cultura.margemLiquida >= 20 ? 'bg-emerald-500' :
-                cultura.margemLiquida >= 10 ? 'bg-amber-400' : 'bg-red-400')}
-            />
-          </div>
-        </div>
       </GlassCard>
     </motion.div>
   );
@@ -181,22 +125,10 @@ function InicioTab({ safraAtual, dreDataRecord, safras }: { safraAtual: string; 
           trend={trendProd ? { value: trendProd, label: 'vs safra ant.' } : undefined} delay={0.05} />
         <KpiCard label="Produtividade Média" value={`${data.produtividadeMedia.toFixed(1)} sc/ha`}
           trend={trendProd ? { value: trendProd, label: 'vs safra ant.' } : undefined} delay={0.1} />
-        <KpiCard label="Preço Médio de Venda" value={`R$ ${data.precoMedioVenda}/sc`}
+        <KpiCard label="Preço Médio de Venda" value={`R$ ${data.precoMedioVenda.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/sc`}
           sub={`Total: ${fmtCompact(data.receitaBruta)}`} delay={0.15} />
       </div>
 
-    </div>
-  );
-}
-
-function CulturasTab({ safraAtual, dreDataRecord, selectedCultura }: { safraAtual: string; dreDataRecord: Record<string, SafraImportData>; selectedCultura: string }) {
-  const data = dreDataRecord[safraAtual];
-  const culturas = selectedCultura === 'Todas' ? data.culturas : data.culturas.filter(c => c.nome === selectedCultura);
-  return (
-    <div className="flex flex-col gap-6">
-      <div className={cn('grid gap-4', culturas.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-3')}>
-        {culturas.map((c, i) => <CulturaCard key={c.nome} cultura={c} idx={i} />)}
-      </div>
     </div>
   );
 }
@@ -295,8 +227,10 @@ function HistoricoTab({ dreDataRecord, safras }: { dreDataRecord: Record<string,
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 export function DREDashboard() {
-  const dreDataRecord = useDREData();
-  const safras = useDRESafras();
+  const dreDataRaw = useDREData();    // chaves compostas "safra|||atividade"
+  const safrasRaw  = useDRESafras();  // safras únicas
+  const atividadesRaw = useDREAtividades(); // atividades únicas
+  const safras = useMemo(() => safrasRaw ? [...safrasRaw].sort() : safrasRaw, [safrasRaw]);
   const { data: importedData } = useImportedData();
   const { isLoading: importLoading, openFilePicker } = useUniversalImport();
   const hasImportedData = !!importedData.dre;
@@ -305,15 +239,43 @@ export function DREDashboard() {
     const available = safras ?? [];
     return available.length > 0 ? available[available.length - 1] : '2024/25';
   });
-  const [fazenda, setFazenda] = useState<Fazenda>('Todas');
-  const [selectedCultura, setSelectedCultura] = useState<string>('Todas');
+  const [fazenda, setFazenda] = useState<string>('Todas');
+  const [selectedAtividade, setSelectedAtividade] = useState<string>('Todas');
   const [activeTab, setActiveTab] = useState('inicio');
 
-  const culturasOptions = useMemo(() => {
-    const rec = dreDataRecord;
-    if (!rec || !safraAtual || !rec[safraAtual]) return [];
-    return rec[safraAtual].culturas.map(c => c.nome);
-  }, [dreDataRecord, safraAtual]);
+  const atividadeOptions = atividadesRaw ?? [];
+
+  // Fazendas disponíveis: valores únicos do campo `fazenda` nas linhas DRE importadas
+  const fazendaOptions = useMemo(() => {
+    if (!dreDataRaw) return [];
+    const seen = new Set<string>();
+    return Object.values(dreDataRaw)
+      .map(d => d.fazenda)
+      .filter((f): f is string => !!f && !seen.has(f) && (seen.add(f), true));
+  }, [dreDataRaw]);
+
+  /**
+   * dreDataRecord normalizado: chaves = safra (sem atividade).
+   * Filtra por fazenda e atividade selecionadas; agrega quando "Todas".
+   */
+  const dreDataRecord = useMemo<Record<string, SafraImportData> | null>(() => {
+    if (!dreDataRaw || !safras) return null;
+    const result: Record<string, SafraImportData> = {};
+    for (const safra of safras) {
+      const allRows = Object.entries(dreDataRaw)
+        .filter(([key]) => key === safra || key.startsWith(`${safra}|||`))
+        .map(([, d]) => d)
+        .filter(d => fazenda === 'Todas' || d.fazenda === fazenda);
+      if (allRows.length === 0) continue;
+      if (selectedAtividade === 'Todas') {
+        result[safra] = aggregateSafraRows(allRows);
+      } else {
+        const row = allRows.find(d => d.atividade === selectedAtividade);
+        if (row) result[safra] = row;
+      }
+    }
+    return result;
+  }, [dreDataRaw, safras, selectedAtividade, fazenda]);
 
   // Inicializa safraAtual com a última safra disponível quando dados carregam
   useEffect(() => {
@@ -328,8 +290,8 @@ export function DREDashboard() {
       {/* Header */}
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">DRE</h1>
-          <p className="text-slate-500 mt-1">Demonstrativo de Resultado por Safra — Fazenda Santa Fé</p>
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">DRE</h1>
+          <p className="text-muted-foreground mt-1">Demonstrativo de Resultado por Safra — Fazenda Santa Fé</p>
         </div>
         <ImportButton
           hasData={hasImportedData}
@@ -342,17 +304,19 @@ export function DREDashboard() {
       <div className="flex flex-row items-end justify-between gap-4">
         <TabNav tabs={DRE_TABS} activeTab={activeTab} onChange={setActiveTab} />
         <div className="flex items-end gap-4">
-          <div className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium text-muted-foreground">Fazenda:</span>
-            <Select value={fazenda} onValueChange={v => setFazenda(v as Fazenda)}>
-              <SelectTrigger className="h-10 w-40 rounded-xl border-border/60 bg-background/70 text-sm shadow-soft">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="rounded-xl">
-                {FAZENDAS.map(f => <SelectItem key={f} value={f}>{f}</SelectItem>)}
-              </SelectContent>
-            </Select>
-          </div>
+          {fazendaOptions.length > 0 && (
+            <div className="flex flex-col gap-1.5">
+              <span className="text-sm font-medium text-slate-600">Fazenda:</span>
+              <div className="relative">
+                <select value={fazenda} onChange={e => setFazenda(e.target.value)}
+                  className="appearance-none bg-white/60 border border-slate-200/60 shadow-sm text-slate-700 hover:bg-white/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500">
+                  <option value="Todas">Todas</option>
+                  {fazendaOptions.map(f => <option key={f} value={f}>{f}</option>)}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
+              </div>
+            </div>
+          )}
           {activeTab !== 'analises' && (
             <div className="flex flex-col gap-1.5">
               <span className="text-sm font-medium text-muted-foreground">Safra:</span>
@@ -366,18 +330,19 @@ export function DREDashboard() {
               </Select>
             </div>
           )}
-          <div className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium text-muted-foreground">Atividade:</span>
-            <Select value={selectedCultura} onValueChange={setSelectedCultura}>
-              <SelectTrigger className="h-10 w-44 rounded-xl border-border/60 bg-background/70 text-sm shadow-soft">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="rounded-xl">
-                <SelectItem value="Todas">{activeTab === 'analises' ? 'Análise Global' : 'Todas'}</SelectItem>
-                {culturasOptions.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-              </SelectContent>
-            </Select>
-          </div>
+          {atividadeOptions.length > 0 && (
+            <div className="flex flex-col gap-1.5">
+              <span className="text-sm font-medium text-slate-600">Atividade:</span>
+              <div className="relative">
+                <select value={selectedAtividade} onChange={e => setSelectedAtividade(e.target.value)}
+                  className="appearance-none bg-white/60 border border-slate-200/60 shadow-sm text-slate-700 hover:bg-white/80 transition-colors px-4 h-[40px] pr-10 text-sm font-medium rounded-xl outline-none cursor-pointer focus:border-emerald-500">
+                  <option value="Todas">{activeTab === 'analises' ? 'Global' : 'Todas'}</option>
+                  {atividadeOptions.map(a => <option key={a} value={a}>{a}</option>)}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -405,19 +370,14 @@ export function DREDashboard() {
               const rec = dreDataRecord!;
               const sfs = safras!;
               const current = rec[safraAtual];
-              const filtered = selectedCultura === 'Todas' ? current : {
-                ...current,
-                culturas: current.culturas.filter(c => c.nome === selectedCultura),
-              };
               const prevKey = sfs.indexOf(safraAtual) > 0 ? sfs[sfs.indexOf(safraAtual) - 1] : null;
               const prevData = prevKey ? rec[prevKey] : null;
-              return <DREInicioTab data={filtered} prev={prevData} dreDataRecord={rec} safras={sfs} onNavigate={setActiveTab} />;
+              return <DREInicioTab data={current} prev={prevData} dreDataRecord={rec} safras={sfs} onNavigate={setActiveTab} />;
             })()}
-            {activeTab === 'vbp'       && <DREVBPTab safraAtual={safraAtual} dreDataRecord={dreDataRecord!} safras={safras!} selectedCultura={selectedCultura} />}
-            {activeTab === 'custo'     && <DRECustoTab safraAtual={safraAtual} dreDataRecord={dreDataRecord!} safras={safras!} selectedCultura={selectedCultura} />}
-            {activeTab === 'culturas'  && <CulturasTab safraAtual={safraAtual} dreDataRecord={dreDataRecord!} selectedCultura={selectedCultura} />}
+            {activeTab === 'vbp'       && <DREVBPTab safraAtual={safraAtual} dreDataRecord={dreDataRecord!} safras={safras!} selectedCultura={selectedAtividade} />}
+            {activeTab === 'custo'     && <DRECustoTab safraAtual={safraAtual} dreDataRecord={dreDataRecord!} safras={safras!} selectedCultura={selectedAtividade} />}
             {activeTab === 'historico' && <HistoricoTab dreDataRecord={dreDataRecord!} safras={safras!} />}
-            {activeTab === 'analises'  && <DREAnalisesTab dreDataRecord={dreDataRecord!} safras={safras!} selectedCultura={selectedCultura} />}
+            {activeTab === 'analises'  && <DREAnalisesTab dreDataRecord={dreDataRecord!} safras={safras!} selectedCultura={selectedAtividade} />}
           </motion.div>
         </AnimatePresence>
       )}

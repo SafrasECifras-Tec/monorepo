@@ -16,8 +16,6 @@ import {
   gefTooltipTitleClass,
 } from '@/lib/chartTheme';
 import type { SafraImportData } from '@/contexts/ImportDataContext';
-import { dreData } from '@/data/dre/dreData';
-import type { Safra } from '@/data/dre/dreData';
 
 // ── Formatters ─────────────────────────────────────────────────────────────────
 
@@ -27,8 +25,7 @@ const fmtMoney = (v: number) =>
 
 const fmtNum = (v: number) => v.toLocaleString('pt-BR');
 
-// ── Fallback helper ────────────────────────────────────────────────────────────
-// Se o campo importado for 0 (coluna ausente na planilha), usa o dreData estático.
+// ── Field accessor ─────────────────────────────────────────────────────────────
 type NumericKey =
   | 'custoInsumos' | 'custoOperacao' | 'custoJuros'
   | 'receitaBruta' | 'custoTotal' | 'resultadoLiquido'
@@ -37,7 +34,14 @@ type NumericKey =
 function fb(d: SafraImportData, field: NumericKey): number {
   const v = d[field] as number;
   if (v) return v;
-  return (dreData[d.safra as Safra]?.[field] as number) ?? 0;
+  // Deriva custoInsumos quando os demais componentes estão disponíveis
+  // custoTotal = custoInsumos + custoOperacao + custoJuros
+  if (field === 'custoInsumos' && d.custoTotal > 0) {
+    const derivado = d.custoTotal - (d.custoOperacao || 0) - (d.custoJuros || 0);
+    if (derivado > 0) return derivado;
+    return d.custoTotal * 0.55;
+  }
+  return 0;
 }
 
 // ── Row definition ─────────────────────────────────────────────────────────────
@@ -268,7 +272,7 @@ export function DREAnalisesTab({
           )}
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-slate-200/60 bg-white/80 shadow-xl">
+        <GlassCard className="overflow-hidden p-0">
           <div className="overflow-auto custom-scrollbar max-h-[70vh]">
             <table className="w-full border-separate border-spacing-0 text-xs">
 
@@ -420,13 +424,13 @@ export function DREAnalisesTab({
               </tbody>
             </table>
           </div>
-        </div>
+        </GlassCard>
       </motion.div>
 
       {/* ── Gráfico de Barras Empilhadas ──────────────────────────────────── */}
       <motion.div
         initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}>
-        <GlassCard className="p-5 hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-5 hover:shadow-float transition-all duration-300">
           <h3 className="text-sm font-bold text-foreground mb-0.5">Análise Comparativa por Safra</h3>
           <p className="text-xs text-muted-foreground mb-4">VBP, custo e resultado em sc/ha — empilhados por safra</p>
           <div className="h-72">

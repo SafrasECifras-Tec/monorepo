@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { GlassCard } from '@socios/ui';
+import { GlassCard, TabNav } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import { formatCurrency } from '@/lib/formatters';
 import { Wallet, DollarSign, Percent, TrendingDown } from 'lucide-react';
@@ -144,7 +144,7 @@ export function DebtDashboard() {
     const longoV = longo.reduce((s, p) => s + p.principal, 0);
     return [
       { name: 'Curto Prazo (até 12 meses)', value: curtoV, percent: Math.round(curtoV / totalG * 1000) / 10, color: '#3b82f6' },
-      { name: 'Longo Prazo',                value: longoV, percent: Math.round(longoV / totalG * 1000) / 10, color: '#8b5cf6' },
+      { name: 'Longo Prazo',                value: longoV, percent: Math.round(longoV / totalG * 1000) / 10, color: '#f4af2d' },
     ].filter(d => d.value > 0);
   }, [filteredParcelas, TODAY]);
 
@@ -250,8 +250,8 @@ export function DebtDashboard() {
     <div className="flex flex-col h-full space-y-6">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Endividamento</h1>
-          <p className="text-slate-500 mt-1">Visão geral e projeção de dívidas</p>
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">Endividamento</h1>
+          <p className="text-muted-foreground mt-1">Visão geral e projeção de dívidas</p>
         </div>
         <ImportButton
           hasData={hasImportedData}
@@ -263,24 +263,7 @@ export function DebtDashboard() {
       {/* Tabs + Filters */}
       <div className="flex flex-col gap-3 2xl:flex-row 2xl:items-end 2xl:justify-between">
         {/* Linha 1 / esquerda em 2xl: Tab nav */}
-        <div className="flex overflow-x-auto custom-scrollbar shrink-0">
-          <GlassCard className="p-1 flex items-center gap-1 w-fit bg-white/60 border border-slate-200/60 shadow-sm rounded-xl shrink-0">
-            {TABS.map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={cn(
-                  'px-4 py-1.5 rounded-lg font-medium transition-all duration-200 text-sm whitespace-nowrap cursor-pointer',
-                  activeTab === tab.id
-                    ? 'bg-white text-[#059669] shadow-sm border border-slate-200/50'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/40',
-                )}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </GlassCard>
-        </div>
+        <TabNav tabs={TABS} activeTab={activeTab} onChange={setActiveTab} />
 
         {/* Linha 2: Filtros */}
         <DebtFilters
@@ -314,7 +297,7 @@ export function DebtDashboard() {
       {/* KPI Cards */}
       {hasImportedData && (<>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-float transition-all duration-300">
           <div className="flex items-center gap-2 mb-4">
             <TrendingDown className="h-5 w-5 text-slate-800" />
             <span className="text-sm font-semibold text-slate-800 uppercase tracking-wider">Endividamento</span>
@@ -323,7 +306,7 @@ export function DebtDashboard() {
             {formatCurrency(totalEndividamento, currencyMode)}
           </div>
         </GlassCard>
-        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-float transition-all duration-300">
           <div className="flex items-center gap-2 mb-4">
             <DollarSign className="h-5 w-5 text-slate-800" />
             <span className="text-sm font-semibold text-slate-800 uppercase tracking-wider">Valor Principal</span>
@@ -332,7 +315,7 @@ export function DebtDashboard() {
             {formatCurrency(totalPrincipal, currencyMode)}
           </div>
         </GlassCard>
-        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-float transition-all duration-300">
           <div className="flex items-center gap-2 mb-4">
             <Wallet className="h-5 w-5 text-slate-800" />
             <span className="text-sm font-semibold text-slate-800 uppercase tracking-wider">Juros</span>
@@ -341,7 +324,7 @@ export function DebtDashboard() {
             {formatCurrency(totalJuros, currencyMode)}
           </div>
         </GlassCard>
-        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300">
+        <GlassCard className="p-6 flex flex-col justify-between hover:shadow-float transition-all duration-300">
           <div className="flex items-center gap-2 mb-4">
             <Percent className="h-5 w-5 text-slate-800" />
             <span className="text-sm font-semibold text-slate-800 uppercase tracking-wider">Taxa Efetiva</span>
@@ -360,7 +343,7 @@ export function DebtDashboard() {
               <EndividamentoPorSafraChart data={endividamentoPorSafraChartData} currencyMode={currencyMode} sojaPrice={sojaPrice} />
 
               {/* Valores por Horizonte */}
-              <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
+              <GlassCard className="p-6 flex flex-col hover:shadow-float transition-all duration-300">
                 <div className="mb-8">
                   <h3 className="text-lg font-bold text-[#1e3a29]">Valores por Horizonte</h3>
                   <p className="text-sm text-slate-400 mt-1">Principal sem juros por prazo</p>

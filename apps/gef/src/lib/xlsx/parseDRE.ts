@@ -56,6 +56,8 @@ export function parseDRE(wb: XLSX.WorkBook): { safras: SafraImportData[] } {
     const safra = String(r.safra ?? '');
     return {
       safra,
+      fazenda:              r.fazenda  ? String(r.fazenda)  : undefined,
+      atividade:            r.atividade ? String(r.atividade) : undefined,
       areaTotal:            Number(r.areaTotal) || 0,
       producaoTotal:        Number(r.producaoTotal) || 0,
       produtividadeMedia:   Number(r.produtividadeMedia) || 0,

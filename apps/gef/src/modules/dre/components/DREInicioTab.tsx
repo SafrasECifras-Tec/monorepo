@@ -12,14 +12,22 @@ import {
 import { GlassCard } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import type { SafraImportData } from '@/contexts/ImportDataContext';
-import { dreData } from '@/data/dre/dreData';
-import type { Safra } from '@/data/dre/dreData';
 
-// Fallback: usa valor importado se > 0, senão cai no dreData estático
+// Accessor: usa valor importado se > 0; para custoInsumos, deriva dos demais componentes
 function fbInicio(d: SafraImportData, field: 'custoInsumos' | 'custoOperacao' | 'custoJuros' | 'custoTotal' | 'roi'): number {
   const v = d[field] as number;
   if (v) return v;
-  return (dreData[d.safra as Safra]?.[field] as number) ?? 0;
+
+  // Deriva custoInsumos quando os demais componentes estão disponíveis
+  // custoTotal = custoInsumos + custoOperacao + custoJuros
+  if (field === 'custoInsumos' && d.custoTotal > 0) {
+    const derivado = d.custoTotal - (d.custoOperacao || 0) - (d.custoJuros || 0);
+    if (derivado > 0) return derivado;
+    // Se operacao e juros também estão zerados, estima 55% do custo total (proporção histórica)
+    return d.custoTotal * 0.55;
+  }
+
+  return 0;
 }
 
 // ── Formatters ────────────────────────────────────────────────────────────────
@@ -44,7 +52,7 @@ function KpiCard({ label, value, sub, trend, delay = 0 }: {
   const down = trend && trend.value < 0;
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay }}>
-      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-md transition-all duration-300 h-full">
+      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-float transition-all duration-300 h-full">
         <span className="text-[14px] font-semibold text-slate-500 uppercase tracking-wider">{label}</span>
         <span className="text-[24px] font-black text-slate-800 leading-tight">{value}</span>
         {sub && <span className="text-xs text-slate-400">{sub}</span>}
@@ -88,7 +96,7 @@ function InsightCard({ type, text, delay = 0 }: { type: InsightType; text: strin
 // ── Paletas ───────────────────────────────────────────────────────────────────
 
 // Cores categóricas por cultura — consistentes em todos os gráficos
-const CULTURA_COLORS = ['#6366f1', '#f59e0b', '#0ea5e9', '#8b5cf6', '#f43f5e'];
+const CULTURA_COLORS = ['#22c55e', '#f59e0b', '#0ea5e9', '#f4af2d', '#f43f5e'];
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
@@ -106,12 +114,6 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
     ? ((data.areaTotal - prev.areaTotal) / prev.areaTotal) * 100
     : null;
 
-  // ── mapa de cores por cultura (nome → cor) — consistente em todos os gráficos ──
-  const culturaColorMap = useMemo(() => {
-    const map: Record<string, string> = {};
-    data.culturas.forEach((c, i) => { map[c.nome] = CULTURA_COLORS[i % CULTURA_COLORS.length]; });
-    return map;
-  }, [data]);
 
   // Saúde Financeira — VBP, Custo e Resultado (realizado vs orçado)
   const finData = useMemo(() => [
@@ -132,15 +134,23 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
     },
   ], [data]);
 
-  // Donut — Percentual de área por atividade (cores categóricas)
-  const areaData = useMemo(() =>
-    data.culturas.map(c => ({
-      nome: c.nome,
-      area: c.area,
-      pct: data.areaTotal > 0 ? (c.area / data.areaTotal) * 100 : 0,
-      fill: culturaColorMap[c.nome] ?? '#94a3b8',
-    })),
-    [data, culturaColorMap]);
+  // Donut — Percentual de Área por atividade (via data.culturas)
+  const areaPercentualData = useMemo(() => {
+    if (data.culturas.length > 0) {
+      const seen = new Map<string, number>();
+      data.culturas.forEach(c => {
+        seen.set(c.nome, (seen.get(c.nome) ?? 0) + c.area);
+      });
+      const totalArea = Array.from(seen.values()).reduce((s, v) => s + v, 0);
+      return Array.from(seen.entries()).map(([nome, area], i) => ({
+        nome,
+        area,
+        pct: totalArea > 0 ? (area / totalArea) * 100 : 0,
+        fill: CULTURA_COLORS[i % CULTURA_COLORS.length],
+      }));
+    }
+    return [{ nome: data.atividade ?? 'Total', area: data.areaTotal, pct: 100, fill: CULTURA_COLORS[0] }];
+  }, [data]);
 
   // ComposedChart — ROI (barras) + Peso Fertilizantes + Peso Defensivos (linhas), por safra
   const retornoData = useMemo(() =>
@@ -155,14 +165,14 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
     }),
     [safras, dreDataRecord]);
 
-  // Receita vs Custo por cultura — 2 barras simples
+  // Receita vs Custo por safra — evolução histórica vinda exclusivamente da aba DRE
   const receitaCustoData = useMemo(() =>
-    data.culturas.map(c => ({
-      nome:    c.nome,
-      receita: c.receitaBruta,
-      custo:   c.custoTotal,
+    safras.map(s => ({
+      safra:   s,
+      receita: dreDataRecord[s]?.receitaBruta ?? 0,
+      custo:   dreDataRecord[s]?.custoTotal   ?? 0,
     })),
-  [data]);
+  [safras, dreDataRecord]);
 
   // Insights dinâmicos — sem repetir KPIs (Área, Produção, Produtividade, Preço Médio)
   const insights = useMemo(() => {
@@ -230,7 +240,7 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
           trend={trendProd ? { value: trendProd, label: 'vs safra ant.' } : undefined} delay={0.05} />
         <KpiCard label="Produtividade Média" value={`${data.produtividadeMedia.toFixed(1)} sc/ha`}
           trend={trendProd ? { value: trendProd, label: 'vs safra ant.' } : undefined} delay={0.1} />
-        <KpiCard label="Preço Médio de Venda" value={`R$ ${data.precoMedioVenda}/sc`}
+        <KpiCard label="Preço Médio de Venda" value={`R$ ${data.precoMedioVenda.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/sc`}
           sub={`Total: ${fmtCompact(data.receitaBruta)}`} delay={0.15} />
       </div>
 
@@ -240,7 +250,7 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
         {/* Esquerda — Saúde Financeira */}
         <motion.div className="lg:col-span-3"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}>
-          <GlassCard className="p-5 h-full hover:shadow-md transition-all duration-300">
+          <GlassCard className="p-5 h-full hover:shadow-float transition-all duration-300">
             <h3 className="text-sm font-bold text-slate-700 mb-0.5">Saúde Financeira</h3>
             <p className="text-xs text-slate-400 mb-4">Realizado vs. Orçado — clique em uma categoria para ver detalhes</p>
             <div className="h-56">
@@ -297,7 +307,7 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
         {/* Direita — Insights da Safra */}
         <motion.div className="lg:col-span-2"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.15 }}>
-          <GlassCard className="p-5 h-full hover:shadow-md transition-all duration-300">
+          <GlassCard className="p-5 h-full hover:shadow-float transition-all duration-300">
             <h3 className="text-sm font-bold text-slate-700 mb-0.5">Insights da Safra</h3>
             <p className="text-xs text-slate-400 mb-4">Análise automática dos indicadores de performance</p>
             <div className="flex flex-col gap-2.5">
@@ -316,14 +326,14 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
         {/* Card 1 — Donut: Percentual de Área */}
         <motion.div
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.2 }}>
-          <GlassCard className="p-5 hover:shadow-md transition-all duration-300">
+          <GlassCard className="p-5 hover:shadow-float transition-all duration-300">
             <h3 className="text-sm font-bold text-slate-700 mb-0.5">Percentual de Área</h3>
-            <p className="text-xs text-slate-400 mb-3">Distribuição das {fmtNum(data.areaTotal)} ha por atividade</p>
+            <p className="text-xs text-slate-400 mb-3">Distribuição da área plantada por atividade</p>
             <div className="h-56">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
-                    data={areaData} dataKey="pct"
+                    data={areaPercentualData} dataKey="pct"
                     cx="50%" cy="50%"
                     outerRadius="80%" innerRadius="48%"
                     paddingAngle={2} strokeWidth={0} labelLine={false}
@@ -340,11 +350,11 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
                       ) : null;
                     }}
                   >
-                    {areaData.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
+                    {areaPercentualData.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
                   </Pie>
                   <Tooltip
                     formatter={(v: number, _: string, props: any) => [
-                      `${v.toFixed(1)}%  (${fmtNum(props.payload.area)} ha)`,
+                      `${v.toFixed(1)}%  (${props.payload.area.toLocaleString('pt-BR')} ha)`,
                       props.payload.nome,
                     ]}
                     contentStyle={{ borderRadius: 10, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
@@ -353,7 +363,7 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
               </ResponsiveContainer>
             </div>
             <div className="flex flex-wrap gap-x-4 gap-y-1.5 mt-3 pt-3 border-t border-slate-100">
-              {areaData.map(d => (
+              {areaPercentualData.map(d => (
                 <div key={d.nome} className="flex items-center gap-1.5 text-xs text-slate-600 font-medium">
                   <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: d.fill }} />
                   {d.nome}
@@ -366,7 +376,7 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
         {/* Card 2 — ComposedChart: ROI (barras) + Peso Fertilizantes + Peso Defensivos (linhas) */}
         <motion.div
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.25 }}>
-          <GlassCard className="p-5 hover:shadow-md transition-all duration-300">
+          <GlassCard className="p-5 hover:shadow-float transition-all duration-300">
             <h3 className="text-sm font-bold text-slate-700 mb-0.5">Retorno sobre a Margem Bruta</h3>
             <p className="text-xs text-slate-400 mb-3">ROI (%) e peso de insumos no custo total — por safra</p>
             <div className="h-56">
@@ -424,18 +434,18 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
           </GlassCard>
         </motion.div>
 
-        {/* Card 3 — Receita vs Custo empilhado por tipo (full width) */}
+        {/* Card 3 — Receita vs Custo por safra — evolução histórica (full width) */}
         <motion.div className="sm:col-span-2"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.3 }}>
           <GlassCard className="p-5 hover:shadow-md transition-all duration-300">
-            <h3 className="text-sm font-bold text-slate-700 mb-0.5">Receita vs. Custo por Atividade</h3>
-            <p className="text-xs text-slate-400 mb-3">VBP realizado vs. custo total desembolsado por cultura</p>
+            <h3 className="text-sm font-bold text-slate-700 mb-0.5">Receita vs. Custo por Safra</h3>
+            <p className="text-xs text-slate-400 mb-3">Evolução histórica do VBP e do custo total desembolsado</p>
             <div className="h-56">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={receitaCustoData} margin={{ top: 28, right: 12, left: 0, bottom: 0 }}
                   barCategoryGap="30%" barGap={4}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#CBD5E1" opacity={0.4} />
-                  <XAxis dataKey="nome" axisLine={false} tickLine={false}
+                  <XAxis dataKey="safra" axisLine={false} tickLine={false}
                     tick={{ fill: '#64748B', fontSize: 11, fontWeight: 600 }} />
                   <YAxis axisLine={false} tickLine={false} width={68}
                     tick={{ fill: '#64748B', fontSize: 10 }}

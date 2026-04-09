@@ -77,11 +77,14 @@ export function DebtFilters({
       {activeTab === 'inicio' && (
         <div className="flex flex-col gap-1.5">
           <span className="text-sm font-medium text-slate-600">Analisar por:</span>
-          <GlassCard className="p-1 flex items-center gap-1 w-fit bg-white/60 border border-slate-200/60 shadow-sm rounded-xl">
+          <div className="sc-tab-nav h-[40px] flex items-center">
             {(['Safra', 'Ano'] as const).map(opt => (
-              <button key={opt} onClick={() => setAnalisarPorInicio(opt)} className={tabBtnClass(analisarPorInicio === opt)}>{opt}</button>
+              <button key={opt} onClick={() => setAnalisarPorInicio(opt)}
+                className={analisarPorInicio === opt ? 'sc-tab-nav-item sc-tab-nav-item-active' : 'sc-tab-nav-item'}>
+                {opt}
+              </button>
             ))}
-          </GlassCard>
+          </div>
         </div>
       )}
 
@@ -121,11 +124,14 @@ export function DebtFilters({
       {activeTab === 'indicadores' && (
         <div className="flex flex-col gap-1.5">
           <span className="text-sm font-medium text-slate-600">Analisar por:</span>
-          <GlassCard className="p-1 flex items-center gap-1 w-fit bg-white/60 border border-slate-200/60 shadow-sm rounded-xl overflow-x-auto custom-scrollbar">
+          <div className="sc-tab-nav h-[40px] flex items-center">
             {(['Valores Médios', 'Valores Projetados'] as const).map(opt => (
-              <button key={opt} onClick={() => setAnalisarPor(opt)} className={tabBtnClass(analisarPor === opt)}>{opt}</button>
+              <button key={opt} onClick={() => setAnalisarPor(opt)}
+                className={analisarPor === opt ? 'sc-tab-nav-item sc-tab-nav-item-active' : 'sc-tab-nav-item'}>
+                {opt}
+              </button>
             ))}
-          </GlassCard>
+          </div>
         </div>
       )}
 
