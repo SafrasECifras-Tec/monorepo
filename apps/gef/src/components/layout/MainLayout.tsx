@@ -12,8 +12,8 @@ export function MainLayout({ children, activeModule, onNavigate }: MainLayoutPro
     <SidebarProvider
       style={
         {
-          "--sidebar-width": "17rem",
-          "--sidebar-width-icon": "5.25rem",
+          "--sidebar-width": "16rem",
+          "--sidebar-width-icon": "4rem",
         } as React.CSSProperties
       }
     >

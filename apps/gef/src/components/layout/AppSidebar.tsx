@@ -109,7 +109,7 @@ export function AppSidebar({ activeModule, onNavigate }: AppSidebarProps) {
                   <Compass className="h-[18px] w-[18px] shrink-0 text-sidebar-muted" />
                 </SidebarMenuButton>
               </TooltipTrigger>
-              <TooltipContent side="right" className="text-xs">Gestao Estrategica</TooltipContent>
+              <TooltipContent side="right" className="text-xs">GEF</TooltipContent>
             </Tooltip>
           </SidebarMenuItem>
 
@@ -133,7 +133,7 @@ export function AppSidebar({ activeModule, onNavigate }: AppSidebarProps) {
         <span className={cn(
           "text-[11px] uppercase tracking-[0.06em] transition-all duration-200",
           sectionOpen ? "font-bold text-sidebar-foreground" : "font-semibold text-muted-foreground",
-        )}>Gestao Estrategica</span>
+        )}>GEF</span>
         <ChevronDown className={cn(
           "h-3 w-3 text-sidebar-muted transition-transform duration-200",
           sectionOpen && "rotate-180",
@@ -161,7 +161,7 @@ export function AppSidebar({ activeModule, onNavigate }: AppSidebarProps) {
   return (
     <Sidebar
       variant="sidebar"
-      className="border-0 bg-transparent"
+      className={cn("border-0 bg-transparent", collapsed ? "w-[4rem]" : "w-[16rem]")}
       collapsible="icon"
     >
       <div className="flex h-full flex-col border-r border-sidebar-border/60 bg-sidebar">
@@ -174,10 +174,10 @@ export function AppSidebar({ activeModule, onNavigate }: AppSidebarProps) {
           <button
             onClick={() => !collapsed && clients.length > 1 && setClientMenuOpen((v) => !v)}
             className={cn(
-              "flex items-center gap-3 w-full",
+              "flex items-center w-full",
+              collapsed ? "justify-center" : "gap-3",
               !collapsed && clients.length > 1 && "hover:opacity-80 transition-opacity duration-150 cursor-pointer",
               (collapsed || clients.length <= 1) && "cursor-default",
-              collapsed && "justify-center",
             )}
           >
             <div className="h-10 w-10 rounded-xl overflow-hidden flex items-center justify-center shrink-0 bg-primary/5">
@@ -200,7 +200,7 @@ export function AppSidebar({ activeModule, onNavigate }: AppSidebarProps) {
                   <ChevronDown className={cn("h-3.5 w-3.5 text-sidebar-muted shrink-0 transition-transform duration-200", clientMenuOpen && "rotate-180")} />
                 )}
               </div>
-              <p className="text-[11px] text-sidebar-muted truncate mt-0.5">Gestao Estrategica de Fazenda</p>
+              <p className="text-[11px] text-sidebar-muted truncate mt-0.5">Gestão Econômica e Financeira</p>
             </div>
           </button>
 

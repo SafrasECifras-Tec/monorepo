@@ -1,6 +1,6 @@
 import { useCalcir } from "@/contexts/CalcirContext";
 import { Users } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@socios/ui';
 
 interface ParceiroSelectorProps {
   value: string;
