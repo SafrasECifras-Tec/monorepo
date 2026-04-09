@@ -5,6 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip,
 import { Info, TrendingDown, TrendingUp } from 'lucide-react';
 import { useSettings } from '@/contexts/SettingsContext';
 import type { BalanceTableRow } from '@/contexts/ImportDataContext';
+import { GefTooltip, CHART_CURSOR, CHART_GRID_PROPS, CHART_AXIS_TICK } from '@/lib/chartTheme';
 
 interface BalanceIndicadoresTabProps {
   ativo: BalanceTableRow[];
@@ -47,35 +48,43 @@ const InfoTooltip = ({ text }: { text: string }) => {
 };
 
 const CustomTooltipCCL = ({ active, payload, label }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-white p-3 border border-slate-200 shadow-lg rounded-lg">
-        <p className="text-sm font-semibold text-slate-700 mb-1">{label}</p>
-        <p className="text-sm text-slate-600">
-          <span className="font-medium">Valor:</span> {payload[0].payload.label}
-        </p>
-      </div>
-    );
-  }
-  return null;
+  if (!active || !payload?.length) return null;
+  return (
+    <GefTooltip
+      title={label}
+      entries={[{ label: 'Valor', value: payload[0].payload.label, color: payload[0].fill }]}
+    />
+  );
 };
 
 const CustomTooltipCompromissos = ({ active, payload, label }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-white p-3 border border-slate-200 shadow-lg rounded-lg">
-        <p className="text-sm font-semibold text-slate-700 mb-2">{label}</p>
-        {payload.map((entry: any, index: number) => (
-          <p key={index} className="text-sm flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.color }}></span>
-            <span className="text-slate-600">{entry.name}:</span>
-            <span className="font-medium text-slate-800">{entry.value}%</span>
-          </p>
-        ))}
-      </div>
-    );
-  }
-  return null;
+  if (!active || !payload?.length) return null;
+  return (
+    <GefTooltip
+      title={label}
+      entries={payload.map((e: any) => ({ label: e.name, value: `${e.value}%`, color: e.fill ?? e.color }))}
+    />
+  );
+};
+
+const CustomTooltipValue = ({ active, payload, label, suffix = '' }: any) => {
+  if (!active || !payload?.length) return null;
+  return (
+    <GefTooltip
+      title={label}
+      entries={[{ label: 'Valor', value: `${payload[0].value}${suffix}`, color: payload[0].fill }]}
+    />
+  );
+};
+
+const CustomTooltipLine = ({ active, payload, label }: any) => {
+  if (!active || !payload?.length) return null;
+  return (
+    <GefTooltip
+      title={label}
+      entries={payload.map((e: any) => ({ label: e.name ?? 'Valor', value: e.payload.label ?? String(e.value), color: e.stroke ?? e.fill }))}
+    />
+  );
 };
 
 export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndicadoresTabProps) {
@@ -353,7 +362,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                         domain={[0, 'dataMax + 0.2']} 
                       />
                       <ReferenceLine y={1} stroke="#94a3b8" strokeDasharray="3 3" />
-                      <RechartsTooltip cursor={{ fill: 'transparent' }} />
+                      <RechartsTooltip content={<CustomTooltipValue />} cursor={CHART_CURSOR} />
                       <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {liquidezImediataData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
@@ -401,7 +410,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                         domain={[0, 'dataMax + 0.2']} 
                       />
                       <ReferenceLine y={1} stroke="#94a3b8" strokeDasharray="3 3" />
-                      <RechartsTooltip cursor={{ fill: 'transparent' }} />
+                      <RechartsTooltip content={<CustomTooltipValue />} cursor={CHART_CURSOR} />
                       <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {liquidezCorrenteData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
@@ -449,7 +458,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                         domain={[0, 'dataMax + 0.5']} 
                       />
                       <ReferenceLine y={1} stroke="#94a3b8" strokeDasharray="3 3" />
-                      <RechartsTooltip cursor={{ fill: 'transparent' }} />
+                      <RechartsTooltip content={<CustomTooltipValue />} cursor={CHART_CURSOR} />
                       <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {liquidezGeralData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
@@ -508,7 +517,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                         domain={[0, 100]}
                         ticks={[0, 20, 40, 60, 80, 100]}
                       />
-                      <RechartsTooltip cursor={{ fill: 'transparent' }} />
+                      <RechartsTooltip content={<CustomTooltipValue suffix="%" />} cursor={CHART_CURSOR} />
                       <ReferenceLine y={50} stroke="#cbd5e1" strokeDasharray="3 3" label={{ position: 'right', value: 'Recomendado: < 50%', fill: '#64748b', fontSize: 12 }} />
                       <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {endividamentoPLData.map((entry, index) => (
@@ -566,7 +575,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                         domain={[0, 100]}
                         ticks={[0, 20, 40, 60, 80, 100]}
                       />
-                      <RechartsTooltip cursor={{ fill: 'transparent' }} />
+                      <RechartsTooltip content={<CustomTooltipValue suffix="%" />} cursor={CHART_CURSOR} />
                       <ReferenceLine y={40} stroke="#cbd5e1" strokeDasharray="3 3" label={{ position: 'right', value: 'Recomendado: < 40%', fill: '#64748b', fontSize: 12 }} />
                       <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {grauEndividamentoData.map((entry, index) => (
@@ -632,9 +641,9 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                         tickLine={false} 
                         tick={{ fill: '#64748b', fontSize: 12 }} 
                         dx={0}
-                        domain={['dataMin - 2', 'dataMax + 2']} 
+                        domain={['dataMin - 2', 'dataMax + 2']}
                       />
-                      <RechartsTooltip cursor={{ fill: 'transparent' }} />
+                      <RechartsTooltip content={<CustomTooltipLine />} cursor={CHART_CURSOR} />
                       <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {patrimonioLiquidoData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
@@ -688,9 +697,9 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                         tickLine={false} 
                         tick={{ fill: '#64748b', fontSize: 12 }} 
                         dx={0}
-                        domain={['dataMin - 2', 'dataMax + 2']} 
+                        domain={['dataMin - 2', 'dataMax + 2']}
                       />
-                      <RechartsTooltip cursor={{ fill: 'transparent' }} />
+                      <RechartsTooltip content={<CustomTooltipLine />} cursor={CHART_CURSOR} />
                       <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {patrimonioLiquidoTerraData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />

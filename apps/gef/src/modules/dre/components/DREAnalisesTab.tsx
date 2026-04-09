@@ -268,7 +268,7 @@ export function DREAnalisesTab({
           )}
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-slate-200/60 bg-white/80 shadow-xl">
+        <div className="overflow-hidden rounded-2xl border border-slate-200/60 bg-white/80">
           <div className="overflow-auto custom-scrollbar max-h-[70vh]">
             <table className="w-full border-separate border-spacing-0 text-xs">
 
