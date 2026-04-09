@@ -33,7 +33,7 @@
   /* ── Metric pill (KPI card) ── */
   .metric-pill {
     @apply relative flex min-h-[8.75rem] flex-col justify-between overflow-hidden rounded-[2rem] border border-border/70 bg-card p-5 shadow-elevated backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-float hover:border-primary/20;
-    background-image: linear-gradient(180deg, hsl(var(--panel-soft)) 0%, hsl(var(--panel-strong)) 100%);
+    background-image: linear-gradient(180deg, hsl(var(--panel)) 0%, hsl(var(--panel-soft)) 100%);
   }
   .metric-pill-accent {
     @apply relative flex min-h-[8.75rem] flex-col justify-between overflow-hidden rounded-[2rem] border p-5 shadow-float transition-all duration-300 hover:-translate-y-1.5;
@@ -237,7 +237,7 @@
   /* ── Glass card — same visual as metric-pill, no layout constraints ── */
   .glass-card {
     @apply relative overflow-hidden rounded-[2rem] border border-border/70 bg-card backdrop-blur-sm shadow-elevated transition-all duration-300;
-    background-image: linear-gradient(180deg, hsl(var(--panel-soft)) 0%, hsl(var(--panel-strong)) 100%);
+    background-image: linear-gradient(180deg, hsl(var(--panel)) 0%, hsl(var(--panel-soft)) 100%);
   }
 
   /* ── Layout helpers ── */

@@ -211,7 +211,7 @@
   border-radius: 2rem;
   border: 1px solid hsl(var(--border) / 0.7);
   background-color: hsl(var(--card));
-  background-image: linear-gradient(180deg, hsl(var(--panel-soft)), hsl(var(--panel-strong)));
+  background-image: linear-gradient(180deg, hsl(var(--panel)) 0%, hsl(var(--panel-soft)) 100%);
   padding: 1.25rem;
   box-shadow: var(--shadow-elevated);
   backdrop-filter: blur(4px);
@@ -506,7 +506,7 @@
   border-radius: 2rem;
   border: 1px solid hsl(var(--border) / 0.7);
   background-color: hsl(var(--card));
-  background-image: linear-gradient(180deg, hsl(var(--panel-soft)) 0%, hsl(var(--panel-strong)) 100%);
+  background-image: linear-gradient(180deg, hsl(var(--panel)) 0%, hsl(var(--panel-soft)) 100%);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   box-shadow: var(--shadow-elevated);

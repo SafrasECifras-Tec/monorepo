@@ -16,7 +16,7 @@ export function GlassCard({ children, className, hoverEffect = false, style, ...
         className
       )}
       style={{
-        backgroundImage: "linear-gradient(180deg, hsl(var(--panel-soft)) 0%, hsl(var(--panel-strong)) 100%)",
+        backgroundImage: "linear-gradient(180deg, hsl(var(--panel)) 0%, hsl(var(--panel-soft)) 100%)",
         ...style,
       }}
       {...props}
