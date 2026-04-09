@@ -222,7 +222,7 @@ function HistoricoTab({ dreDataRecord, safras }: { dreDataRecord: Record<string,
                   tickFormatter={v => `${(v / 1000).toFixed(0)}k sc`} />
                 <Tooltip formatter={(v: number) => [`${fmtNum(v)} sc`, 'Produção']}
                   contentStyle={{ borderRadius: 12, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
-                <Bar dataKey="producaoTotal" fill="#10b981" radius={[4, 4, 0, 0]} name="Produção" />
+                <Bar dataKey="producaoTotal" fill="#10b981" radius={[6, 6, 0, 0]} name="Produção" />
               </BarChart>
             </ResponsiveContainer>
           </div>

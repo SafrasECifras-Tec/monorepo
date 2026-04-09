@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { GlassCard } from '@socios/ui';
 import { motion } from 'motion/react';
+import { gefTooltipClass, gefTooltipTitleClass } from '@/lib/chartTheme';
 import {
   ArrowDown,
   ArrowUp,
@@ -74,20 +75,20 @@ const CustomTooltip = ({ active, payload, total }: any) => {
       initial={{ opacity: 0, x: 10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.2 }}
-      className="bg-white p-3 rounded-xl shadow-xl border border-slate-100 min-w-[200px] z-50 pointer-events-none"
+      className={gefTooltipClass}
     >
-      <div className="flex items-center gap-2 mb-2">
-        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: data.color }}></div>
-        <span className="font-semibold text-slate-700">{data.name}</span>
-      </div>
-      <div className="flex flex-col gap-1.5">
-        <div className="flex justify-between items-center gap-4">
-          <span className="text-sm text-slate-500">Valor:</span>
-          <span className="text-sm font-medium text-slate-900">{formatCurrency(data.value, 'BRL', false)}</span>
+      <p className={`${gefTooltipTitleClass} flex items-center gap-2`}>
+        <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: data.color }} />
+        {data.name}
+      </p>
+      <div className="space-y-1.5">
+        <div className="flex justify-between items-center text-xs gap-4">
+          <span className="text-muted-foreground">Valor</span>
+          <span className="font-semibold tabular-nums">{formatCurrency(data.value, 'BRL', false)}</span>
         </div>
-        <div className="flex justify-between items-center gap-4">
-          <span className="text-sm text-slate-500">Participação:</span>
-          <span className="text-sm font-medium text-slate-900">{percentage}%</span>
+        <div className="flex justify-between items-center text-xs gap-4">
+          <span className="text-muted-foreground">Participação</span>
+          <span className="font-semibold tabular-nums">{percentage}%</span>
         </div>
       </div>
     </motion.div>

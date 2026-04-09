@@ -113,7 +113,7 @@ export function DebtIndicadoresTab({
                         </Bar>
                       )}
 
-                      <Bar dataKey="juros" name="Juros" stackId="a" fill="#64748b" radius={[4, 4, 0, 0]} isAnimationActive={false} activeBar={false}>
+                      <Bar dataKey="juros" name="Juros" stackId="a" fill="#64748b" radius={[6, 6, 0, 0]} isAnimationActive={false} activeBar={false}>
                         {ebitdaData.map((_, i) => (
                           <Cell key={i} fill="#64748b" opacity={activeBarIndex === null || activeBarIndex === i ? 1 : 0.3} />
                         ))}
@@ -247,7 +247,7 @@ export function DebtIndicadoresTab({
                       <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fill: '#64748B', fontSize: 10, angle: -45, textAnchor: 'end' }} dy={10} />
                       <YAxis hide />
                       <Tooltip cursor={{ fill: '#F1F5F9', opacity: 0.4 }} formatter={(value: number) => `${value}%`} />
-                      <Bar dataKey="value" fill="#3b82f6" radius={[2, 2, 0, 0]}>
+                      <Bar dataKey="value" fill="#3b82f6" radius={[6, 6, 0, 0]}>
                         <LabelList dataKey="value" position="top" fill="#475569" formatter={(v: number) => `${v}%`} fontSize={10} fontWeight={500} />
                       </Bar>
                     </BarChart>

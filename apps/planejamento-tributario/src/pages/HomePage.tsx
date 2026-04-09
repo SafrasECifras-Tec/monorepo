@@ -9,7 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import {
   Leaf, Plus, Loader2, LogOut, Search, MapPin, Filter, X,
   Pencil, Trash2, ImagePlus, MoreVertical, Share2, DoorOpen,
-  ChevronRight, ChevronLeft, Building2, Map, ExternalLink, Newspaper, FlaskConical
+  ChevronRight, ChevronLeft, Building2, Map, ExternalLink, Newspaper, FlaskConical,
+  LayoutGrid,
 } from "lucide-react";
 import logoSafras from "@/assets/logo-safras-cifras.png";
 import { useToast } from "@/hooks/use-toast";
@@ -23,7 +24,8 @@ import {
 } from '@socios/ui';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
@@ -361,8 +363,12 @@ export default function HomePage() {
     navigate("/");
   };
 
+  const PORTAL_URL = import.meta.env.VITE_PORTAL_URL ?? 'http://localhost:4000';
+
   const placeholderBg = "bg-gradient-to-br from-primary/20 via-accent/10 to-primary/5";
   const displayName = getUserDisplayName(user?.email);
+  const userInitials = user?.email ? user.email.slice(0, 2).toUpperCase() : "??";
+  const userPicture = (user?.user_metadata?.avatar_url as string | undefined) || "";
 
   return (
     <div className="min-h-screen bg-background">
@@ -378,16 +384,15 @@ export default function HomePage() {
               <p className="text-[11px] text-muted-foreground">Planejamento Tributário</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-semibold text-xs shrink-0">
-                {displayName.charAt(0).toUpperCase()}
+          <div className="flex items-center gap-2">
+            {userPicture ? (
+              <img src={userPicture} alt={user?.email ?? ""} className="h-7 w-7 rounded-lg object-cover shrink-0" referrerPolicy="no-referrer" />
+            ) : (
+              <div className="h-7 w-7 rounded-lg bg-primary/15 flex items-center justify-center shrink-0">
+                <span className="text-[10px] font-bold text-primary">{userInitials}</span>
               </div>
-              <span className="text-sm font-medium text-foreground hidden sm:block">{displayName}</span>
-            </div>
-            <Button variant="ghost" size="icon" onClick={signOut} className="h-8 w-8 text-muted-foreground hover:text-foreground">
-              <LogOut className="h-4 w-4" />
-            </Button>
+            )}
+            <span className="text-[12px] font-medium text-foreground/70 hidden sm:block">{user?.email}</span>
           </div>
         </div>
       </header>
@@ -812,6 +817,39 @@ export default function HomePage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Floating user menu — bottom-left */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button
+            className="fixed bottom-6 left-6 z-50 h-11 w-11 rounded-2xl flex items-center justify-center bg-popover border border-border shadow-float hover:bg-accent transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+            title={user?.email ?? "Usuário"}
+          >
+            {userPicture ? (
+              <img src={userPicture} alt={user?.email ?? ""} className="h-7 w-7 rounded-lg object-cover" referrerPolicy="no-referrer" />
+            ) : (
+              <div className="h-7 w-7 rounded-lg bg-primary/15 flex items-center justify-center">
+                <span className="text-[10px] font-bold text-primary">{userInitials}</span>
+              </div>
+            )}
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent side="top" align="start" className="w-52">
+          <div className="px-2 py-1.5">
+            <p className="text-[11px] text-muted-foreground truncate">{user?.email ?? ""}</p>
+          </div>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => { window.location.href = PORTAL_URL; }}>
+            <LayoutGrid className="h-4 w-4 mr-2" />
+            Voltar ao Portal
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={signOut} className="text-destructive focus:text-destructive">
+            <LogOut className="h-4 w-4 mr-2" />
+            Sair
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }

@@ -330,7 +330,7 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
                     contentStyle={{ borderRadius: 12, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.12)' }}
                   />
                   <Bar yAxisId="custo" dataKey="custo" name="Custo Total" fill="#f87171"
-                    radius={[4, 4, 0, 0]} maxBarSize={64} />
+                    radius={[6, 6, 0, 0]} maxBarSize={64} />
                   <Line yAxisId="ha" dataKey="custoHa" name="Custo/ha"
                     type="monotone" stroke="#ef4444" strokeWidth={2.5}
                     dot={{ fill: '#ef4444', r: 4 }} activeDot={{ r: 6 }} />

@@ -9,12 +9,28 @@ import {
   DEBT_CHART_COLORS,
 } from '@/data/debt/debtChartData';
 import type { HistoricoEndividamentoItem } from '@/data/debt/debtChartData';
+import {
+  CHART_GRID_PROPS,
+  CHART_AXIS_TICK,
+  CHART_CURSOR,
+  stackedTopRadius,
+  ChartBarTopLabel,
+  gefTooltipClass,
+  gefTooltipTitleClass,
+} from '@/lib/chartTheme';
 
 interface Props {
   data: HistoricoEndividamentoItem[];
   currencyMode: 'BRL' | 'SOJA';
   sojaPrice?: number;
 }
+
+const NAME_MAP: Record<string, string> = {
+  compraDeTerras:    'Compra de Terras',
+  custeios:          'Custeios',
+  investimentos:     'Investimentos',
+  investimentosDolar: 'Investimentos em Dólar',
+};
 
 const fmt = (value: number, mode: 'BRL' | 'SOJA', sojaPrice: number) =>
   mode === 'BRL'
@@ -32,20 +48,50 @@ const TotalLabel = (props: any) => {
   const { x, y, width, value } = props;
   if (!value) return null;
   return (
-    <text x={x + width / 2} y={y - 6} textAnchor="middle" fill="#1e293b" fontSize={11} fontWeight={700}>
+    <text x={x + width / 2} y={y - 6} textAnchor="middle"
+      fill="hsl(var(--foreground))" fontSize={11} fontWeight={700}>
       {fmtCompact(value)}
     </text>
   );
 };
 
+const HISTORICO_KEYS = ['compraDeTerras', 'custeios', 'investimentos', 'investimentosDolar'] as const;
+
 export function HistoricoEndividamentoChart({ data, currencyMode, sojaPrice = 120 }: Props) {
   if (!data.length) return null;
+
+  const HistoricoTooltip = ({ active, payload, label }: any) => {
+    if (!active || !payload?.length) return null;
+    const total = payload.reduce((s: number, e: any) => s + (e.value || 0), 0);
+    return (
+      <div className={gefTooltipClass}>
+        <p className={gefTooltipTitleClass}>{label}</p>
+        <div className="space-y-1.5">
+          {payload.map((entry: any, i: number) => (
+            <div key={i} className="flex justify-between items-center text-xs gap-4">
+              <span className="text-muted-foreground flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: entry.fill }} />
+                {NAME_MAP[entry.dataKey] ?? entry.name}
+              </span>
+              <span className="font-semibold tabular-nums">
+                {fmt(entry.value, currencyMode, sojaPrice)}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-between text-xs pt-2 mt-2 border-t border-border/50 font-bold">
+          <span>Total</span>
+          <span>{fmt(total, currencyMode, sojaPrice)}</span>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <GlassCard className="p-6 flex flex-col hover:shadow-md transition-all duration-300">
       <div className="mb-4">
-        <h3 className="text-lg font-bold text-slate-800">Histórico do Endividamento</h3>
-        <p className="text-sm text-slate-400 mt-0.5">Evolução anual por categoria</p>
+        <h3 className="text-lg font-bold text-foreground">Histórico do Endividamento</h3>
+        <p className="text-sm text-muted-foreground mt-0.5">Evolução anual por categoria</p>
       </div>
 
       <div className="h-[320px] w-full">
@@ -54,54 +100,41 @@ export function HistoricoEndividamentoChart({ data, currencyMode, sojaPrice = 12
             data={data}
             margin={{ top: 28, right: 10, left: 0, bottom: 0 }}
           >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#CBD5E1" opacity={0.4} />
+            <CartesianGrid {...CHART_GRID_PROPS} />
             <XAxis
               dataKey="data"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#64748B', fontSize: 11 }}
+              tick={CHART_AXIS_TICK}
               dy={8}
             />
             <YAxis
               axisLine={false}
               tickLine={false}
               width={72}
-              tick={{ fill: '#64748B', fontSize: 11 }}
+              tick={CHART_AXIS_TICK}
               tickFormatter={(v) =>
                 currencyMode === 'BRL'
                   ? `R$ ${(v / 1_000_000).toFixed(0)}M`
                   : `${(v / sojaPrice / 1000).toFixed(0)}k sc`
               }
             />
-            <Tooltip
-              cursor={{ fill: '#F1F5F9' }}
-              contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-              formatter={(value: number, name: string) => [
-                fmt(value, currencyMode, sojaPrice),
-                name === 'compraDeTerras' ? 'Compra de Terras'
-                : name === 'custeios'     ? 'Custeios'
-                : name === 'investimentos' ? 'Investimentos'
-                : 'Investimentos em Dólar',
-              ]}
-            />
+            <Tooltip cursor={CHART_CURSOR} content={<HistoricoTooltip />} />
             <Legend
               verticalAlign="bottom"
               height={32}
               iconType="circle"
               iconSize={8}
               formatter={(value) => (
-                <span className="text-slate-600 text-xs font-medium">
-                  {value === 'compraDeTerras' ? 'Compra de Terras'
-                    : value === 'custeios'     ? 'Custeios'
-                    : value === 'investimentos' ? 'Investimentos'
-                    : 'Investimentos em Dólar'}
+                <span className="text-muted-foreground text-xs font-medium">
+                  {NAME_MAP[value] ?? value}
                 </span>
               )}
             />
-            <Bar dataKey="compraDeTerras"   stackId="a" fill={DEBT_CHART_COLORS.compraDeTerras}   barSize={36} isAnimationActive={false} />
-            <Bar dataKey="custeios"         stackId="a" fill={DEBT_CHART_COLORS.custeios}         barSize={36} isAnimationActive={false} />
-            <Bar dataKey="investimentos"    stackId="a" fill={DEBT_CHART_COLORS.investimentos}    barSize={36} isAnimationActive={false} />
-            <Bar dataKey="investimentosDolar" stackId="a" fill={DEBT_CHART_COLORS.investimentosDolar} radius={[4, 4, 0, 0]} barSize={36} isAnimationActive={false}>
+            <Bar dataKey="compraDeTerras"     stackId="a" fill={DEBT_CHART_COLORS.compraDeTerras}     shape={stackedTopRadius(data, 'compraDeTerras',     HISTORICO_KEYS)} barSize={36} isAnimationActive={false} />
+            <Bar dataKey="custeios"           stackId="a" fill={DEBT_CHART_COLORS.custeios}           shape={stackedTopRadius(data, 'custeios',           HISTORICO_KEYS)} barSize={36} isAnimationActive={false} />
+            <Bar dataKey="investimentos"      stackId="a" fill={DEBT_CHART_COLORS.investimentos}      shape={stackedTopRadius(data, 'investimentos',      HISTORICO_KEYS)} barSize={36} isAnimationActive={false} />
+            <Bar dataKey="investimentosDolar" stackId="a" fill={DEBT_CHART_COLORS.investimentosDolar} shape={stackedTopRadius(data, 'investimentosDolar', HISTORICO_KEYS)} barSize={36} isAnimationActive={false}>
               <LabelList dataKey="total" content={<TotalLabel />} />
             </Bar>
           </BarChart>

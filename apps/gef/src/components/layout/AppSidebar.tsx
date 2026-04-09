@@ -161,7 +161,7 @@ export function AppSidebar({ activeModule, onNavigate }: AppSidebarProps) {
   return (
     <Sidebar
       variant="sidebar"
-      className="border-0 bg-transparent"
+      className={cn("border-0 bg-transparent", collapsed ? "w-[4rem]" : "w-[16rem]")}
       collapsible="icon"
     >
       <div className="flex h-full flex-col border-r border-sidebar-border/60 bg-sidebar">
@@ -174,10 +174,10 @@ export function AppSidebar({ activeModule, onNavigate }: AppSidebarProps) {
           <button
             onClick={() => !collapsed && clients.length > 1 && setClientMenuOpen((v) => !v)}
             className={cn(
-              "flex items-center gap-3 w-full",
+              "flex items-center w-full",
+              collapsed ? "justify-center" : "gap-3",
               !collapsed && clients.length > 1 && "hover:opacity-80 transition-opacity duration-150 cursor-pointer",
               (collapsed || clients.length <= 1) && "cursor-default",
-              collapsed && "justify-center",
             )}
           >
             <div className="h-10 w-10 rounded-xl overflow-hidden flex items-center justify-center shrink-0 bg-primary/5">

@@ -108,6 +108,7 @@ export function AppSidebar() {
 
   const userInitials = user?.email ? user.email.slice(0, 2).toUpperCase() : "??";
   const userEmail = user?.email || "";
+  const userPicture = (user?.user_metadata?.avatar_url as string | undefined) || "";
 
   // Renders nav items — tooltip always wraps but TooltipContent only shows in icon mode.
   const renderItems = (items: typeof clienteItems) =>
@@ -227,8 +228,8 @@ export function AppSidebar() {
 
         {/* ── Logo header ── */}
         <div className={cn(
-          "flex items-center gap-3 border-b border-sidebar-border/60",
-          collapsed ? "p-3 justify-center" : "px-5 py-5"
+          "flex items-center border-b border-sidebar-border/60",
+          collapsed ? "p-3 justify-center" : "px-5 py-5 gap-3"
         )}>
           <div className="h-10 w-10 rounded-xl overflow-hidden flex items-center justify-center shrink-0 bg-primary/5">
             <img src={logoSafrasCifras} alt="Safras & Cifras" className="h-12 w-12 object-contain" />
@@ -283,9 +284,13 @@ export function AppSidebar() {
                 "flex items-center gap-2.5 rounded-xl transition-colors duration-200 hover:bg-sidebar-accent",
                 collapsed ? "p-2 justify-center w-full" : "flex-1 min-w-0 px-2 py-2"
               )}>
-                <div className="h-7 w-7 rounded-lg bg-primary/15 flex items-center justify-center shrink-0">
-                  <span className="text-[10px] font-bold text-primary">{userInitials}</span>
-                </div>
+                {userPicture ? (
+                  <img src={userPicture} alt={userEmail} className="h-7 w-7 rounded-lg object-cover shrink-0" referrerPolicy="no-referrer" />
+                ) : (
+                  <div className="h-7 w-7 rounded-lg bg-primary/15 flex items-center justify-center shrink-0">
+                    <span className="text-[10px] font-bold text-primary">{userInitials}</span>
+                  </div>
+                )}
                 {!collapsed && (
                   <span className="text-[12px] text-sidebar-foreground/70 truncate min-w-0 flex-1 text-left">{userEmail}</span>
                 )}

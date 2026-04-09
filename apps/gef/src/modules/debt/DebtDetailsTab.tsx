@@ -105,7 +105,7 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
                   <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#64748B', fontSize: 12 }} dy={10} />
                   <YAxis hide />
                   <Tooltip content={<CustomTooltip currencyMode={currencyMode} />} cursor={{ fill: '#F1F5F9', opacity: 0.4 }} />
-                  <Bar dataKey="value" radius={[4, 4, 0, 0]} maxBarSize={40}>
+                  <Bar dataKey="value" radius={[6, 6, 0, 0]} maxBarSize={40}>
                     {tipoFinanciamentoData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
                     <LabelList
                       dataKey="value"
@@ -139,7 +139,7 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
                   <XAxis type="number" hide />
                   <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={truncatedYAxis} width={160} />
                   <Tooltip content={<CustomTooltip currencyMode={currencyMode} />} cursor={{ fill: '#F1F5F9', opacity: 0.4 }} />
-                  <Bar dataKey="value" fill="#3b82f6" radius={[0, 4, 4, 0]}>
+                  <Bar dataKey="value" fill="#3b82f6" radius={[0, 6, 6, 0]}>
                     <LabelList
                       dataKey="value"
                       position="right"
@@ -172,7 +172,7 @@ export function DebtDetailsTab({ currencyMode, filteredParcelas }: Props) {
                   <XAxis type="number" hide />
                   <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={truncatedYAxis} width={160} />
                   <Tooltip content={<CustomTooltip currencyMode={currencyMode} />} cursor={{ fill: '#F1F5F9', opacity: 0.4 }} />
-                  <Bar dataKey="value" fill="#3b82f6" radius={[0, 4, 4, 0]}>
+                  <Bar dataKey="value" fill="#3b82f6" radius={[0, 6, 6, 0]}>
                     <LabelList
                       dataKey="value"
                       position="right"
