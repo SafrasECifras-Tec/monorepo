@@ -9,12 +9,14 @@
     "./components.css": "./src/components.css",
     "./tailwind.css": "./src/tailwind.css"
   },
+  "dependencies": {
+    "@radix-ui/react-select": "^2.2.5",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.462.0",
+    "tailwind-merge": "^2.6.0"
+  },
   "peerDependencies": {
-    "@radix-ui/react-select": ">=2",
-    "clsx": ">=2",
-    "lucide-react": ">=0.400.0",
-    "react": ">=18",
-    "tailwind-merge": ">=2"
+    "react": ">=18"
   },
   "devDependencies": {
     "@socios/tsconfig": "workspace:*",
