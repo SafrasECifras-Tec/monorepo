@@ -1,28 +1,31 @@
 /**
- * Decorative plow-furrow lines — Safras & Cifras brand element.
+ * Decorative plow-furrow / pipe-connector lines — Safras & Cifras brand element.
  *
- * Shape per line — smooth cubic Bézier S-curve with horizontal tangents:
+ * Each line traces a pipe-elbow path:
  *
- *   ─────────────╮
- *                 ╲  ← steep diagonal middle (≈ 48° from horizontal)
- *                  ╰─────────────
+ *   ─────────────╮          Q-bézier elbow  (right → down)
+ *                │
+ *                │  D px    straight vertical section
+ *                │
+ *                ╰──────── Q-bézier elbow  (down → right)
  *
- * Path: M 0 y  H x1  C (x1+t) y  (x2-t) (y+dY)  x2 (y+dY)  H viewW
- *
- * All 4 lines are identical — only y shifts by `spacing`, keeping
- * the lines perfectly parallel throughout the curve.
+ * All 4 lines use identical geometry — only y shifts by `spacing`.
+ * D = spacing so each line's vertical section sits flush against the next
+ * one, forming a clean parallel pipe-bundle column.
  */
 export function PlowLines() {
   const COLORS = ['#0062a3', '#467f5f', '#a9bf9a', '#f4af2d']; // blue → gold
 
-  const spacing = 32;   // vertical gap between lines
-  const y0  = 30;       // y of top (blue) line
-  const x1  = 640;      // S-curve begins here  (~44 % of viewBox)
-  const x2  = 800;      // S-curve ends here    (~56 % of viewBox)
-  const t   = 35;       // Bézier handle length — short = steep visible middle
-  const dY  = 180;      // total vertical drop per line
+  const spacing = 36;    // vertical gap between lines
+  const y0  = 20;        // y of top (blue) line
+  const R   = 64;        // elbow radius  — generous, pipe-like
+  const D   = spacing;   // straight vertical depth = spacing → sections sit adjacent
+  const x1  = 700;       // x where elbows begin  (~49 % of 1440)
   const viewW = 1440;
-  const viewH = y0 + (COLORS.length - 1) * spacing + dY + 90; // ≈ 410
+  const viewH = 480;     // tall enough; container is also 480 px → no y-distortion
+
+  // Each line's full drop: 2R + D
+  const drop = 2 * R + D; // 164
 
   return (
     <svg
@@ -34,7 +37,8 @@ export function PlowLines() {
       preserveAspectRatio="none"
     >
       {COLORS.map((color, i) => {
-        const y = y0 + i * spacing; // 30 | 62 | 94 | 126
+        const y    = y0 + i * spacing;   // 20 | 56 | 92 | 128
+        const yEnd = y + drop;            // 184 | 220 | 256 | 292
 
         return (
           <path
@@ -42,15 +46,19 @@ export function PlowLines() {
             d={[
               `M 0 ${y}`,
               `H ${x1}`,
-              // Cubic Bézier: horizontal handle at start, horizontal handle at end,
-              // short handles → steep ~48° diagonal in the middle
-              `C ${x1 + t} ${y}  ${x2 - t} ${y + dY}  ${x2} ${y + dY}`,
+              // Elbow 1 — going RIGHT turns to going DOWN
+              `Q ${x1 + R} ${y}  ${x1 + R} ${y + R}`,
+              // Straight vertical section (D = spacing → adjacent to next line's section)
+              `V ${y + R + D}`,
+              // Elbow 2 — going DOWN turns to going RIGHT
+              `Q ${x1 + R} ${yEnd}  ${x1 + 2 * R} ${yEnd}`,
               `H ${viewW}`,
             ].join(' ')}
             stroke={color}
-            strokeWidth="4.5"
+            strokeWidth="5"
             fill="none"
             strokeLinecap="round"
+            strokeLinejoin="round"
           />
         );
       })}
