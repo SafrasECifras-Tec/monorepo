@@ -53,6 +53,7 @@ export interface BalanceTableRow {
   name: string;
   level: number;
   values: number[]; // comprimento igual a columns — ex: [58980000, 64980000, 70820437, 54428694]
+  fazenda?: string;
   children?: BalanceTableRow[];
 }
 
@@ -117,7 +118,7 @@ export interface ImportedDataStore {
   fluxoCaixa:    { transactions: TransactionRow[]; saldoInicial?: number } | null;
   fluxoAgregado: { rows: AggregatedFlowRow[] } | null;
   endividamento: { parcelas: ParcelaRow[] } | null;
-  balanco:       { columns: string[]; ativo: BalanceTableRow[]; passivo: BalanceTableRow[] } | null;
+  balanco:       { columns: string[]; fazendas: string[]; ativo: BalanceTableRow[]; passivo: BalanceTableRow[] } | null;
   dre:           { safras: SafraImportData[] } | null;
   estoque:       { crops: CropStockImport[] } | null;
 }

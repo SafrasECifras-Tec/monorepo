@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, Legend, LabelList, ResponsiveContainer,
@@ -21,6 +22,7 @@ interface Props {
   data: EndividamentoPorSafraItem[];
   currencyMode: 'BRL' | 'SOJA';
   sojaPrice?: number;
+  viewMode?: 'Safra' | 'Ano';
 }
 
 const NAME_MAP: Record<string, string> = {
@@ -54,8 +56,7 @@ const TotalLabel = (props: any) => {
 
 const SAFRA_KEYS = ['custeios', 'investimentos', 'investimentosDolar'] as const;
 
-export function EndividamentoPorSafraChart({ data, currencyMode, sojaPrice = 120 }: Props) {
-  if (!data.length) return null;
+export function EndividamentoPorSafraChart({ data, currencyMode, sojaPrice = 120, viewMode = 'Safra' }: Props) {
 
   const SafraTooltip = ({ active, payload, label }: any) => {
     if (!active || !payload?.length) return null;
@@ -87,11 +88,22 @@ export function EndividamentoPorSafraChart({ data, currencyMode, sojaPrice = 120
   return (
     <GlassCard className="p-6 flex flex-col hover:shadow-float transition-all duration-300">
       <div className="mb-4">
-        <h3 className="text-lg font-bold text-foreground">Endividamento por Safra</h3>
-        <p className="text-sm text-muted-foreground mt-0.5">Composição por categoria</p>
+        <h3 className="text-lg font-bold text-foreground">Endividamento por {viewMode}</h3>
+        <p className="text-sm text-muted-foreground mt-0.5">Posição atual em diante · composição por categoria</p>
       </div>
 
-      <div className="h-[300px] w-full">
+      <AnimatePresence mode="wait">
+      <motion.div
+        key={viewMode}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }}
+        transition={{ duration: 0.25, ease: 'easeInOut' }}
+        className="h-[300px] w-full flex items-center justify-center"
+      >
+        {!data.length ? (
+          <p className="text-sm text-muted-foreground">Sem parcelas futuras para o filtro selecionado.</p>
+        ) :
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}
@@ -104,7 +116,7 @@ export function EndividamentoPorSafraChart({ data, currencyMode, sojaPrice = 120
               tickLine={false}
               tick={CHART_AXIS_TICK}
               dy={8}
-              tickFormatter={(v) => v.replace('Safra ', '')}
+              tickFormatter={(v) => viewMode === 'Safra' ? v.replace('Safra ', '') : v}
             />
             <YAxis
               axisLine={false}
@@ -141,8 +153,9 @@ export function EndividamentoPorSafraChart({ data, currencyMode, sojaPrice = 120
               <LabelList dataKey="total" content={<TotalLabel />} />
             </Bar>
           </BarChart>
-        </ResponsiveContainer>
-      </div>
+        </ResponsiveContainer>}
+      </motion.div>
+      </AnimatePresence>
     </GlassCard>
   );
 }

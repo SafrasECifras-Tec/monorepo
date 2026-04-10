@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { GlassCard } from '@socios/ui';
 import { TabNav } from '@socios/ui';
@@ -11,6 +11,7 @@ import { EvoluçaoMensalChart } from './components/EvoluçaoMensalChart';
 import { TopCategoriesSection } from './components/TopCategoriesSection';
 import { ShortTermRadarCard } from './components/ShortTermRadarCard';
 import type { CurrencyMode } from '@/lib/formatters';
+import { cropStockData } from '@/data/cashflow/estoqueData';
 import type { CropStock } from '@/data/cashflow/estoqueData';
 import { MONTHS_PT } from '@/lib/formatters';
 import { monthFullNames } from '@/data/cashflow/cashFlowChartData';
@@ -59,13 +60,24 @@ export function CashFlowDashboard() {
   const [currencyMode, setCurrencyMode] = useState<CurrencyMode>('BRL');
   const [periodMode, setPeriodMode] = useState('2026');
   const [activeTab, setActiveTab] = useState('inicio');
+  const [isNavSticky, setIsNavSticky] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsNavSticky(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '-1px 0px 0px 0px' },
+    );
+    if (sentinelRef.current) observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, []);
   const [selectedDetalhamentoMonth, setSelectedDetalhamentoMonth] = useState<string | undefined>(undefined);
   const [radarFilter, setRadarFilter] = useState<{ type: 'entrada' | 'saida' | 'todos'; preset: 'proximos30' } | null>(null);
-  const [stockData, setStockData] = useState<CropStock[]>(() => (estoqueBase ?? []).map(c => ({ ...c, sales: [...c.sales] })));
+  const [stockData, setStockData] = useState<CropStock[]>(() => (estoqueBase ?? cropStockData).map(c => ({ ...c, sales: [...c.sales] })));
 
   // Sincroniza stockData quando estoqueBase muda (ex: dados importados ou removidos)
   useEffect(() => {
-    setStockData((estoqueBase ?? []).map(c => ({ ...c, sales: [...c.sales] })));
+    setStockData((estoqueBase ?? cropStockData).map(c => ({ ...c, sales: [...c.sales] })));
   }, [estoqueBase]);
 
   // Reinicializa Realizado/Projetado quando dados importados mudam.
@@ -129,7 +141,7 @@ export function CashFlowDashboard() {
   return (
     <div className={cn(
       'flex flex-col space-y-4 animate-in fade-in slide-in-from-bottom-8 duration-1000',
-      (activeTab === 'detalhamento' || activeTab === 'realizado_projetado') ? 'h-[calc(100vh-2rem)] -mb-8 overflow-hidden' : 'pb-6'
+      (activeTab === 'detalhamento' || activeTab === 'realizado_projetado') ? 'h-[calc(100vh-2rem)] pb-4 overflow-hidden' : 'pb-6'
     )}>
       {/* Header Row: Title */}
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -144,21 +156,31 @@ export function CashFlowDashboard() {
         />
       </header>
 
-      {/* Controls Row: Tabs + Filters + Actions */}
-      <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-4">
-        {/* Tabs Navigation */}
-        <TabNav
-          tabs={[
-            { id: 'inicio', label: 'Início' },
-            { id: 'detalhamento', label: 'Detalhamento' },
-            { id: 'realizado_projetado', label: 'Realizado/Projetado' },
-            { id: 'estoque', label: 'Estoque' },
-          ]}
-          activeTab={activeTab}
-          onChange={setActiveTab}
-        />
-      </div>
+      {/* Sentinel para detectar scroll */}
+      <div ref={sentinelRef} className="h-px -mt-4" />
 
+      {/* Controls Row: Tabs + Filters + Actions */}
+      <div className={cn(
+        'flex flex-row items-center gap-4 sticky top-0 z-40 transition-all duration-300 rounded-2xl',
+        isNavSticky
+          ? 'backdrop-blur-xl bg-white/90 border border-slate-200/60 shadow-lg shadow-slate-100/30 -mx-2 px-5 py-3'
+          : 'py-0'
+      )}>
+        {/* Tabs Navigation */}
+        <div className="flex flex-col gap-1.5">
+          {isNavSticky && <span className="text-sm font-medium text-muted-foreground">Fluxo de Caixa</span>}
+          <TabNav
+            tabs={[
+              { id: 'inicio', label: 'Início' },
+              { id: 'detalhamento', label: 'Detalhamento' },
+              { id: 'realizado_projetado', label: 'Realizado/Projetado' },
+              { id: 'estoque', label: 'Estoque' },
+            ]}
+            activeTab={activeTab}
+            onChange={setActiveTab}
+          />
+        </div>
+      </div>
 
       {/* Empty state quando não há dados importados */}
       {!hasImportedData && (

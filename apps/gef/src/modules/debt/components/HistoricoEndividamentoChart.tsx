@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   ResponsiveContainer,
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
@@ -23,6 +24,7 @@ interface Props {
   data: HistoricoEndividamentoItem[];
   currencyMode: 'BRL' | 'SOJA';
   sojaPrice?: number;
+  viewMode?: 'Safra' | 'Ano';
 }
 
 const NAME_MAP: Record<string, string> = {
@@ -57,7 +59,7 @@ const TotalLabel = (props: any) => {
 
 const HISTORICO_KEYS = ['compraDeTerras', 'custeios', 'investimentos', 'investimentosDolar'] as const;
 
-export function HistoricoEndividamentoChart({ data, currencyMode, sojaPrice = 120 }: Props) {
+export function HistoricoEndividamentoChart({ data, currencyMode, sojaPrice = 120, viewMode = 'Ano' }: Props) {
   if (!data.length) return null;
 
   const HistoricoTooltip = ({ active, payload, label }: any) => {
@@ -91,10 +93,18 @@ export function HistoricoEndividamentoChart({ data, currencyMode, sojaPrice = 12
     <GlassCard className="p-6 flex flex-col hover:shadow-float transition-all duration-300">
       <div className="mb-4">
         <h3 className="text-lg font-bold text-foreground">Histórico do Endividamento</h3>
-        <p className="text-sm text-muted-foreground mt-0.5">Evolução anual por categoria</p>
+        <p className="text-sm text-muted-foreground mt-0.5">Evolução por {viewMode === 'Safra' ? 'safra' : 'ano'} até a posição atual</p>
       </div>
 
-      <div className="h-[320px] w-full">
+      <AnimatePresence mode="wait">
+      <motion.div
+        key={viewMode}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }}
+        transition={{ duration: 0.25, ease: 'easeInOut' }}
+        className="h-[320px] w-full"
+      >
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}
@@ -139,7 +149,8 @@ export function HistoricoEndividamentoChart({ data, currencyMode, sojaPrice = 12
             </Bar>
           </BarChart>
         </ResponsiveContainer>
-      </div>
+      </motion.div>
+      </AnimatePresence>
     </GlassCard>
   );
 }

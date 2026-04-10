@@ -44,6 +44,17 @@ export const cropStockData: CropStock[] = [
     ],
   },
   {
+    name: 'Milho Safrinha',
+    color: 'text-lime-700',
+    bgColor: 'bg-lime-50 border-lime-200',
+    initialStock: 48000,
+    soldStock: 4000,
+    sales: [
+      { date: '27/06/2026', quantity: 2500, avgPrice: 78.00, totalValue: 195000 },
+      { date: '23/06/2026', quantity: 1500, avgPrice: 78.00, totalValue: 117000 },
+    ],
+  },
+  {
     name: 'Feijão',
     color: 'text-red-700',
     bgColor: 'bg-red-50 border-red-200',

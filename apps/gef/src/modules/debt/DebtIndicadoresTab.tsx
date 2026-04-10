@@ -8,6 +8,11 @@ import { formatCurrency } from '@/lib/formatters';
 import { useSettings } from '@/contexts/SettingsContext';
 import { GaugeChart } from './components/GaugeChart';
 import type { EbitdaRow, CustoFinanceiroRow } from '@/data/debt/debtIndicadoresData';
+import {
+  ebitdaData as staticEbitdaData,
+  custoFinanceiroData as staticCfData,
+  custoFinanceiroEbitdaData as staticCfEbitdaData,
+} from '@/data/debt/debtIndicadoresData';
 import { gefTooltipClass, gefTooltipTitleClass, CHART_CURSOR } from '@/lib/chartTheme';
 
 const EbitdaTooltip = ({ active, payload, label }: any) => {
@@ -65,12 +70,12 @@ function IndicadorPlaceholder({ title, subtitle }: { title: string; subtitle?: s
 export function DebtIndicadoresTab({
   currencyMode,
   analisarPor,
-  ebitdaData = [],
-  custoFinanceiroData: cfData = [],
-  custoFinanceiroEbitdaData: cfEbitdaData = [],
-  endividamentoReceita,
-  endividamentoEbitda,
-  custeioRatio,
+  ebitdaData = staticEbitdaData,
+  custoFinanceiroData: cfData = staticCfData,
+  custoFinanceiroEbitdaData: cfEbitdaData = staticCfEbitdaData,
+  endividamentoReceita = 2.3,
+  endividamentoEbitda = 4.8,
+  custeioRatio = 35,
 }: Props) {
   const [custoFinanceiroVs, setCustoFinanceiroVs] = React.useState<'Desembolso Operacional' | 'EBITDA'>('Desembolso Operacional');
   const [activeBarIndex, setActiveBarIndex] = React.useState<number | null>(null);

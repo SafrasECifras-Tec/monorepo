@@ -47,14 +47,15 @@ export function DebtFilters({
   selectedTipos, setSelectedTipos, tiposOptions,
   pagoMode, setPagoMode,
 }: Props) {
-  const [isTipoOpen, setIsTipoOpen] = React.useState(false);
-  const tipoRef = useRef<HTMLDivElement>(null);
+  const [isTipoOpen,  setIsTipoOpen]  = React.useState(false);
+  const [isBancoOpen, setIsBancoOpen] = React.useState(false);
+  const tipoRef  = useRef<HTMLDivElement>(null);
+  const bancoRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function onClickOutside(e: MouseEvent) {
-      if (tipoRef.current && !tipoRef.current.contains(e.target as Node)) {
-        setIsTipoOpen(false);
-      }
+      if (tipoRef.current  && !tipoRef.current.contains(e.target as Node))  setIsTipoOpen(false);
+      if (bancoRef.current && !bancoRef.current.contains(e.target as Node)) setIsBancoOpen(false);
     }
     document.addEventListener('mousedown', onClickOutside);
     return () => document.removeEventListener('mousedown', onClickOutside);
@@ -137,17 +138,40 @@ export function DebtFilters({
 
       {/* Banco — Bancos + Início */}
       {(activeTab === 'bancos' || activeTab === 'inicio') && (
-        <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-1.5 relative" ref={bancoRef}>
           <span className="text-sm font-medium text-muted-foreground">Banco:</span>
-          <Select value={selectedBanco} onValueChange={setSelectedBanco}>
-            <SelectTrigger className="h-10 w-48 rounded-xl border-border/60 bg-background/70 text-sm shadow-soft">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl">
-              <SelectItem value="Todos">Todos</SelectItem>
-              {bancosOptions.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
-            </SelectContent>
-          </Select>
+          <div className="relative">
+            <button
+              onClick={() => setIsBancoOpen(o => !o)}
+              className="w-44 bg-background/70 border border-border/60 shadow-soft text-foreground hover:bg-background transition-colors px-4 h-10 text-sm font-medium rounded-xl outline-none cursor-pointer flex items-center justify-between"
+            >
+              <span className="truncate pr-2">
+                {selectedBanco === 'Todos' ? 'Todos' : selectedBanco}
+              </span>
+              <ChevronDown className={cn('h-4 w-4 text-muted-foreground shrink-0 transition-transform', isBancoOpen ? 'rotate-180' : '')} />
+            </button>
+
+            {isBancoOpen && (
+              <div className="absolute top-full left-0 mt-2 w-64 bg-popover rounded-xl shadow-float border border-border/70 overflow-hidden z-50">
+                <div className="p-2 flex flex-col gap-1 max-h-60 overflow-y-auto">
+                  {['Todos', ...bancosOptions].map(banco => (
+                    <button
+                      key={banco}
+                      onClick={() => { setSelectedBanco(banco); setIsBancoOpen(false); }}
+                      className={cn(
+                        'w-full text-left px-3 py-1.5 rounded-lg text-sm transition-colors',
+                        selectedBanco === banco
+                          ? 'bg-accent text-accent-foreground font-medium'
+                          : 'text-popover-foreground hover:bg-accent'
+                      )}
+                    >
+                      {banco}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
 

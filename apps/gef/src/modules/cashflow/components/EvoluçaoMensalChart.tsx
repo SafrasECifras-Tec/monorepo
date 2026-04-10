@@ -19,6 +19,10 @@ import { cashFlowData, monthFullNames } from '@/data/cashflow/cashFlowChartData'
 import { cn } from '@/lib/utils';
 import { CHART_GRID_PROPS, CHART_AXIS_TICK, CHART_CURSOR, gefTooltipClass, gefTooltipTitleClass } from '@/lib/chartTheme';
 
+const MONTH_KEYS = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+// Índice 0-based do mês atual — meses anteriores = realizados, atual em diante = projetados
+const CURRENT_MONTH_IDX = new Date().getMonth();
+
 interface EvoluçaoMensalChartProps {
   data: typeof cashFlowData;
   currencyMode: CurrencyMode;
@@ -81,6 +85,8 @@ export function EvoluçaoMensalChart({
 
   const { leftMin, leftMax, leftTicks, rightMin, rightMax, rightTicks } = axisCalibration;
 
+  const displayData = data;
+
   return (
     <GlassCard className={cn(
       'p-6 flex flex-col min-h-[350px] transition-colors duration-500',
@@ -102,18 +108,30 @@ export function EvoluçaoMensalChart({
             </div>
           )}
           {/* Custom Legend */}
-          <div className="flex items-center gap-4 text-sm">
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-[#10b981]"></div>
-              <span className="text-muted-foreground font-medium">Entradas</span>
+          <div className="flex flex-col items-end gap-2">
+            <div className="flex items-center gap-4 text-sm">
+              <div className="flex items-center gap-1.5">
+                <div className="w-2 h-2 rounded-full bg-[#10b981]"></div>
+                <span className="text-muted-foreground font-medium">Entradas</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-2 h-2 rounded-full bg-[#ef4444]"></div>
+                <span className="text-muted-foreground font-medium">Saídas</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-2 h-2 rounded-full bg-[#3b82f6]"></div>
+                <span className="text-muted-foreground font-medium">Saldo</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-[#ef4444]"></div>
-              <span className="text-muted-foreground font-medium">Saídas</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-[#3b82f6]"></div>
-              <span className="text-muted-foreground font-medium">Saldo</span>
+            <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+              <div className="flex items-center gap-1.5">
+                <div className="w-7 h-2.5 rounded-sm bg-[#10b981]"></div>
+                <span>Realizado</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-7 h-2.5 rounded-sm bg-[#10b981] opacity-35 border border-[#10b981]"></div>
+                <span>Projetado</span>
+              </div>
             </div>
           </div>
         </div>
@@ -122,7 +140,7 @@ export function EvoluçaoMensalChart({
       <div className="h-[300px] w-full mt-2">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
-            data={data}
+            data={displayData}
             margin={{ top: 20, right: 10, bottom: 20, left: 10 }}
             barGap={8}
             barCategoryGap="20%"
@@ -172,11 +190,16 @@ export function EvoluçaoMensalChart({
                   const saldo = payload.find(p => p.dataKey === 'saldoAcumulado');
                   const fullMonth = monthFullNames[label as string] || label;
                   const displayYear = periodMode === '2026' ? '2026' : (['Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'].includes(label as string) ? `20${periodMode.split('/')[0]}` : `20${periodMode.split('/')[1]}`);
+                  const monthIdx = MONTH_KEYS.indexOf(label as string);
+                  const isProj = monthIdx >= CURRENT_MONTH_IDX;
 
                   return (
                     <div className={gefTooltipClass}>
                       <p className={gefTooltipTitleClass}>
                         {fullMonth} {displayYear}
+                        {isProj && (
+                          <span className="ml-2 text-[10px] font-semibold text-amber-600 bg-amber-50 border border-amber-100 px-1.5 py-0.5 rounded">Projetado</span>
+                        )}
                       </p>
 
                       <div className="space-y-1.5">
@@ -214,9 +237,27 @@ export function EvoluçaoMensalChart({
               }}
             />
 
+            {/* Área sombreada para meses projetados */}
+            {CURRENT_MONTH_IDX < 12 && (
+              <ReferenceArea
+                {...({ yAxisId: 'left', x1: MONTH_KEYS[CURRENT_MONTH_IDX], x2: MONTH_KEYS[11], fill: '#f1f5f9', fillOpacity: 0.55 } as any)}
+              />
+            )}
+
             {/* Reference Area for Negative Balance */}
             <ReferenceArea {...({ yAxisId: 'right', y1: -10000000, y2: 0, fill: '#fee2e2', fillOpacity: 0.5 } as any)} />
             <ReferenceLine yAxisId="right" y={0} stroke="#ef4444" strokeDasharray="3 3" />
+
+            {/* Linha separadora: realizado → projetado */}
+            {CURRENT_MONTH_IDX > 0 && CURRENT_MONTH_IDX < 12 && (
+              <ReferenceLine
+                {...({ yAxisId: 'left', x: MONTH_KEYS[CURRENT_MONTH_IDX] } as any)}
+                stroke="#94a3b8"
+                strokeDasharray="5 3"
+                strokeWidth={1.5}
+                label={{ value: 'Projetado ›', position: 'insideTopRight', fill: '#94a3b8', fontSize: 10, fontWeight: 600 }}
+              />
+            )}
 
             <Bar
               yAxisId="left"
@@ -231,14 +272,21 @@ export function EvoluçaoMensalChart({
               onClick={(data) => onMonthClick(data.month)}
               cursor="pointer"
             >
-              {data.map((_entry, index) => (
-                <Cell
-                  key={`cell-entradas-${index}`}
-                  fill="#10b981"
-                  fillOpacity={activeIndex === null || activeIndex == index ? 1 : 0.3}
-                  cursor="pointer"
-                />
-              ))}
+              {displayData.map((_entry, index) => {
+                const isProj = index >= CURRENT_MONTH_IDX;
+                const isActive = activeIndex === null || activeIndex === index;
+                return (
+                  <Cell
+                    key={`cell-entradas-${index}`}
+                    fill="#10b981"
+                    fillOpacity={isProj ? (isActive ? 0.38 : 0.18) : (isActive ? 1 : 0.3)}
+                    stroke={isProj ? '#10b981' : 'none'}
+                    strokeWidth={isProj ? 1.5 : 0}
+                    strokeDasharray={isProj ? '4 2' : undefined}
+                    cursor="pointer"
+                  />
+                );
+              })}
             </Bar>
             <Bar
               yAxisId="left"
@@ -253,14 +301,21 @@ export function EvoluçaoMensalChart({
               onClick={(data) => onMonthClick(data.month)}
               cursor="pointer"
             >
-              {data.map((_entry, index) => (
-                <Cell
-                  key={`cell-saidas-${index}`}
-                  fill="#ef4444"
-                  fillOpacity={activeIndex === null || activeIndex == index ? 1 : 0.3}
-                  cursor="pointer"
-                />
-              ))}
+              {displayData.map((_entry, index) => {
+                const isProj = index >= CURRENT_MONTH_IDX;
+                const isActive = activeIndex === null || activeIndex === index;
+                return (
+                  <Cell
+                    key={`cell-saidas-${index}`}
+                    fill="#ef4444"
+                    fillOpacity={isProj ? (isActive ? 0.38 : 0.18) : (isActive ? 1 : 0.3)}
+                    stroke={isProj ? '#ef4444' : 'none'}
+                    strokeWidth={isProj ? 1.5 : 0}
+                    strokeDasharray={isProj ? '4 2' : undefined}
+                    cursor="pointer"
+                  />
+                );
+              })}
             </Bar>
             <Line
               yAxisId="right"
@@ -269,6 +324,7 @@ export function EvoluçaoMensalChart({
               name="Saldo Acumulado"
               stroke="#3b82f6"
               strokeWidth={3}
+              connectNulls={false}
               dot={{ r: 4, fill: '#3b82f6', strokeWidth: 2, stroke: '#fff', cursor: 'pointer', onClick: (_: any, payload: any) => onMonthClick(payload.payload.month) }}
               activeDot={{ r: 6, fill: '#3b82f6', strokeWidth: 0, cursor: 'pointer', onClick: (_: any, payload: any) => onMonthClick(payload.payload.month) }}
               animationDuration={2500}

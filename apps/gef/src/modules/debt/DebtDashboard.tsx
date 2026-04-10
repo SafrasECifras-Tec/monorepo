@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { GlassCard, TabNav } from '@socios/ui';
 import { cn } from '@/lib/utils';
 import { formatCurrency } from '@/lib/formatters';
@@ -63,6 +63,18 @@ export function DebtDashboard() {
   const hasImportedData = !!importedData.endividamento;
   const endividamentoData = useEndividamentoData();
   const parcelas = endividamentoData?.parcelas ?? [];
+
+  const [isNavSticky, setIsNavSticky] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsNavSticky(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '-1px 0px 0px 0px' },
+    );
+    if (sentinelRef.current) observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const [activeTab,         setActiveTab]         = useState('inicio');
   const [selectedAno,       setSelectedAno]       = useState('Todos');
@@ -198,56 +210,71 @@ export function DebtDashboard() {
       }));
   }, [filteredParcelas, analisarPorInicio]);
 
-  // ─── Endividamento por Safra — chart data derivado das parcelas filtradas ────
+  // ─── Período atual (safra e ano) ─────────────────────────────────────────────
+  const { currentSafra, currentAno } = useMemo(() => {
+    const now   = new Date();
+    const month = now.getMonth();
+    const year  = now.getFullYear();
+    const safra = month >= 6
+      ? `${year}/${String(year + 1).slice(-2)}`
+      : `${year - 1}/${String(year).slice(-2)}`;
+    return { currentSafra: safra, currentAno: String(year) };
+  }, []);
+
+  // ─── Endividamento por Safra — atual em diante, agrupado por Safra ou Ano ────
   const endividamentoPorSafraChartData = useMemo((): EndividamentoPorSafraItem[] => {
     if (!filteredParcelas.length) return [];
     const grouped = new Map<string, { custeios: number; investimentos: number; investimentosDolar: number }>();
     filteredParcelas.forEach(p => {
-      const safra = mesAnoToSafra(p.mesAno);
-      const g = grouped.get(safra) ?? { custeios: 0, investimentos: 0, investimentosDolar: 0 };
+      const key = analisarPorInicio === 'Safra' ? mesAnoToSafra(p.mesAno) : mesAnoToAno(p.mesAno);
+      // Apenas safra/ano atual em diante
+      if (analisarPorInicio === 'Safra' ? key < currentSafra : key < currentAno) return;
+      const g = grouped.get(key) ?? { custeios: 0, investimentos: 0, investimentosDolar: 0 };
       const tipoLower = p.tipo.toLowerCase();
       if (tipoLower.includes('custeio')) g.custeios += p.total;
       else g.investimentos += p.total;
-      grouped.set(safra, g);
+      grouped.set(key, g);
     });
     return [...grouped.entries()]
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([safra, g]) => ({
-        safra: `Safra ${safra}`,
+      .map(([key, g]) => ({
+        safra: analisarPorInicio === 'Safra' ? `Safra ${key}` : key,
         custeios: g.custeios,
         investimentos: g.investimentos,
         investimentosDolar: g.investimentosDolar,
         total: g.custeios + g.investimentos + g.investimentosDolar,
       }));
-  }, [filteredParcelas]);
+  }, [filteredParcelas, analisarPorInicio, currentSafra, currentAno]);
 
-  // ─── Histórico do Endividamento — chart data derivado de TODAS as parcelas ───
+  // ─── Histórico do Endividamento — passado até atual, agrupado por Safra ou Ano
   const historicoChartData = useMemo((): HistoricoEndividamentoItem[] => {
     if (!parcelas.length) return [];
     const grouped = new Map<string, { compraDeTerras: number; custeios: number; investimentos: number; investimentosDolar: number }>();
     parcelas.forEach(p => {
-      const ano = mesAnoToAno(p.mesAno);
-      const g = grouped.get(ano) ?? { compraDeTerras: 0, custeios: 0, investimentos: 0, investimentosDolar: 0 };
+      const key = analisarPorInicio === 'Safra' ? mesAnoToSafra(p.mesAno) : mesAnoToAno(p.mesAno);
+      // Apenas safra/ano atual e anteriores
+      if (analisarPorInicio === 'Safra' ? key > currentSafra : key > currentAno) return;
+      const g = grouped.get(key) ?? { compraDeTerras: 0, custeios: 0, investimentos: 0, investimentosDolar: 0 };
       const tipoLower = p.tipo.toLowerCase();
       if (tipoLower.includes('custeio')) g.custeios += p.total;
       else if (tipoLower.includes('fazenda') || tipoLower.includes('terra')) g.compraDeTerras += p.total;
       else g.investimentos += p.total;
-      grouped.set(ano, g);
+      grouped.set(key, g);
     });
     return [...grouped.entries()]
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([ano, g]) => ({
-        data: ano,
+      .map(([key, g]) => ({
+        data: key,
         compraDeTerras: g.compraDeTerras,
         custeios: g.custeios,
         investimentos: g.investimentos,
         investimentosDolar: g.investimentosDolar,
         total: g.compraDeTerras + g.custeios + g.investimentos + g.investimentosDolar,
       }));
-  }, [parcelas]);
+  }, [parcelas, analisarPorInicio, currentSafra, currentAno]);
 
   return (
-    <div className="flex flex-col h-full space-y-6">
+    <div className="flex flex-col space-y-6 pb-6">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-foreground tracking-tight">Endividamento</h1>
@@ -260,19 +287,30 @@ export function DebtDashboard() {
         />
       </header>
 
+      {/* Sentinel para detectar scroll */}
+      <div ref={sentinelRef} className="h-px -mt-6" />
+
       {/* Tabs + Filters */}
-      <div className="flex flex-col gap-3 2xl:flex-row 2xl:items-end 2xl:justify-between">
-        {/* Linha 1 / esquerda em 2xl: Tab nav */}
-        <TabNav tabs={TABS} activeTab={activeTab} onChange={setActiveTab} />
+      <div className={cn(
+        'flex flex-row items-center justify-between gap-4 sticky top-0 z-40 transition-all duration-300 rounded-2xl',
+        isNavSticky
+          ? 'backdrop-blur-xl bg-white/90 border border-slate-200/60 shadow-lg shadow-slate-100/30 -mx-2 px-5 py-3'
+          : 'py-0'
+      )}>
+        {/* Linha 1 / esquerda: Tab nav */}
+        <div className="flex flex-col gap-1.5">
+          {isNavSticky && <span className="text-sm font-medium text-muted-foreground">Endividamento</span>}
+          <TabNav tabs={TABS} activeTab={activeTab} onChange={setActiveTab} />
+        </div>
 
         {/* Linha 2: Filtros */}
         <DebtFilters
           activeTab={activeTab}
           analisarPorInicio={analisarPorInicio} setAnalisarPorInicio={setAnalisarPorInicio}
           analisarPor={analisarPor}             setAnalisarPor={setAnalisarPor}
-          selectedAno={selectedAno}             setSelectedAno={setSelectedAno}
+          selectedAno={selectedAno}             setSelectedAno={(v) => { setSelectedAno(v); if (v !== 'Todos') setSelectedSafra('Todas'); }}
           anosOptions={anosOptions}
-          selectedSafra={selectedSafra}         setSelectedSafra={setSelectedSafra}
+          selectedSafra={selectedSafra}         setSelectedSafra={(v) => { setSelectedSafra(v); if (v !== 'Todas') setSelectedAno('Todos'); }}
           safrasOptions={safrasOptions}
           selectedBanco={selectedBanco}         setSelectedBanco={setSelectedBanco}
           bancosOptions={bancosOptions}
@@ -340,7 +378,7 @@ export function DebtDashboard() {
         {activeTab === 'inicio' && (
           <motion.div key="inicio" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="flex flex-col gap-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <EndividamentoPorSafraChart data={endividamentoPorSafraChartData} currencyMode={currencyMode} sojaPrice={sojaPrice} />
+              <EndividamentoPorSafraChart data={endividamentoPorSafraChartData} currencyMode={currencyMode} sojaPrice={sojaPrice} viewMode={analisarPorInicio} />
 
               {/* Valores por Horizonte */}
               <GlassCard className="p-6 flex flex-col hover:shadow-float transition-all duration-300">
@@ -371,7 +409,7 @@ export function DebtDashboard() {
               </GlassCard>
             </div>
 
-            <HistoricoEndividamentoChart data={historicoChartData} currencyMode={currencyMode} sojaPrice={sojaPrice} />
+            <HistoricoEndividamentoChart data={historicoChartData} currencyMode={currencyMode} sojaPrice={sojaPrice} viewMode={analisarPorInicio} />
 
             <DebtSafraTable data={filteredIndicatorsData} currencyMode={currencyMode} />
           </motion.div>

@@ -17,10 +17,10 @@ export function MainLayout({ children, activeModule, onNavigate }: MainLayoutPro
         } as React.CSSProperties
       }
     >
-      <div className="min-h-screen w-full bg-transparent px-3 py-4">
-        <div className="mx-auto flex w-full max-w-[1720px] gap-4">
+      <div className="h-screen w-full bg-transparent px-3 py-4 overflow-hidden">
+        <div className="mx-auto flex w-full max-w-[1720px] h-full gap-4">
           <AppSidebar activeModule={activeModule} onNavigate={onNavigate} />
-          <main className="flex-1 min-w-0 rounded-[2rem] border border-border/70 bg-card p-6 shadow-card overflow-auto lg:p-7">
+          <main className="flex-1 min-w-0 max-h-[calc(100vh-2rem)] rounded-[2rem] border border-border/70 bg-card p-6 shadow-card overflow-y-auto lg:p-7">
             {children}
           </main>
         </div>

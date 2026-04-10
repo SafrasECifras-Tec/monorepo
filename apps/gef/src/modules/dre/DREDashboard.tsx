@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid,
@@ -51,8 +51,8 @@ const DRE_TABS = [
 
 // ── Sub-components ───────────────────────────────────────────────────────────
 
-function KpiCard({ label, value, sub, trend, delay = 0 }: {
-  label: string; value: string; sub?: string;
+function KpiCard({ label, value, sub, tooltip, trend, delay = 0 }: {
+  label: string; value: string; sub?: string; tooltip?: string;
   trend?: { value: number; label: string }; delay?: number;
 }) {
   const up = trend && trend.value > 0;
@@ -61,7 +61,12 @@ function KpiCard({ label, value, sub, trend, delay = 0 }: {
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay }}>
       <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-float transition-all duration-300 h-full">
         <span className="text-[14px] font-semibold text-slate-500 uppercase tracking-wider">{label}</span>
-        <span className="text-[24px] font-black text-slate-800 leading-tight">{value}</span>
+        <span
+          className={cn('text-[24px] font-black text-slate-800 leading-tight', tooltip && 'cursor-help')}
+          title={tooltip}
+        >
+          {value}
+        </span>
         {sub && <span className="text-xs text-slate-400">{sub}</span>}
         {trend && (
           <div className={cn(
@@ -121,12 +126,12 @@ function InicioTab({ safraAtual, dreDataRecord, safras }: { safraAtual: string; 
         <KpiCard label="Área Plantada" value={`${fmtNum(data.areaTotal)} ha`}
           trend={trendArea ? { value: trendArea, label: 'vs safra ant.' } : undefined} delay={0} />
         <KpiCard label="Produção Total" value={`${fmtNum(data.producaoTotal)} sc`}
-          sub={`${fmtNum(data.producaoTotal * 60)} kg`}
+          tooltip={`${fmtNum(data.producaoTotal * 60)} kg`}
           trend={trendProd ? { value: trendProd, label: 'vs safra ant.' } : undefined} delay={0.05} />
         <KpiCard label="Produtividade Média" value={`${data.produtividadeMedia.toFixed(1)} sc/ha`}
           trend={trendProd ? { value: trendProd, label: 'vs safra ant.' } : undefined} delay={0.1} />
         <KpiCard label="Preço Médio de Venda" value={`R$ ${data.precoMedioVenda.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/sc`}
-          sub={`Total: ${fmtCompact(data.receitaBruta)}`} delay={0.15} />
+          tooltip={`Total: ${fmtCompact(data.receitaBruta)}`} delay={0.15} />
       </div>
 
     </div>
@@ -242,6 +247,17 @@ export function DREDashboard() {
   const [fazenda, setFazenda] = useState<string>('Todas');
   const [selectedAtividade, setSelectedAtividade] = useState<string>('Todas');
   const [activeTab, setActiveTab] = useState('inicio');
+  const [isNavSticky, setIsNavSticky] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsNavSticky(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '-1px 0px 0px 0px' },
+    );
+    if (sentinelRef.current) observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const atividadeOptions = atividadesRaw ?? [];
 
@@ -300,9 +316,20 @@ export function DREDashboard() {
         />
       </header>
 
+      {/* Sentinel para detectar quando o nav sai do viewport */}
+      <div ref={sentinelRef} className="h-px -mt-6" />
+
       {/* Tab navigation + Filtros */}
-      <div className="flex flex-row items-end justify-between gap-4">
-        <TabNav tabs={DRE_TABS} activeTab={activeTab} onChange={setActiveTab} />
+      <div className={cn(
+        'flex flex-row items-center justify-between gap-4 sticky top-0 z-40 transition-all duration-300 rounded-2xl',
+        isNavSticky
+          ? 'backdrop-blur-xl bg-white/90 border border-slate-200/60 shadow-lg shadow-slate-100/30 -mx-2 px-5 py-3'
+          : 'py-0'
+      )}>
+        <div className="flex flex-col gap-1.5">
+          {isNavSticky && <span className="text-sm font-medium text-muted-foreground">DRE</span>}
+          <TabNav tabs={DRE_TABS} activeTab={activeTab} onChange={setActiveTab} />
+        </div>
         <div className="flex items-end gap-4">
           {fazendaOptions.length > 0 && (
             <div className="flex flex-col gap-1.5">

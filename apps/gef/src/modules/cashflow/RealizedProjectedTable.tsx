@@ -239,11 +239,12 @@ export function RealizedProjectedTable({
       limit = Math.min(12, currentMonthIndex + 4); // Current + 3 months
     }
 
-    const realizedValues = values.slice(0, currentMonthIndex + 1);
+    // Mês atual é projetado — média calculada apenas com meses anteriores
+    const realizedValues = values.slice(0, currentMonthIndex);
     const sum = realizedValues.reduce((a, b) => a + b, 0);
-    const avg = sum / realizedValues.length;
+    const avg = realizedValues.length > 0 ? sum / realizedValues.length : 0;
 
-    for (let i = currentMonthIndex + 1; i < limit; i++) {
+    for (let i = currentMonthIndex; i < limit; i++) {
       values[i] = avg;
     }
 
@@ -326,7 +327,7 @@ export function RealizedProjectedTable({
       layout
       transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       className={cn(
-        "overflow-hidden border-slate-200/60 bg-white/80 shadow-xl flex flex-col rounded-2xl",
+        "overflow-hidden border border-slate-200/60 bg-white/80 shadow-xl flex flex-col rounded-2xl",
         isFullscreen
           ? "fixed inset-2 z-50 rounded-xl shadow-2xl"
           : "h-full"
@@ -502,7 +503,7 @@ export function RealizedProjectedTable({
                   className={cn(
                     'py-3 px-2 text-right font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap',
                     isFullscreen ? "" : "min-w-[100px]",
-                    viewMode === 'monthly' && i > currentMonthIndex ? 'bg-blue-50/50' : 'bg-slate-50'
+                    viewMode === 'monthly' && i >= currentMonthIndex ? 'bg-blue-50/50' : 'bg-slate-50'
                   )}
                 >
                   <div className="flex flex-col items-end gap-1">
@@ -544,7 +545,7 @@ export function RealizedProjectedTable({
                       title={formatFullValue(val, currencyMode)}
                       className={cn(
                         'py-3 px-2 text-right font-bold border-r border-b border-slate-100 font-mono whitespace-nowrap',
-                        viewMode === 'monthly' && i > currentMonthIndex ? 'bg-blue-50/20' : ''
+                        viewMode === 'monthly' && i >= currentMonthIndex ? 'bg-blue-50/20' : ''
                       )}
                     >
                       {formatValue(val, currencyMode)}
@@ -595,18 +596,25 @@ export function RealizedProjectedTable({
                             <span>{child.name}</span>
                           </div>
                           <div className="flex items-center gap-0.5">
-                            {master.name === 'ENTRADAS' && /^Venda de /i.test(child.name) && (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setSelectedCrop(child.name.replace(/^Venda de\s+/i, ''));
-                                }}
-                                className="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-md opacity-0 group-hover/row:opacity-100 transition-all cursor-pointer"
-                                title="Ver Estoque"
-                              >
-                                <Warehouse className="h-3.5 w-3.5" />
-                              </button>
-                            )}
+                            {master.name === 'ENTRADAS' && !child.isSubMaster && (() => {
+                              // Ordena por nome mais longo primeiro para "Milho Safrinha" ter precedência sobre "Milho"
+                              const sorted = [...stockData].sort((a, b) => b.name.length - a.name.length);
+                              const matched = sorted.find(s =>
+                                child.name.toLowerCase().includes(s.name.toLowerCase())
+                              );
+                              return matched ? (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setSelectedCrop(matched.name);
+                                  }}
+                                  className="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-md opacity-0 group-hover/row:opacity-100 transition-all cursor-pointer"
+                                  title="Ver Estoque"
+                                >
+                                  <Warehouse className="h-3.5 w-3.5" />
+                                </button>
+                              ) : null;
+                            })()}
                           </div>
                         </td>
                         {child.values.map((val, i) => {
@@ -614,7 +622,7 @@ export function RealizedProjectedTable({
 
                           const isOperatingExpenseCell = master.name === 'SAÍDAS' && currentSubMasterName === 'Operação';
                           const isRestrictedCategoryCell = master.name === 'ENTRADAS' || (master.name === 'SAÍDAS' && !isOperatingExpenseCell);
-                          const isBeyondAutoLimit = isRestrictedCategoryCell && i > currentMonthIndex + 3;
+                          const isBeyondAutoLimit = isRestrictedCategoryCell && i >= currentMonthIndex + 3;
 
                           const canEdit = !child.isSubMaster && (viewMode === 'annual' || i >= currentMonthIndex);
 
@@ -625,7 +633,7 @@ export function RealizedProjectedTable({
                               className={cn(
                                 'py-3 px-2 text-right border-r border-b border-slate-50 font-mono relative transition-colors duration-500 whitespace-nowrap',
                                 child.isSubMaster ? 'font-bold text-slate-700' : 'text-slate-600',
-                                viewMode === 'monthly' && i > currentMonthIndex ? 'bg-blue-50/10' : '',
+                                viewMode === 'monthly' && i >= currentMonthIndex ? 'bg-blue-50/10' : '',
                                 isBeyondAutoLimit ? 'bg-slate-50/30' : '',
                                 highlightedCell?.masterIdx === masterIdx && highlightedCell?.childIdx === childIdx && highlightedCell?.colIdx === i ? 'bg-emerald-100/80' : ''
                               )}
@@ -661,17 +669,17 @@ export function RealizedProjectedTable({
             ))}
           </tbody>
 
-          <tfoot className="sticky bottom-0 z-40 bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+          <tfoot className="sticky bottom-0 z-40 bg-white">
             {/* Saldo Inicial */}
             <tr className="text-slate-800">
-              <td className="sticky left-0 z-50 bg-slate-50 py-3 px-3 font-semibold border-r border-t-2 border-t-emerald-600 border-r-slate-200">
+              <td className="sticky left-0 z-50 bg-slate-50 py-3 px-3 font-semibold border-r border-t-2 border-t-slate-300 border-r-slate-200">
                 Saldo Inicial
               </td>
               {saldoInicialMensal.map((val, i) => visibleColumns[i] && (
                 <td
                   key={i}
                   title={formatFullValue(val, currencyMode)}
-                  className="py-3 px-2 text-right font-semibold border-r border-t-2 border-t-emerald-600 border-r-slate-200 font-mono bg-slate-50 relative text-slate-700 whitespace-nowrap"
+                  className="py-3 px-2 text-right font-semibold border-r border-t-2 border-t-slate-300 border-r-slate-200 font-mono bg-slate-50 relative text-slate-700 whitespace-nowrap"
                 >
                   <EditableCell
                     value={val}
@@ -683,7 +691,7 @@ export function RealizedProjectedTable({
               ))}
               <td
                 title={formatFullValue(saldoInicialMensal[0], currencyMode)}
-                className="py-3 px-2 text-right font-semibold bg-slate-200 border-t-2 border-t-emerald-600 font-mono text-slate-800 whitespace-nowrap"
+                className="py-3 px-2 text-right font-semibold bg-slate-200 border-t-2 border-t-slate-300 font-mono text-slate-800 whitespace-nowrap"
               >
                 {formatValue(saldoInicialMensal[0], currencyMode)}
               </td>
@@ -691,7 +699,7 @@ export function RealizedProjectedTable({
             {/* Variação de Caixa */}
             <tr className="text-slate-800">
               <td className="sticky left-0 z-50 bg-slate-50 py-3 px-3 font-semibold border-r border-t border-slate-200">
-                Variação de Caixa (Mensal)
+                Variação de Caixa ({viewMode === 'monthly' ? 'Mensal' : 'Anual'})
               </td>
               {variacaoCaixa.map((val, i) => visibleColumns[i] && (
                 <td

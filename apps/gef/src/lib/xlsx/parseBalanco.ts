@@ -39,6 +39,7 @@ function buildTree(flat: BalanceTableRow[]): BalanceTableRow[] {
 // Colunas estruturais que nunca são colunas de valor
 const FIXED_COLS = new Set([
   'Grupo', 'grupo', 'Subgrupo', 'subgrupo', 'Item', 'item',
+  'Fazenda', 'fazenda',
   'id', 'name', 'level',
 ]);
 
@@ -117,6 +118,7 @@ function parseSheetNovo(wb: XLSX.WorkBook, sheetName: string): { rows: BalanceTa
     const grupo    = String(r['Grupo']    ?? r['grupo']    ?? '').trim();
     const subgrupo = String(r['Subgrupo'] ?? r['subgrupo'] ?? '').trim();
     const item     = String(r['Item']     ?? r['item']     ?? '').trim();
+    const fazenda  = String(r['Fazenda']  ?? r['fazenda']  ?? '').trim() || undefined;
 
     if (!grupo) return; // pular linhas sem grupo
 
@@ -131,6 +133,7 @@ function parseSheetNovo(wb: XLSX.WorkBook, sheetName: string): { rows: BalanceTa
       id,
       name: nome,
       level,
+      fazenda,
       // Mapeia cada coluna detectada → valor numérico (0 se ausente)
       values: columns.map(col => Number(r[col]) || 0),
     });
@@ -160,7 +163,19 @@ function parseSheet(wb: XLSX.WorkBook, sheetName: string): { rows: BalanceTableR
 
 // ─── Export ───────────────────────────────────────────────────────────────────
 
-export function parseBalanco(wb: XLSX.WorkBook): { columns: string[]; ativo: BalanceTableRow[]; passivo: BalanceTableRow[] } {
+function collectFazendas(rows: BalanceTableRow[]): string[] {
+  const seen = new Set<string>();
+  function walk(list: BalanceTableRow[]) {
+    for (const r of list) {
+      if (r.fazenda) seen.add(r.fazenda);
+      if (r.children) walk(r.children);
+    }
+  }
+  walk(rows);
+  return [...seen].sort();
+}
+
+export function parseBalanco(wb: XLSX.WorkBook): { columns: string[]; fazendas: string[]; ativo: BalanceTableRow[]; passivo: BalanceTableRow[] } {
   const ativo   = parseSheet(wb, 'Ativo');
   const passivo = parseSheet(wb, 'Passivo');
 
@@ -168,5 +183,10 @@ export function parseBalanco(wb: XLSX.WorkBook): { columns: string[]; ativo: Bal
   // Em caso de divergência, mantém a união das duas para não perder dados
   const allCols = [...new Set([...ativo.columns, ...passivo.columns])];
 
-  return { columns: allCols, ativo: ativo.rows, passivo: passivo.rows };
+  const fazendas = [...new Set([
+    ...collectFazendas(ativo.rows),
+    ...collectFazendas(passivo.rows),
+  ])].sort();
+
+  return { columns: allCols, fazendas, ativo: ativo.rows, passivo: passivo.rows };
 }

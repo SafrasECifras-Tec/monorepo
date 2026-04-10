@@ -331,16 +331,16 @@ function ComercializacaoTable({ data }: { data: SafraImportData }) {
             </tbody>
 
             {/* ── Footer sticky dentro da tabela ── */}
-            <tfoot className="sticky bottom-0 z-40">
+            <tfoot className="sticky bottom-0 z-40 shadow-[0_-2px_0_0_#cbd5e1]">
               <tr className="font-bold text-slate-700 text-sm">
-                <td className="sticky left-0 z-50 bg-slate-300 py-3.5 px-4 text-left whitespace-nowrap border-t-2 border-r border-slate-400 min-w-[220px] font-bold">Total</td>
-                <td className="bg-slate-300 py-3.5 px-4 text-right font-mono font-bold whitespace-nowrap w-[140px] border-t-2 border-l border-slate-400">
+                <td className="sticky left-0 z-50 bg-white py-3.5 px-4 text-left whitespace-nowrap border-r border-slate-200 min-w-[220px] font-bold">Total</td>
+                <td className="bg-white py-3.5 px-4 text-right font-mono font-bold whitespace-nowrap w-[140px] border-l border-slate-100">
                   {fmtQtdNum(totalQtd)}
                 </td>
-                <td className="bg-slate-300 py-3.5 px-4 text-right font-mono font-bold whitespace-nowrap w-[140px] border-t-2 border-l border-slate-400">
+                <td className="bg-white py-3.5 px-4 text-right font-mono font-bold whitespace-nowrap w-[140px] border-l border-slate-100">
                   {fmtPrecoNum(totalPreco)}
                 </td>
-                <td className="bg-slate-300 py-3.5 px-4 text-right font-mono font-bold whitespace-nowrap border-t-2 border-l border-slate-400">
+                <td className="bg-white py-3.5 px-4 text-right font-mono font-bold whitespace-nowrap border-l border-slate-100">
                   {fmtBRLNum(totalValor)}
                 </td>
               </tr>

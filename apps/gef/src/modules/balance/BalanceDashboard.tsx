@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useBalancoData } from '@/hooks/useBalancoData';
 import { useImportedData } from '@/contexts/ImportDataContext';
+import type { BalanceTableRow } from '@/contexts/ImportDataContext';
 import { useUniversalImport } from '@/hooks/useUniversalImport';
 import { ImportButton } from '@/components/ui/ImportButton';
 import { EmptyDataState } from '@/components/ui/EmptyDataState';
@@ -14,19 +15,53 @@ import { BalanceAtivoTab } from './BalanceAtivoTab';
 import { BalancePassivoTab } from './BalancePassivoTab';
 import { BalanceIndicadoresTab } from './BalanceIndicadoresTab';
 
+// Filtra a árvore por fazenda — linhas sem fazenda (grupos/subgrupos) sempre passam
+function filterTree(rows: BalanceTableRow[], fazenda: string): BalanceTableRow[] {
+  if (fazenda === 'Todas') return rows;
+  return rows.reduce<BalanceTableRow[]>((acc, row) => {
+    if (row.children) {
+      const filteredChildren = filterTree(row.children, fazenda);
+      if (filteredChildren.length > 0) acc.push({ ...row, children: filteredChildren });
+    } else if (!row.fazenda || row.fazenda === fazenda) {
+      acc.push(row);
+    }
+    return acc;
+  }, []);
+}
+
 export function BalanceDashboard() {
   const balancoData = useBalancoData();
-  const importedAtivo   = balancoData?.ativo   ?? null;
-  const importedPassivo = balancoData?.passivo ?? null;
-  const columns = balancoData?.columns ?? [];
   const { data: importedData } = useImportedData();
   const { isLoading: importLoading, openFilePicker } = useUniversalImport();
   const hasImportedData = !!importedData.balanco;
+
+  const columns  = balancoData?.columns  ?? [];
+  const fazendas = balancoData?.fazendas ?? [];
 
   const [activeTab, setActiveTab] = useState('inicio');
   const [selectedFazenda, setSelectedFazenda] = useState('Todas');
   const [selectedAvaliacao, setSelectedAvaliacao] = useState('');
   const [viewMode, setViewMode] = useState('Detalhamento');
+  const [isNavSticky, setIsNavSticky] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsNavSticky(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '-1px 0px 0px 0px' },
+    );
+    if (sentinelRef.current) observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const importedAtivo   = React.useMemo(
+    () => balancoData ? filterTree(balancoData.ativo,   selectedFazenda) : null,
+    [balancoData, selectedFazenda],
+  );
+  const importedPassivo = React.useMemo(
+    () => balancoData ? filterTree(balancoData.passivo, selectedFazenda) : null,
+    [balancoData, selectedFazenda],
+  );
 
   // Sincroniza selectedAvaliacao quando as colunas carregam/mudam
   React.useEffect(() => {
@@ -53,70 +88,81 @@ export function BalanceDashboard() {
         />
       </header>
 
+      {/* Sentinel para detectar scroll */}
+      <div ref={sentinelRef} className="h-px -mt-4" />
+
       {/* Controls Row: Tabs + Filters */}
-      <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-4 xl:gap-6">
-        {/* Tabs Navigation */}
-        <TabNav
-          tabs={[
-            { id: 'inicio', label: 'Início' },
-            { id: 'ativo', label: 'Ativo' },
-            { id: 'passivo', label: 'Passivo' },
-            { id: 'indicadores', label: 'Indicadores' },
-          ]}
-          activeTab={activeTab}
-          onChange={setActiveTab}
-        />
-
-        {/* Filters */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap items-end gap-3 xl:gap-6 w-full xl:w-auto">
-          {/* View Mode Filter (Only for Ativo and Passivo) */}
-          {(activeTab === 'ativo' || activeTab === 'passivo') && (
-            <div className="flex flex-col gap-1.5 w-full lg:w-auto">
-              <span className="text-sm font-medium text-muted-foreground">Visualização:</span>
-              <Select value={viewMode} onValueChange={setViewMode}>
-                <SelectTrigger className="h-10 w-full lg:w-48 rounded-xl border-border/60 bg-background/70 text-sm shadow-soft">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="rounded-xl">
-                  <SelectItem value="Detalhamento">Detalhamento</SelectItem>
-                  <SelectItem value="Tabela">Tabela</SelectItem>
-                  <SelectItem value="Árvore Hierárquica">Árvore Hierárquica</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-
-          {/* Fazenda Filter */}
-          <div className="flex flex-col gap-1.5 w-full lg:w-auto">
-            <span className="text-sm font-medium text-muted-foreground">Fazenda:</span>
-            <Select value={selectedFazenda} onValueChange={setSelectedFazenda}>
-              <SelectTrigger className="h-10 w-full lg:w-48 rounded-xl border-border/60 bg-background/70 text-sm shadow-soft">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="rounded-xl">
-                <SelectItem value="Todas">Todas</SelectItem>
-                <SelectItem value="Fazenda Boa Vista">Fazenda Boa Vista</SelectItem>
-                <SelectItem value="Fazenda São João">Fazenda São João</SelectItem>
-                <SelectItem value="Fazenda Santa Rita">Fazenda Santa Rita</SelectItem>
-              </SelectContent>
-            </Select>
+      <div className={cn(
+        'flex flex-row items-center justify-between gap-4 xl:gap-6 sticky top-0 z-40 transition-all duration-300 rounded-2xl',
+        isNavSticky
+          ? 'backdrop-blur-xl bg-white/90 border border-slate-200/60 shadow-lg shadow-slate-100/30 -mx-2 px-5 py-3'
+          : 'py-0'
+      )}>
+          {/* Tabs Navigation */}
+          <div className="flex flex-col gap-1.5">
+            {isNavSticky && <span className="text-sm font-medium text-muted-foreground">Balanço Patrimonial</span>}
+            <TabNav
+              tabs={[
+                { id: 'inicio', label: 'Início' },
+                { id: 'ativo', label: 'Ativo' },
+                { id: 'passivo', label: 'Passivo' },
+                { id: 'indicadores', label: 'Indicadores' },
+              ]}
+              activeTab={activeTab}
+              onChange={setActiveTab}
+            />
           </div>
 
-          {/* Avaliação Filter — populado dinamicamente pelas colunas importadas */}
-          {columns.length > 0 && (
-            <div className="flex flex-col gap-1.5 w-full lg:w-auto">
-              <span className="text-sm font-medium text-muted-foreground">Coluna:</span>
-              <Select value={selectedAvaliacao} onValueChange={setSelectedAvaliacao}>
-                <SelectTrigger className="h-10 w-full lg:w-48 rounded-xl border-border/60 bg-background/70 text-sm shadow-soft">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="rounded-xl">
-                  {columns.map(col => <SelectItem key={col} value={col}>{col}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-        </div>
+          {/* Filters */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap items-end gap-3 xl:gap-6 w-full xl:w-auto">
+            {/* View Mode Filter (Only for Ativo and Passivo) */}
+            {(activeTab === 'ativo' || activeTab === 'passivo') && (
+              <div className="flex flex-col gap-1.5 w-full lg:w-auto">
+                <span className="text-sm font-medium text-muted-foreground">Visualização:</span>
+                <Select value={viewMode} onValueChange={setViewMode}>
+                  <SelectTrigger className="h-10 w-full lg:w-48 rounded-xl border-border/60 bg-background/70 text-sm shadow-soft">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl">
+                    <SelectItem value="Detalhamento">Detalhamento</SelectItem>
+                    <SelectItem value="Tabela">Tabela</SelectItem>
+                    <SelectItem value="Árvore Hierárquica">Árvore Hierárquica</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {/* Fazenda Filter — apenas se a planilha tiver coluna Fazenda */}
+            {fazendas.length > 0 && (
+              <div className="flex flex-col gap-1.5 w-full lg:w-auto">
+                <span className="text-sm font-medium text-muted-foreground">Fazenda:</span>
+                <Select value={selectedFazenda} onValueChange={setSelectedFazenda}>
+                  <SelectTrigger className="h-10 w-full lg:w-48 rounded-xl border-border/60 bg-background/70 text-sm shadow-soft">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl">
+                    <SelectItem value="Todas">Todas</SelectItem>
+                    {fazendas.map(f => <SelectItem key={f} value={f}>{f}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {/* Avaliação Filter — populado dinamicamente pelas colunas importadas */}
+            {columns.length > 0 && (
+              <div className="flex flex-col gap-1.5 w-full lg:w-auto">
+                <span className="text-sm font-medium text-muted-foreground">Avaliação:</span>
+                <Select value={selectedAvaliacao} onValueChange={setSelectedAvaliacao}>
+                  <SelectTrigger className="h-10 w-full lg:w-48 rounded-xl border-border/60 bg-background/70 text-sm shadow-soft">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl">
+                    {[...columns].sort((a, b) => a.localeCompare(b, 'pt-BR')).map(col => <SelectItem key={col} value={col}>{col}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          </div>
       </div>
 
       {/* Empty state */}
@@ -132,7 +178,7 @@ export function BalanceDashboard() {
       {/* Tab Content */}
       <AnimatePresence mode="wait">
         {hasImportedData && activeTab === 'inicio' && (
-          <motion.div 
+          <motion.div
             key="inicio"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}

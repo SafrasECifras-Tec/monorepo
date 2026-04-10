@@ -99,11 +99,11 @@ function DesembolsoHaCard({ custoHa, custoHaSemArrend, delay = 0 }: {
   );
 }
 
-function KpiCard({ label, value, sub, trend, badge, invertTrend, delay = 0 }: {
-  label: string; value: string; sub?: string;
+function KpiCard({ label, value, tooltip, trend, badge, invertTrend, delay = 0 }: {
+  label: string; value: string; tooltip?: string;
   trend?: { value: number; label: string };
   badge?: { text: string; color: string };
-  invertTrend?: boolean; // custo subir é ruim
+  invertTrend?: boolean;
   delay?: number;
 }) {
   const raw = trend?.value ?? 0;
@@ -111,22 +111,34 @@ function KpiCard({ label, value, sub, trend, badge, invertTrend, delay = 0 }: {
   const isNegative = invertTrend ? raw > 0 : raw < 0;
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay }}>
-      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-float transition-all duration-300 h-full">
-        <span className="text-[14px] font-semibold text-slate-500 uppercase tracking-wider">{label}</span>
-        <span className="text-[24px] font-black text-slate-800 leading-tight">{value}</span>
-        {sub && <span className="text-xs text-slate-400">{sub}</span>}
-        {trend && (
-          <div className={cn('flex items-center gap-1 text-xs font-semibold mt-auto',
-            isPositive ? 'text-emerald-600' : isNegative ? 'text-red-500' : 'text-slate-400')}>
-            {raw > 0 ? <ArrowUpRight className="h-3.5 w-3.5" /> : raw < 0 ? <ArrowDownRight className="h-3.5 w-3.5" /> : <Minus className="h-3.5 w-3.5" />}
-            {raw > 0 ? '+' : ''}{raw.toFixed(1)}% {trend.label}
-          </div>
-        )}
+      <GlassCard className="group p-5 flex flex-col gap-2 hover:shadow-md transition-all duration-300 h-full">
+        <span className="text-[13px] font-bold text-slate-600 uppercase tracking-wider">{label}</span>
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-[26px] font-black text-slate-800 leading-tight">{value}</span>
+          {tooltip && (
+            <span className="text-[11px] font-medium bg-slate-800 text-white px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+              {tooltip}
+            </span>
+          )}
+        </div>
         {badge && (
-          <span className="px-2 py-0.5 rounded-full text-xs font-bold mt-auto self-start"
+          <span className="px-2 py-0.5 rounded-full text-xs font-bold self-start"
             style={{ backgroundColor: `${badge.color}20`, color: badge.color }}>
             {badge.text}
           </span>
+        )}
+        {trend && (
+          <div className="mt-auto pt-3 border-t border-slate-100 flex items-center gap-2">
+            <span className={cn(
+              'text-[10px] font-bold px-1.5 py-0.5 rounded-full',
+              isPositive ? 'bg-emerald-100 text-emerald-700'
+                         : isNegative ? 'bg-red-100 text-red-600'
+                                      : 'bg-slate-100 text-slate-500',
+            )}>
+              {raw > 0 ? '+' : ''}{raw.toFixed(1)}%
+            </span>
+            <span className="text-[11px] text-slate-500">{trend.label}</span>
+          </div>
         )}
       </GlassCard>
     </motion.div>
@@ -383,14 +395,14 @@ function CustoTable({ data }: { data: SafraImportData }) {
             </tbody>
 
             {/* Footer */}
-            <tfoot className="sticky bottom-0 z-40">
+            <tfoot className="sticky bottom-0 z-40 shadow-[0_-2px_0_0_#cbd5e1]">
               <tr className="font-bold text-slate-700 text-sm">
-                <td className="sticky left-0 z-50 bg-slate-300 py-3 px-4 whitespace-nowrap border-t-2 border-slate-400 min-w-[220px] text-left">Total</td>
-                <td className="bg-slate-300 py-3 px-4 text-right font-mono font-bold whitespace-nowrap w-[120px] border-t-2 border-l border-slate-400">—</td>
-                <td className="bg-slate-300 py-3 px-4 text-right font-mono font-bold whitespace-nowrap w-[120px] border-t-2 border-l border-slate-400">{fmtPe(pe(data.custoTotal))}</td>
-                <td className="bg-slate-300 py-3 px-4 text-right font-mono font-bold whitespace-nowrap w-[110px] border-t-2 border-l border-slate-400">{fmtHa(ha(data.custoTotal))}</td>
-                <td className="bg-slate-300 py-3 px-4 text-right font-mono font-bold whitespace-nowrap w-[110px] border-t-2 border-l border-slate-400">{fmtCompact(data.custoTotal)}</td>
-                <td className="bg-slate-300 py-3 px-4 text-right font-mono font-bold whitespace-nowrap border-t-2 border-l border-slate-400">—</td>
+                <td className="sticky left-0 z-50 bg-white py-3 px-4 whitespace-nowrap border-r border-slate-200 min-w-[220px] text-left">Total</td>
+                <td className="bg-white py-3 px-4 text-right font-mono font-bold whitespace-nowrap w-[120px] border-l border-slate-100">—</td>
+                <td className="bg-white py-3 px-4 text-right font-mono font-bold whitespace-nowrap w-[120px] border-l border-slate-100">{fmtPe(pe(data.custoTotal))}</td>
+                <td className="bg-white py-3 px-4 text-right font-mono font-bold whitespace-nowrap w-[110px] border-l border-slate-100">{fmtHa(ha(data.custoTotal))}</td>
+                <td className="bg-white py-3 px-4 text-right font-mono font-bold whitespace-nowrap w-[110px] border-l border-slate-100">{fmtCompact(data.custoTotal)}</td>
+                <td className="bg-white py-3 px-4 text-right font-mono font-bold whitespace-nowrap border-l border-slate-100">—</td>
               </tr>
             </tfoot>
           </table>
@@ -505,7 +517,7 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
         <KpiCard
           label="Desembolso Operacional"
           value={fmtCompact(data.custoTotal)}
-          sub={fmtBRL(data.custoTotal)}
+          tooltip={fmtBRL(data.custoTotal)}
           trend={trendCusto != null ? { value: trendCusto, label: 'vs safra ant.' } : undefined}
           invertTrend delay={0}
         />
@@ -514,7 +526,7 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
         <KpiCard
           label="Desembolso /ha"
           value={`R$ ${fmtNum(Math.round(custoHa))}/ha`}
-          sub={`Área: ${fmtNum(data.areaTotal)} ha`}
+          tooltip={`Área: ${fmtNum(data.areaTotal)} ha`}
           trend={trendCustoHa != null ? { value: trendCustoHa, label: 'vs safra ant.' } : undefined}
           invertTrend delay={0.05}
         />
@@ -523,7 +535,7 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
         <KpiCard
           label="Desembolso por Saca"
           value={`R$ ${(data.producaoTotal > 0 ? data.custoTotal / data.producaoTotal : 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/sc`}
-          sub={`Produção: ${fmtNum(data.producaoTotal)} sc`}
+          tooltip={`Produção: ${fmtNum(data.producaoTotal)} sc`}
           delay={0.1}
         />
 

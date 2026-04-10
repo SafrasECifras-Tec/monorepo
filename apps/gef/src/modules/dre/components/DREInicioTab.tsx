@@ -44,23 +44,35 @@ const fmtNum = (v: number) => v.toLocaleString('pt-BR');
 
 // ── KpiCard ───────────────────────────────────────────────────────────────────
 
-function KpiCard({ label, value, sub, trend, delay = 0 }: {
-  label: string; value: string; sub?: string;
+function KpiCard({ label, value, tooltip, trend, delay = 0 }: {
+  label: string; value: string; tooltip?: string;
   trend?: { value: number; label: string }; delay?: number;
 }) {
   const up   = trend && trend.value > 0;
   const down = trend && trend.value < 0;
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay }}>
-      <GlassCard className="p-5 flex flex-col gap-2 hover:shadow-float transition-all duration-300 h-full">
-        <span className="text-[14px] font-semibold text-slate-500 uppercase tracking-wider">{label}</span>
-        <span className="text-[24px] font-black text-slate-800 leading-tight">{value}</span>
-        {sub && <span className="text-xs text-slate-400">{sub}</span>}
+      <GlassCard className="group p-5 flex flex-col gap-2 hover:shadow-md transition-all duration-300 h-full">
+        <span className="text-[13px] font-bold text-slate-600 uppercase tracking-wider">{label}</span>
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-[26px] font-black text-slate-800 leading-tight">{value}</span>
+          {tooltip && (
+            <span className="text-[11px] font-medium bg-slate-800 text-white px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+              {tooltip}
+            </span>
+          )}
+        </div>
         {trend && (
-          <div className={cn('flex items-center gap-1 text-xs font-semibold mt-auto',
-            up ? 'text-emerald-600' : down ? 'text-red-500' : 'text-slate-400')}>
-            {up ? <ArrowUpRight className="h-3.5 w-3.5" /> : down ? <ArrowDownRight className="h-3.5 w-3.5" /> : <Minus className="h-3.5 w-3.5" />}
-            {trend.value > 0 ? '+' : ''}{trend.value.toFixed(1)}% {trend.label}
+          <div className="mt-auto pt-3 border-t border-slate-100 flex items-center gap-2">
+            <span className={cn(
+              'text-[10px] font-bold px-1.5 py-0.5 rounded-full',
+              up   ? 'bg-emerald-100 text-emerald-700'
+                   : down ? 'bg-red-100 text-red-600'
+                           : 'bg-slate-100 text-slate-500',
+            )}>
+              {trend.value > 0 ? '+' : ''}{trend.value.toFixed(1)}%
+            </span>
+            <span className="text-[11px] text-slate-500">{trend.label}</span>
           </div>
         )}
       </GlassCard>
@@ -236,12 +248,12 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
         <KpiCard label="Área Plantada"       value={`${fmtNum(data.areaTotal)} ha`}
           trend={trendArea ? { value: trendArea, label: 'vs safra ant.' } : undefined} delay={0} />
         <KpiCard label="Produção Total"      value={`${fmtNum(data.producaoTotal)} sc`}
-          sub={`${fmtNum(data.producaoTotal * 60)} kg`}
+          tooltip={`${fmtNum(data.producaoTotal * 60)} kg`}
           trend={trendProd ? { value: trendProd, label: 'vs safra ant.' } : undefined} delay={0.05} />
         <KpiCard label="Produtividade Média" value={`${data.produtividadeMedia.toFixed(1)} sc/ha`}
           trend={trendProd ? { value: trendProd, label: 'vs safra ant.' } : undefined} delay={0.1} />
         <KpiCard label="Preço Médio de Venda" value={`R$ ${data.precoMedioVenda.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/sc`}
-          sub={`Total: ${fmtCompact(data.receitaBruta)}`} delay={0.15} />
+          tooltip={`Total: ${fmtCompact(data.receitaBruta)}`} delay={0.15} />
       </div>
 
       {/* ── Linha 2: Saúde Financeira (60%) + Insights da Safra (40%) ─────── */}

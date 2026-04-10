@@ -25,12 +25,13 @@ function getSoldStock(r: Record<string, unknown>): number {
 
 // Cor padrão por cultura (fallback quando não fornecida no template)
 const CROP_COLORS: Record<string, { color: string; bgColor: string }> = {
-  soja:   { color: 'text-amber-700',  bgColor: 'bg-amber-50 border-amber-200'   },
-  milho:  { color: 'text-yellow-700', bgColor: 'bg-yellow-50 border-yellow-200' },
-  feijao: { color: 'text-red-700',    bgColor: 'bg-red-50 border-red-200'       },
-  trigo:  { color: 'text-orange-700', bgColor: 'bg-orange-50 border-orange-200' },
-  algodao:{ color: 'text-blue-700',   bgColor: 'bg-blue-50 border-blue-200'     },
-  cafe:   { color: 'text-brown-700',  bgColor: 'bg-stone-50 border-stone-200'   },
+  soja:           { color: 'text-amber-700',   bgColor: 'bg-amber-50 border-amber-200'   },
+  milho:          { color: 'text-yellow-700',  bgColor: 'bg-yellow-50 border-yellow-200' },
+  'milho safrinha': { color: 'text-lime-700',  bgColor: 'bg-lime-50 border-lime-200'     },
+  feijao:         { color: 'text-red-700',     bgColor: 'bg-red-50 border-red-200'       },
+  trigo:          { color: 'text-orange-700',  bgColor: 'bg-orange-50 border-orange-200' },
+  algodao:        { color: 'text-blue-700',    bgColor: 'bg-blue-50 border-blue-200'     },
+  cafe:           { color: 'text-stone-700',   bgColor: 'bg-stone-50 border-stone-200'   },
 };
 
 function getCropColor(name: string): { color: string; bgColor: string } {

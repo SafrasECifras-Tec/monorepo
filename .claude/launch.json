@@ -6,6 +6,12 @@
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["--filter", "portal-shell", "dev"],
       "port": 4000
+    },
+    {
+      "name": "gef",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "gef", "dev"],
+      "port": 3000
     }
   ]
 }
