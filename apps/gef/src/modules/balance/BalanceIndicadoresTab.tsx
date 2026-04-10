@@ -95,7 +95,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
 
   // ─── Compute metrics per column ──────────────────────────────────────────────
   const colColor = (idx: number, isGood: boolean) =>
-    idx < columns.length - 1 ? '#94a3b8' : isGood ? '#10b981' : '#ef4444';
+    idx < columns.length - 1 ? '#475569' : isGood ? '#10b981' : '#ef4444';
 
   const metrics = useMemo(() => columns.map((col, i) => {
     const ac    = groupVal(acGroup,   i);
@@ -158,13 +158,13 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
   const patrimonioLiquidoData = useMemo(() => metrics.map((m, i) => ({
     name: m.col, value: +m.plMi.toFixed(1),
     label: `R$ ${m.plMi.toFixed(1)} Mi`,
-    color: i === 0 ? '#94a3b8' : m.plMi >= (metrics[i - 1]?.plMi ?? 0) ? '#16a34a' : '#ef4444',
+    color: i === 0 ? '#475569' : m.plMi >= (metrics[i - 1]?.plMi ?? 0) ? '#10b981' : '#ef4444',
   })), [metrics]);
 
   const patrimonioLiquidoTerraData = useMemo(() => metrics.map((m, i) => ({
     name: m.col, value: +m.plSemTerrasMi.toFixed(1),
     label: `R$ ${m.plSemTerrasMi.toFixed(1)} Mi`,
-    color: i === 0 ? '#94a3b8' : m.plSemTerrasMi >= (metrics[i - 1]?.plSemTerrasMi ?? 0) ? '#16a34a' : '#ef4444',
+    color: i === 0 ? '#475569' : m.plSemTerrasMi >= (metrics[i - 1]?.plSemTerrasMi ?? 0) ? '#10b981' : '#ef4444',
   })), [metrics]);
 
   const last = metrics[metrics.length - 1];
@@ -213,7 +213,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                         dx={0}
                         domain={['dataMin - 1', 0]}
                       />
-                      <ReferenceLine y={0} stroke="#94a3b8" />
+                      <ReferenceLine y={0} stroke="#475569" />
                       <RechartsTooltip content={<CustomTooltipCCL />} cursor={{ fill: 'transparent' }} />
                       <Bar dataKey="value" radius={[0, 0, 4, 4]}>
                         {cclData.map((entry, index) => (
@@ -352,7 +352,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                         dx={0}
                         domain={[0, 'dataMax + 0.2']} 
                       />
-                      <ReferenceLine y={1} stroke="#94a3b8" strokeDasharray="3 3" />
+                      <ReferenceLine y={1} stroke="#475569" strokeDasharray="3 3" />
                       <RechartsTooltip cursor={{ fill: 'transparent' }} />
                       <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {liquidezImediataData.map((entry, index) => (
@@ -400,7 +400,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                         dx={0}
                         domain={[0, 'dataMax + 0.2']} 
                       />
-                      <ReferenceLine y={1} stroke="#94a3b8" strokeDasharray="3 3" />
+                      <ReferenceLine y={1} stroke="#475569" strokeDasharray="3 3" />
                       <RechartsTooltip cursor={{ fill: 'transparent' }} />
                       <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {liquidezCorrenteData.map((entry, index) => (
@@ -448,7 +448,7 @@ export function BalanceIndicadoresTab({ ativo, passivo, columns }: BalanceIndica
                         dx={0}
                         domain={[0, 'dataMax + 0.5']} 
                       />
-                      <ReferenceLine y={1} stroke="#94a3b8" strokeDasharray="3 3" />
+                      <ReferenceLine y={1} stroke="#475569" strokeDasharray="3 3" />
                       <RechartsTooltip cursor={{ fill: 'transparent' }} />
                       <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                         {liquidezGeralData.map((entry, index) => (

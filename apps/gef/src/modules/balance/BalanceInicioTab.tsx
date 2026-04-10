@@ -23,7 +23,7 @@ interface BalanceInicioTabProps {
   selectedColumn: string;
 }
 
-const PIE_COLORS = ['#2563eb', '#f4af2d', '#475569', '#0ea5e9', '#b45309', '#0f766e', '#dc2626', '#059669'];
+const PIE_COLORS = ['#3b82f6', '#f59e0b', '#475569', '#3b82f6', '#f59e0b', '#10b981', '#dc2626', '#10b981'];
 
 const norm = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');

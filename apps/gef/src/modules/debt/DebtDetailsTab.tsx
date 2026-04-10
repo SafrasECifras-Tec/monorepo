@@ -13,7 +13,7 @@ interface Props {
   filteredParcelas: ParcelaRow[];
 }
 
-const TIPO_COLORS = ['#3b82f6', '#f4af2d', '#10b981', '#f59e0b', '#ef4444', '#06b6d4', '#84cc16'];
+const TIPO_COLORS = ['#3b82f6', '#f59e0b', '#10b981', '#475569', '#ef4444', '#475569', '#10b981'];
 
 const formatValue = (value: number, currencyMode: 'BRL' | 'SOJA') => {
   if (currencyMode === 'SOJA') return `${(value / 1000).toFixed(1)} K sc`;

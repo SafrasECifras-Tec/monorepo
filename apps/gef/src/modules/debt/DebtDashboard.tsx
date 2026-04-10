@@ -144,7 +144,7 @@ export function DebtDashboard() {
     const longoV = longo.reduce((s, p) => s + p.principal, 0);
     return [
       { name: 'Curto Prazo (até 12 meses)', value: curtoV, percent: Math.round(curtoV / totalG * 1000) / 10, color: '#3b82f6' },
-      { name: 'Longo Prazo',                value: longoV, percent: Math.round(longoV / totalG * 1000) / 10, color: '#f4af2d' },
+      { name: 'Longo Prazo',                value: longoV, percent: Math.round(longoV / totalG * 1000) / 10, color: '#f59e0b' },
     ].filter(d => d.value > 0);
   }, [filteredParcelas, TODAY]);
 

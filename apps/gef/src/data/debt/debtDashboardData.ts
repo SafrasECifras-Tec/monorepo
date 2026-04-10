@@ -12,12 +12,12 @@ export const TYPE_WEIGHTS: Record<string, number> = {
 
 export const debtByTermData = [
   { name: 'Curto Prazo (Safra 2025/26)', value: 37526009.51, percent: 32.5, color: '#3b82f6' },
-  { name: 'Longo Prazo (Outras Safras)', value: 77827589.33, percent: 67.5, color: '#f4af2d' },
+  { name: 'Longo Prazo (Outras Safras)', value: 77827589.33, percent: 67.5, color: '#f59e0b' },
 ];
 
 export const debtByTermAnoData = [
   { name: 'Curto Prazo (Ano 2025)', value: 37526009.51, percent: 32.5, color: '#3b82f6' },
-  { name: 'Longo Prazo (Outros Anos)', value: 77827589.33, percent: 67.5, color: '#f4af2d' },
+  { name: 'Longo Prazo (Outros Anos)', value: 77827589.33, percent: 67.5, color: '#f59e0b' },
 ];
 
 export interface SafraDetalhe {

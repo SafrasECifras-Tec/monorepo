@@ -16,6 +16,17 @@ export const CHART_COLORS = {
   chart5: '#f4af2d',  // yellow
 } as const;
 
+/**
+ * Paleta padrão de séries — usada em todos os gráficos do sistema.
+ * Regra: importar estas constantes em vez de hardcodar hex nos componentes.
+ */
+export const C = {
+  orange: '#f59e0b', // amber-500  — séries laranja/destaque
+  blue:   '#3b82f6', // blue-500   — séries azul
+  green:  '#10b981', // emerald-500 — séries verde / sucesso
+  gray:   '#475569', // slate-600  — séries neutro / cinza
+} as const;
+
 /** Ordered palette for series/slices — use with .map((_, i) => PALETTE[i % PALETTE.length]) */
 export const PALETTE = [
   CHART_COLORS.chart1,
@@ -23,4 +34,12 @@ export const PALETTE = [
   CHART_COLORS.chart3,
   CHART_COLORS.chart4,
   CHART_COLORS.chart5,
+] as const;
+
+/** Paleta sequencial padrão para séries múltiplas */
+export const SERIES_PALETTE = [
+  C.blue,
+  C.green,
+  C.orange,
+  C.gray,
 ] as const;

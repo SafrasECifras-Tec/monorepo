@@ -129,9 +129,9 @@ const HorizontalBarChart = ({ detailedData, title, subtitle, icon: Icon, classNa
   
   const getBarColor = (item: any) => {
     const groupName = item.group || item.name;
-    if (groupName === 'Financeiro') return 'bg-blue-600';
-    if (groupName === 'Produtos') return 'bg-[#f4af2d]';
-    return 'bg-emerald-600';
+    if (groupName === 'Financeiro') return 'bg-[#3b82f6]';
+    if (groupName === 'Produtos') return 'bg-[#f59e0b]';
+    return 'bg-[#10b981]';
   };
 
   return (
