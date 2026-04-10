@@ -255,6 +255,7 @@ export default function HomePage() {
           {
             cliente_id: newId,
             calcir_cow_enabled: true,
+            contabilidade_regular: true,
           },
           { onConflict: "cliente_id" },
         );
