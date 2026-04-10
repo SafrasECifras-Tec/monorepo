@@ -296,7 +296,7 @@ export function ProjectionDashboard({ hideTitle = false }: { hideTitle?: boolean
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <label className="text-sm font-medium text-slate-600">Produtividade (sc/ha)</label>
-                  <span className="text-sm font-bold text-amber-700">{productivity} sc/ha</span>
+                  <span className="text-sm font-bold text-[#f59e0b]">{productivity} sc/ha</span>
                 </div>
                 <input 
                   type="range" 
@@ -305,7 +305,7 @@ export function ProjectionDashboard({ hideTitle = false }: { hideTitle?: boolean
                   step="1"
                   value={productivity}
                   onChange={(e) => setProductivity(parseInt(e.target.value))}
-                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-600"
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#f59e0b]"
                 />
                 <div className="flex justify-between text-[10px] text-slate-400 font-mono">
                   <span>40 sc/ha</span>
@@ -418,7 +418,7 @@ export function ProjectionDashboard({ hideTitle = false }: { hideTitle?: boolean
                 </div>
                 {simulatedEvents.length > 0 && (
                   <div className="flex items-center gap-1.5">
-                    <div className="w-3 h-0.5 bg-[#f4af2d] border-t border-dashed" />
+                    <div className="w-3 h-0.5 bg-[#f59e0b] border-t border-dashed" />
                     <span className="text-slate-500">Com Simulação</span>
                   </div>
                 )}
@@ -499,9 +499,9 @@ export function ProjectionDashboard({ hideTitle = false }: { hideTitle?: boolean
                   <Line 
                     type="monotone" 
                     dataKey="actual" 
-                    stroke="#059669" 
+                    stroke="#10b981" 
                     strokeWidth={3} 
-                    dot={{ fill: '#059669', strokeWidth: 2, r: 4, stroke: '#fff' }}
+                    dot={{ fill: '#10b981', strokeWidth: 2, r: 4, stroke: '#fff' }}
                     activeDot={{ r: 6, strokeWidth: 0 }}
                   />
 
@@ -509,7 +509,7 @@ export function ProjectionDashboard({ hideTitle = false }: { hideTitle?: boolean
                   <Line 
                     type="monotone" 
                     dataKey="projected" 
-                    stroke="#059669" 
+                    stroke="#10b981" 
                     strokeWidth={3} 
                     strokeDasharray="8 5"
                     dot={false}
@@ -522,10 +522,10 @@ export function ProjectionDashboard({ hideTitle = false }: { hideTitle?: boolean
                     <Line 
                       type="monotone" 
                       dataKey="projectedWithEvent" 
-                      stroke="#f4af2d" 
+                      stroke="#f59e0b" 
                       strokeWidth={3} 
                       strokeDasharray="8 5"
-                      dot={{ fill: '#f4af2d', strokeWidth: 2, r: 4, stroke: '#fff' }}
+                      dot={{ fill: '#f59e0b', strokeWidth: 2, r: 4, stroke: '#fff' }}
                       activeDot={{ r: 6, strokeWidth: 0 }}
                     />
                   )}

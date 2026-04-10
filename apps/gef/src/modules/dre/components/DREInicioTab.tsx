@@ -74,7 +74,7 @@ type InsightType = 'success' | 'warning' | 'danger' | 'info';
 
 const INSIGHT_STYLES: Record<InsightType, { bg: string; border: string; icon: React.ReactNode }> = {
   success: { bg: 'bg-emerald-50', border: 'border-emerald-200', icon: <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" /> },
-  warning: { bg: 'bg-amber-50',   border: 'border-amber-200',   icon: <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" /> },
+  warning: { bg: 'bg-[#f59e0b]/10', border: 'border-[#f59e0b]/30', icon: <AlertTriangle className="h-4 w-4 text-[#f59e0b] shrink-0 mt-0.5" /> },
   danger:  { bg: 'bg-red-50',     border: 'border-red-200',     icon: <TrendingDown className="h-4 w-4 text-red-500 shrink-0 mt-0.5" /> },
   info:    { bg: 'bg-blue-50',    border: 'border-blue-200',    icon: <Info className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" /> },
 };
@@ -96,7 +96,7 @@ function InsightCard({ type, text, delay = 0 }: { type: InsightType; text: strin
 // ── Paletas ───────────────────────────────────────────────────────────────────
 
 // Cores categóricas por cultura — consistentes em todos os gráficos
-const CULTURA_COLORS = ['#22c55e', '#f59e0b', '#0ea5e9', '#f4af2d', '#f43f5e'];
+const CULTURA_COLORS = ['#10b981', '#f59e0b', '#3b82f6', '#475569', '#f43f5e'];
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
@@ -125,7 +125,7 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
     {
       name: 'Custo', label: 'Custo Total Desembolsado', tab: 'custo',
       realizado: data.custoTotal, orcado: data.orcadoCusto,
-      fillReal: '#f87171', fillOrc: '#fecaca',
+      fillReal: '#ef4444', fillOrc: '#fecaca',
     },
     {
       name: 'Resultado', label: 'Resultado Operacional', tab: 'historico',
@@ -278,7 +278,7 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
                     {finData.map((entry, i) => <Cell key={i} fill={entry.fillReal} />)}
                   </Bar>
                   <Bar dataKey="orcado" name="orcado" radius={[6, 6, 0, 0]} maxBarSize={52}
-                    label={{ position: 'top', fontSize: 10, fontWeight: 400, fill: '#94a3b8',
+                    label={{ position: 'top', fontSize: 10, fontWeight: 400, fill: '#475569',
                       formatter: (v: number) => fmtCompact(v) }}>
                     {finData.map((entry, i) => (
                       <Cell key={i} fill={entry.fillOrc} stroke={entry.fillReal} strokeWidth={1.5} strokeDasharray="4 2" />
@@ -403,7 +403,7 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
                     contentStyle={{ borderRadius: 12, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.12)' }}
                     cursor={{ fill: 'rgba(148,163,184,0.08)' }}
                   />
-                  <Bar yAxisId="roi" dataKey="roi" name="roi" fill="#1e3a5f"
+                  <Bar yAxisId="roi" dataKey="roi" name="roi" fill="#475569"
                     radius={[6, 6, 0, 0]} maxBarSize={48}
                     label={{ position: 'top', fontSize: 10, fontWeight: 700, fill: '#475569',
                       formatter: (v: number) => `${v.toFixed(0)}%` }}
@@ -419,7 +419,7 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
             </div>
             <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 mt-3 pt-3 border-t border-slate-100">
               <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-                <span className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: '#1e3a5f' }} />
+                <span className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: '#475569' }} />
                 ROI
               </div>
               <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
@@ -459,9 +459,9 @@ export function DREInicioTab({ data, prev, dreDataRecord, safras, onNavigate }: 
                     cursor={{ fill: 'rgba(148,163,184,0.08)' }}
                   />
                   <Bar dataKey="receita" name="receita" fill="#10b981" radius={[6, 6, 0, 0]} maxBarSize={56}
-                    label={{ position: 'top', fontSize: 10, fontWeight: 700, fill: '#059669',
+                    label={{ position: 'top', fontSize: 10, fontWeight: 700, fill: '#10b981',
                       formatter: (v: number) => fmtCompact(v) }} />
-                  <Bar dataKey="custo" name="custo" fill="#f87171" radius={[6, 6, 0, 0]} maxBarSize={56}
+                  <Bar dataKey="custo" name="custo" fill="#ef4444" radius={[6, 6, 0, 0]} maxBarSize={56}
                     label={{ position: 'top', fontSize: 10, fontWeight: 700, fill: '#dc2626',
                       formatter: (v: number) => fmtCompact(v) }} />
                 </BarChart>

@@ -128,9 +128,9 @@ export function DebtIndicadoresTab({
                       </Bar>
 
                       {hasAquisicoes && (
-                        <Bar dataKey="aquisicoes" name="Aquisições de Terras" stackId="a" fill="#f4af2d" isAnimationActive={false} activeBar={false}>
+                        <Bar dataKey="aquisicoes" name="Aquisições de Terras" stackId="a" fill="#f59e0b" isAnimationActive={false} activeBar={false}>
                           {ebitdaData.map((_, i) => (
-                            <Cell key={i} fill="#f4af2d" opacity={activeBarIndex === null || activeBarIndex === i ? 1 : 0.3} />
+                            <Cell key={i} fill="#f59e0b" opacity={activeBarIndex === null || activeBarIndex === i ? 1 : 0.3} />
                           ))}
                         </Bar>
                       )}
@@ -172,7 +172,7 @@ export function DebtIndicadoresTab({
                       <GaugeChart
                         value={endividamentoReceita} max={5} label=""
                         colorRanges={[
-                          { min: 0, max: 1.5, color: '#22c55e' },
+                          { min: 0, max: 1.5, color: '#10b981' },
                           { min: 1.5, max: 3, color: '#eab308' },
                           { min: 3, max: 5, color: '#ef4444' },
                         ]}
@@ -195,7 +195,7 @@ export function DebtIndicadoresTab({
                       <GaugeChart
                         value={endividamentoEbitda} max={10} label=""
                         colorRanges={[
-                          { min: 0, max: 5,  color: '#22c55e' },
+                          { min: 0, max: 5,  color: '#10b981' },
                           { min: 5, max: 7,  color: '#eab308' },
                           { min: 7, max: 10, color: '#ef4444' },
                         ]}

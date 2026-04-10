@@ -1,6 +1,6 @@
 export const tipoFinanciamentoData = [
   { name: 'Investimento', value: 35200000, percent: 53.7, color: '#3b82f6' },
-  { name: 'Custeio',      value: 30300000, percent: 46.3, color: '#f4af2d' },
+  { name: 'Custeio',      value: 30300000, percent: 46.3, color: '#f59e0b' },
 ];
 
 export const descricaoData = [

@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, Cell, PieChart, Pie, Label,
-  ComposedChart, Line,
+  ComposedChart, Line, Legend,
 } from 'recharts';
 import { ArrowUpRight, ArrowDownRight, Minus, TrendingDown, ChevronDown, ChevronRight } from 'lucide-react';
 import { GlassCard } from '@socios/ui';
@@ -24,7 +24,13 @@ const fmtNum = (v: number) => v.toLocaleString('pt-BR');
 
 // ── Paleta ────────────────────────────────────────────────────────────────────
 
-const CUSTO_COLORS = ['#f87171', '#fb923c', '#94a3b8', '#f4af2d', '#38bdf8'];
+const CUSTO_COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#475569', '#ef4444'];
+
+// Cores fixas dos componentes de custo — paleta padrão do sistema
+const COR_INSUMOS   = '#10b981'; // verde  — maior categoria
+const COR_OPERACAO  = '#475569'; // cinza  — neutro operacional
+const COR_JUROS     = '#f59e0b'; // laranja — custo financeiro
+const COR_PROD_LINE = '#3b82f6'; // azul   — linha de produtividade
 
 // ── Médias S&C — substituir por dados reais quando disponíveis ────────────────
 const SC_MEDIAS_CUSTO = {
@@ -247,7 +253,7 @@ const PROP_OPERACAO = [
 ];
 
 function CustoTable({ data }: { data: SafraImportData }) {
-  const [expanded, setExpanded] = useState(new Set<string>(['insumos']));
+  const [expanded, setExpanded] = useState(new Set<string>(['insumos', 'operacao']));
   const toggle = (id: string) => setExpanded(prev => {
     const next = new Set(prev);
     next.has(id) ? next.delete(id) : next.add(id);
@@ -466,6 +472,29 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
     }),
     [safras, dreDataRecord]);
 
+  // ── Histórico com breakdown (Insumos / Operação / Juros) por safra ───────
+  const breakdownData = useMemo(() =>
+    safras.map(s => {
+      const d = dreDataRecord[s];
+      if (!d) return { safra: s, insumosHa: 0, operacaoHa: 0, jurosHa: 0, insumosPe: 0, operacaoPe: 0, jurosPe: 0, produtividade: 0 };
+      const area = d.areaTotal || 1;
+      const prod = d.producaoTotal || 1;
+      const ins  = d.custoInsumos  > 0 ? d.custoInsumos  : d.custoTotal * 0.55;
+      const ope  = d.custoOperacao > 0 ? d.custoOperacao : d.custoTotal * 0.35;
+      const jur  = d.custoJuros    > 0 ? d.custoJuros    : d.custoTotal * 0.10;
+      return {
+        safra: s,
+        insumosHa:   Math.round(ins / area),
+        operacaoHa:  Math.round(ope / area),
+        jurosHa:     Math.round(jur / area),
+        insumosPe:   parseFloat((ins / prod).toFixed(2)),
+        operacaoPe:  parseFloat((ope / prod).toFixed(2)),
+        jurosPe:     parseFloat((jur / prod).toFixed(2)),
+        produtividade: parseFloat((prod / area).toFixed(1)),
+      };
+    }),
+    [safras, dreDataRecord]);
+
   return (
     <div className="flex flex-col gap-6">
 
@@ -506,75 +535,78 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
       {/* ── Linha 2: Tabela Desembolso por Rubrica ──────────────────── */}
       <CustoTable data={data} />
 
-      {/* ── Linha 3: Custo por Cultura (60%) + Donut (40%) ──────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+      {/* ── Linha 3: Desembolso /ha + Ponto de Equilíbrio ──────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
-        {/* Esquerda — Barras horizontais */}
-        <motion.div className="lg:col-span-3"
-          initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}>
-          <GlassCard className="p-5 h-full hover:shadow-float transition-all duration-300">
-            <h3 className="text-sm font-bold text-slate-700 mb-0.5">Custo por Cultura</h3>
-            <p className="text-xs text-slate-400 mb-4">Custo total desembolsado por atividade</p>
-            <div style={{ height: Math.max(culturaSorted.length * 56, 180) }}>
+        {/* Esquerda — Desembolso Operacional p/ hectare */}
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.2 }}>
+          <GlassCard className="p-5 hover:shadow-float transition-all duration-300">
+            <h3 className="text-sm font-bold text-slate-700 mb-0.5">Desembolso Operacional p/ hectare</h3>
+            <p className="text-xs text-slate-400 mb-4">Composição do custo por ha ao longo das safras</p>
+            <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={culturaSorted} layout="vertical"
-                  margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#CBD5E1" opacity={0.3} />
-                  <XAxis type="number" axisLine={false} tickLine={false}
+                <BarChart data={breakdownData} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#CBD5E1" opacity={0.4} />
+                  <XAxis dataKey="safra" axisLine={false} tickLine={false}
+                    tick={{ fill: '#64748B', fontSize: 11 }} />
+                  <YAxis axisLine={false} tickLine={false} width={68}
                     tick={{ fill: '#64748B', fontSize: 10 }}
-                    tickFormatter={v => `R$ ${(v / 1_000_000).toFixed(0)}M`} />
-                  <YAxis type="category" dataKey="nome" axisLine={false} tickLine={false}
-                    width={90} tick={{ fill: '#1e293b', fontSize: 12, fontWeight: 600 }} />
+                    tickFormatter={v => `R$${(v / 1000).toFixed(0)}k`} />
                   <Tooltip
-                    formatter={(v: number) => [fmtBRL(v), 'Custo']}
+                    formatter={(v: number, name: string) => [`R$ ${fmtNum(v)}/ha`, name]}
                     contentStyle={{ borderRadius: 12, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.12)' }}
-                    cursor={{ fill: 'rgba(148,163,184,0.08)' }}
                   />
-                  <Bar dataKey="custo" radius={[0, 6, 6, 0]} maxBarSize={32}>
-                    {culturaSorted.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
-                  </Bar>
+                  <Legend verticalAlign="bottom" height={28} iconType="circle" iconSize={8}
+                    wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
+                  <Bar dataKey="insumosHa"  name="Insumos"  stackId="a" fill={COR_INSUMOS} />
+                  <Bar dataKey="operacaoHa" name="Operação" stackId="a" fill={COR_OPERACAO} />
+                  <Bar dataKey="jurosHa"    name="Juros"    stackId="a" fill={COR_JUROS} radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </GlassCard>
         </motion.div>
 
-        {/* Direita — Donut */}
-        <motion.div className="lg:col-span-2"
-          initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.15 }}>
-          <GlassCard className="p-5 h-full hover:shadow-float transition-all duration-300">
-            <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-4">Composição do Custo</h3>
-            <div className="flex flex-col items-center gap-3">
-              <div className="h-44 w-44">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie data={donutData} dataKey="value" innerRadius="55%" outerRadius="82%"
-                      startAngle={90} endAngle={-270} paddingAngle={2} strokeWidth={0}>
-                      {donutData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
-                      <Label content={({ viewBox }: any) => {
-                        const { cx, cy } = viewBox;
-                        return (
-                          <text textAnchor="middle" dominantBaseline="middle">
-                            <tspan x={cx} y={cy - 8} fontSize="14" fontWeight="800" fill="#1e293b">
-                              {fmtCompact(data.custoTotal)}
-                            </tspan>
-                            <tspan x={cx} y={cy + 10} fontSize="10" fill="#64748b">custo total</tspan>
-                          </text>
-                        );
-                      }} />
-                    </Pie>
-                    <Tooltip formatter={(v: number, name: string) => [fmtBRL(v), name]}
-                      contentStyle={{ borderRadius: 10, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-              <DonutLegend items={donutData.map(d => ({ ...d, total: data.custoTotal }))} />
+        {/* Direita — Ponto de Equilíbrio vs Produtividade */}
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.25 }}>
+          <GlassCard className="p-5 hover:shadow-float transition-all duration-300">
+            <h3 className="text-sm font-bold text-slate-700 mb-0.5">Ponto de Equilíbrio vs Produtividade</h3>
+            <p className="text-xs text-slate-400 mb-4">PE por componente (R$/sc) e produtividade real (sc/ha)</p>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <ComposedChart data={breakdownData} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#CBD5E1" opacity={0.4} />
+                  <XAxis dataKey="safra" axisLine={false} tickLine={false}
+                    tick={{ fill: '#64748B', fontSize: 11 }} />
+                  <YAxis yAxisId="pe" axisLine={false} tickLine={false} width={52}
+                    tick={{ fill: '#64748B', fontSize: 10 }}
+                    tickFormatter={v => `R$${v}`} />
+                  <YAxis yAxisId="prod" orientation="right" axisLine={false} tickLine={false} width={48}
+                    tick={{ fill: COR_PROD_LINE, fontSize: 10 }}
+                    tickFormatter={v => `${v}sc`} />
+                  <Tooltip
+                    formatter={(v: number, name: string) =>
+                      name === 'Produtividade' ? [`${v} sc/ha`, name] : [`R$ ${v}/sc`, name]}
+                    contentStyle={{ borderRadius: 12, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.12)' }}
+                  />
+                  <Legend verticalAlign="bottom" height={28} iconType="circle" iconSize={8}
+                    wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
+                  <Bar yAxisId="pe" dataKey="insumosPe"  name="Insumos"  stackId="b" fill={COR_INSUMOS} />
+                  <Bar yAxisId="pe" dataKey="operacaoPe" name="Operação" stackId="b" fill={COR_OPERACAO} />
+                  <Bar yAxisId="pe" dataKey="jurosPe"    name="Juros"    stackId="b" fill={COR_JUROS} radius={[4, 4, 0, 0]} />
+                  <Line yAxisId="prod" dataKey="produtividade" name="Produtividade"
+                    type="monotone" stroke={COR_PROD_LINE} strokeWidth={2.5}
+                    dot={{ fill: COR_PROD_LINE, r: 4, stroke: '#fff', strokeWidth: 2 }}
+                    activeDot={{ r: 6 }} />
+                </ComposedChart>
+              </ResponsiveContainer>
             </div>
           </GlassCard>
         </motion.div>
+
       </div>
 
-      {/* ── Linha 3: Evolução (60%) + Orçado & Métricas (40%) ───────── */}
+      {/* ── Linha 4: Evolução (60%) + Orçado & Métricas (40%) ───────── */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
 
         {/* Esquerda — Evolução */}
@@ -583,7 +615,7 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
           <GlassCard className="p-5 h-full hover:shadow-float transition-all duration-300">
             <h3 className="text-sm font-bold text-slate-700 mb-0.5">Evolução do Custo</h3>
             <p className="text-xs text-slate-400 mb-4">Custo total por safra + custo por hectare</p>
-            <div className="h-56">
+            <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart data={historicoData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#CBD5E1" opacity={0.4} />
@@ -593,28 +625,28 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
                     tick={{ fill: '#64748B', fontSize: 10 }}
                     tickFormatter={v => `R$ ${(v / 1_000_000).toFixed(0)}M`} />
                   <YAxis yAxisId="ha" orientation="right" axisLine={false} tickLine={false} width={62}
-                    tick={{ fill: '#f87171', fontSize: 10 }}
+                    tick={{ fill: '#475569', fontSize: 10 }}
                     tickFormatter={v => `R$${(v / 1000).toFixed(0)}k`} />
                   <Tooltip
                     formatter={(v: number, name: string) =>
                       name === 'Custo Total' ? [fmtBRL(v), name] : [`R$ ${fmtNum(v)}/ha`, name]}
                     contentStyle={{ borderRadius: 12, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.12)' }}
                   />
-                  <Bar yAxisId="custo" dataKey="custo" name="Custo Total" fill="#f87171"
+                  <Bar yAxisId="custo" dataKey="custo" name="Custo Total" fill={COR_INSUMOS}
                     radius={[6, 6, 0, 0]} maxBarSize={64} />
                   <Line yAxisId="ha" dataKey="custoHa" name="Custo/ha"
-                    type="monotone" stroke="#ef4444" strokeWidth={2.5}
-                    dot={{ fill: '#ef4444', r: 4 }} activeDot={{ r: 6 }} />
+                    type="monotone" stroke={COR_PROD_LINE} strokeWidth={2.5}
+                    dot={{ fill: COR_PROD_LINE, r: 4 }} activeDot={{ r: 6 }} />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
             <div className="flex items-center justify-center gap-6 mt-2">
               <div className="flex items-center gap-1.5 text-xs">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
+                <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COR_INSUMOS }} />
                 <span className="text-slate-500 font-medium">Custo Total</span>
               </div>
               <div className="flex items-center gap-1.5 text-xs">
-                <span className="w-6 h-0.5 rounded bg-red-500" />
+                <span className="w-6 h-0.5 rounded" style={{ backgroundColor: COR_PROD_LINE }} />
                 <span className="text-slate-500 font-medium">Custo/ha (R$)</span>
               </div>
             </div>
@@ -643,7 +675,7 @@ export function DRECustoTab({ safraAtual, dreDataRecord, safras, selectedCultura
         </motion.div>
       </div>
 
-      {/* ── Linha 4: Tabela detalhada por cultura ───────────────────── */}
+      {/* ── Linha 6: Tabela detalhada por cultura ───────────────────── */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.2 }}>
         <GlassCard className="p-5 hover:shadow-float transition-all duration-300">
           <h3 className="text-sm font-bold text-slate-700 mb-4">Detalhamento por Cultura</h3>

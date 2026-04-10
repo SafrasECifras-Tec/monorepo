@@ -12,10 +12,10 @@ interface Props {
 }
 
 const TIPO_COLORS: Record<string, string> = {
-  'Custeio':      'bg-blue-500',
-  'Empréstimos':  'bg-[#f4af2d]',
-  'Fazenda':      'bg-emerald-500',
-  'Consórcios':   'bg-amber-500',
+  'Custeio':      'bg-[#3b82f6]',
+  'Empréstimos':  'bg-[#f59e0b]',
+  'Fazenda':      'bg-[#10b981]',
+  'Consórcios':   'bg-[#475569]',
   'Investimento': 'bg-rose-500',
 };
 

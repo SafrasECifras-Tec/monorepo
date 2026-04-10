@@ -142,7 +142,7 @@ const TABLE_ROWS: TableRowDef[] = [
 // ── Temas ──────────────────────────────────────────────────────────────────────
 
 const THEME = {
-  emerald: { bg: 'bg-emerald-50',  text: 'text-emerald-800', accent: 'border-l-emerald-500' },
+  emerald: { bg: 'bg-[#10b981]/10', text: 'text-[#10b981]', accent: 'border-l-[#10b981]' },
   red:     { bg: 'bg-red-50',      text: 'text-red-800',     accent: 'border-l-red-400'     },
   blue:    { bg: 'bg-blue-50',     text: 'text-blue-800',    accent: 'border-l-blue-500'    },
 };
@@ -160,7 +160,7 @@ function PctBadge({ value }: { value: number | null }) {
   return (
     <span className={cn(
       'inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-bold tabular-nums',
-      pos ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-600',
+      pos ? 'bg-[#10b981]/10 text-[#10b981]' : 'bg-red-100 text-red-600',
     )}>
       {pos ? '+' : ''}{value.toFixed(0)}%
     </span>
@@ -388,7 +388,7 @@ export function DREAnalisesTab({
                         } else {
                           const formatted = row.format ? row.format(val) : fmtMoney(val);
                           const colorClass = row.colorize
-                            ? val > 0 ? 'text-emerald-600' : val < 0 ? 'text-red-500' : ''
+                            ? val > 0 ? 'text-[#10b981]' : val < 0 ? 'text-red-500' : ''
                             : '';
                           cell = <span className={colorClass}>{formatted}</span>;
                         }
@@ -468,13 +468,13 @@ export function DREAnalisesTab({
                     );
                   }}
                 />
-                <Bar dataKey="insumos"   name="insumos"   stackId="a" fill="#4db6ac" shape={stackedTopRadius(chartData, 'insumos',   DRE_STACK_KEYS)} maxBarSize={72}>
+                <Bar dataKey="insumos"   name="insumos"   stackId="a" fill="#f59e0b" shape={stackedTopRadius(chartData, 'insumos',   DRE_STACK_KEYS)} maxBarSize={72}>
                   <LabelList content={<BarSegmentLabel />} />
                 </Bar>
-                <Bar dataKey="operacao"  name="operacao"  stackId="a" fill="#f59e0b" shape={stackedTopRadius(chartData, 'operacao',  DRE_STACK_KEYS)} maxBarSize={72}>
+                <Bar dataKey="operacao"  name="operacao"  stackId="a" fill="#475569" shape={stackedTopRadius(chartData, 'operacao',  DRE_STACK_KEYS)} maxBarSize={72}>
                   <LabelList content={<BarSegmentLabel />} />
                 </Bar>
-                <Bar dataKey="resultado" name="resultado" stackId="a" fill="#86efac" shape={stackedTopRadius(chartData, 'resultado', DRE_STACK_KEYS)} maxBarSize={72}>
+                <Bar dataKey="resultado" name="resultado" stackId="a" fill="#10b981" shape={stackedTopRadius(chartData, 'resultado', DRE_STACK_KEYS)} maxBarSize={72}>
                   <LabelList content={<BarSegmentLabel />} />
                   <LabelList dataKey="vbp" content={<VbpTopLabel />} />
                 </Bar>
@@ -483,9 +483,9 @@ export function DREAnalisesTab({
           </div>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-1.5 mt-3 pt-3 border-t border-border/50">
             {[
-              { color: '#4db6ac', label: 'Custo com Insumos' },
-              { color: '#f59e0b', label: 'Custo com Operação' },
-              { color: '#86efac', label: 'Resultado Operacional', border: true },
+              { color: '#f59e0b', label: 'Custo com Insumos' },
+              { color: '#475569', label: 'Custo com Operação' },
+              { color: '#10b981', label: 'Resultado Operacional', border: false },
             ].map(l => (
               <div key={l.label} className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
                 <span className={cn('w-3 h-3 rounded-sm shrink-0', l.border && 'border border-green-300')}

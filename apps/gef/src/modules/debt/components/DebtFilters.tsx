@@ -32,7 +32,7 @@ interface Props {
 
 const tabBtnClass = (active: boolean) => cn(
   'flex-1 sm:flex-none px-4 py-1.5 rounded-lg font-medium transition-all duration-200 text-sm whitespace-nowrap',
-  active ? 'bg-white text-[#059669] shadow-sm border border-slate-200/50' : 'text-slate-600 hover:text-slate-900 hover:bg-white/40',
+  active ? 'bg-white text-[#10b981] shadow-sm border border-slate-200/50' : 'text-slate-600 hover:text-slate-900 hover:bg-white/40',
 );
 
 export function DebtFilters({
