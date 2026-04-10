@@ -10,10 +10,13 @@
         "VITE_SUPABASE_PROJECT_ID",
         "VITE_GOOGLE_CLIENT_ID",
         "GEMINI_API_KEY",
+        "VITE_PORTAL_URL",
+        "VITE_COOKIE_DOMAIN",
         "NEXT_PUBLIC_SUPABASE_URL",
         "NEXT_PUBLIC_SUPABASE_ANON_KEY",
         "NEXT_PUBLIC_GEF_URL",
-        "NEXT_PUBLIC_PLT_URL"
+        "NEXT_PUBLIC_PLT_URL",
+        "NEXT_PUBLIC_COOKIE_DOMAIN"
       ]
     },
     "dev": {

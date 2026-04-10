@@ -12,15 +12,10 @@ import type { Fazenda } from "@socios/database";
 import { AppLauncherCard } from "@/components/AppLauncherCard";
 import { UserMenu } from "@/components/UserMenu";
 
-const GEF_URL =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:3000"
-    : (process.env.NEXT_PUBLIC_GEF_URL ?? "http://localhost:3000");
-
-const PLT_URL =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:8080"
-    : (process.env.NEXT_PUBLIC_PLT_URL ?? "http://localhost:8080");
+// URLs are injected at build time via NEXT_PUBLIC_* env vars.
+// In development, set these in .env.local (already included in this repo).
+const GEF_URL = process.env.NEXT_PUBLIC_GEF_URL ?? "http://localhost:3000";
+const PLT_URL = process.env.NEXT_PUBLIC_PLT_URL ?? "http://localhost:8080";
 
 export default async function LaunchpadPage() {
   const supabase = await createSupabaseServerClient();

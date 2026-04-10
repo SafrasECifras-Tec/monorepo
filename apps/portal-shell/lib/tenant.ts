@@ -11,14 +11,20 @@ export function getClientTenantId(): string | null {
   );
 }
 
-/** Write the tenant cookie client-side. SameSite=Lax so sub-apps receive it on first navigation. */
+/** Write the tenant cookie client-side.
+ *  domain=.sociosdoagro.com.br → shared across all subdomains (gef, plt, …).
+ *  SameSite=Lax + Secure to comply with modern browser requirements on HTTPS. */
 export function setTenantId(fazendaId: string) {
   const maxAge = 60 * 60 * 24 * 7; // 7 days
-  document.cookie = `${TENANT_COOKIE}=${fazendaId}; path=/; max-age=${maxAge}; SameSite=Lax`;
+  const domain = process.env.NEXT_PUBLIC_COOKIE_DOMAIN ?? "";
+  const domainAttr = domain ? `; domain=${domain}` : "";
+  document.cookie = `${TENANT_COOKIE}=${fazendaId}; path=/${domainAttr}; max-age=${maxAge}; SameSite=Lax; Secure`;
 }
 
 export function clearTenantId() {
-  document.cookie = `${TENANT_COOKIE}=; path=/; max-age=0; SameSite=Lax`;
+  const domain = process.env.NEXT_PUBLIC_COOKIE_DOMAIN ?? "";
+  const domainAttr = domain ? `; domain=${domain}` : "";
+  document.cookie = `${TENANT_COOKIE}=; path=/${domainAttr}; max-age=0; SameSite=Lax; Secure`;
 }
 
 /**
