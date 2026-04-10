@@ -8,6 +8,22 @@ type CookieToSet = {
   options?: Record<string, unknown>;
 };
 
+// When set, all auth cookies are written with this domain so every subdomain
+// (gef.sociosdoagro.com.br, plt.sociosdoagro.com.br, etc.) shares the session.
+// Set NEXT_PUBLIC_COOKIE_DOMAIN=.sociosdoagro.com.br in production builds.
+const COOKIE_DOMAIN = process.env.NEXT_PUBLIC_COOKIE_DOMAIN;
+
+function withDomain(options?: Record<string, unknown>): Record<string, unknown> {
+  if (!COOKIE_DOMAIN) return options ?? {};
+  return {
+    ...(options ?? {}),
+    domain: COOKIE_DOMAIN,
+    path: "/",
+    sameSite: "lax",
+    secure: true,
+  };
+}
+
 export async function createSupabaseServerClient() {
   const cookieStore = await cookies();
   return createServerClient(
@@ -21,7 +37,11 @@ export async function createSupabaseServerClient() {
         setAll(cookiesToSet: CookieToSet[]) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options as Parameters<typeof cookieStore.set>[2])
+              cookieStore.set(
+                name,
+                value,
+                withDomain(options) as Parameters<typeof cookieStore.set>[2]
+              )
             );
           } catch {
             // Called from a Server Component — cookies are read-only here.
@@ -51,7 +71,7 @@ export function createSupabaseMiddlewareClient(
             response.cookies.set(
               name,
               value,
-              options as Parameters<typeof response.cookies.set>[2]
+              withDomain(options) as Parameters<typeof response.cookies.set>[2]
             );
           });
         },

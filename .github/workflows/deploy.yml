@@ -49,12 +49,13 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
           VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
-          VITE_PORTAL_URL: https://sociosdoagro.pages.dev
+          VITE_PORTAL_URL: https://sociosdoagro.com.br
+          VITE_COOKIE_DOMAIN: .sociosdoagro.com.br
 
       - name: Deploy PLT → Cloudflare Workers
         if: steps.plt-check.outcome == 'failure'
         working-directory: apps/planejamento-tributario
-        run: npx wrangler deploy --name socios-plt
+        run: npx wrangler deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
@@ -70,14 +71,14 @@ jobs:
         env:
           VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          VITE_PORTAL_URL: https://sociosdoagro.pages.dev
+          VITE_PORTAL_URL: https://sociosdoagro.com.br
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
 
       - name: Deploy GEF → Cloudflare Workers
         if: steps.gef-check.outcome == 'failure'
         working-directory: apps/gef
-        run: npx wrangler deploy --name socios-gef
+        run: npx wrangler deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
@@ -96,8 +97,9 @@ jobs:
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
-          NEXT_PUBLIC_GEF_URL: https://socios-gef.tecnologia-231.workers.dev
-          NEXT_PUBLIC_PLT_URL: https://socios-plt.tecnologia-231.workers.dev
+          NEXT_PUBLIC_GEF_URL: https://gef.sociosdoagro.com.br
+          NEXT_PUBLIC_PLT_URL: https://plt.sociosdoagro.com.br
+          NEXT_PUBLIC_COOKIE_DOMAIN: .sociosdoagro.com.br
 
       - name: Deploy portal-shell → Cloudflare Pages
         if: steps.portal-check.outcome == 'failure' || steps.gef-check.outcome == 'failure' || steps.plt-check.outcome == 'failure'
@@ -127,19 +129,19 @@ jobs:
           echo "## Deploy Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           if [ "${{ steps.plt-check.outcome }}" == "failure" ]; then
-            echo "- **PLT**: 🚀 deploiado → https://socios-plt.tecnologia-231.workers.dev" >> $GITHUB_STEP_SUMMARY
+            echo "- **PLT**: 🚀 deploiado → https://plt.sociosdoagro.com.br" >> $GITHUB_STEP_SUMMARY
           else
             echo "- **PLT**: ⏭️ sem mudanças, pulado" >> $GITHUB_STEP_SUMMARY
           fi
           if [ "${{ steps.gef-check.outcome }}" == "failure" ]; then
-            echo "- **GEF**: 🚀 deploiado → https://socios-gef.tecnologia-231.workers.dev" >> $GITHUB_STEP_SUMMARY
+            echo "- **GEF**: 🚀 deploiado → https://gef.sociosdoagro.com.br" >> $GITHUB_STEP_SUMMARY
           else
             echo "- **GEF**: ⏭️ sem mudanças, pulado" >> $GITHUB_STEP_SUMMARY
           fi
           if [ "${{ steps.portal-check.outcome }}" == "failure" ]; then
-            echo "- **Portal**: 🚀 deploiado → https://sociosdoagro.pages.dev" >> $GITHUB_STEP_SUMMARY
+            echo "- **Portal**: 🚀 deploiado → https://sociosdoagro.com.br" >> $GITHUB_STEP_SUMMARY
           else
             echo "- **Portal**: ⏭️ sem mudanças, pulado" >> $GITHUB_STEP_SUMMARY
           fi
-          echo "- **redirect-gef**: 🔀 gef.tecnologia-231.workers.dev → sociosdoagro.pages.dev" >> $GITHUB_STEP_SUMMARY
-          echo "- **redirect-plt**: 🔀 planejamento-tributario.tecnologia-231.workers.dev → sociosdoagro.pages.dev" >> $GITHUB_STEP_SUMMARY
+          echo "- **redirect-gef**: 🔀 legado → https://gef.sociosdoagro.com.br" >> $GITHUB_STEP_SUMMARY
+          echo "- **redirect-plt**: 🔀 legado → https://plt.sociosdoagro.com.br" >> $GITHUB_STEP_SUMMARY

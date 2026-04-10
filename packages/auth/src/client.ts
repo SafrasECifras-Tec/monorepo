@@ -41,12 +41,12 @@ function createCookieStorage(domain: string): Storage {
   function writeCookie(name: string, value: string): void {
     if (typeof document === "undefined") return;
     const maxAge = 60 * 60 * 24 * 365; // 1 year
-    document.cookie = `${name}=${encodeURIComponent(value)}; path=/; domain=${domain}; max-age=${maxAge}; SameSite=Lax`;
+    document.cookie = `${name}=${encodeURIComponent(value)}; path=/; domain=${domain}; max-age=${maxAge}; SameSite=Lax; Secure`;
   }
 
   function deleteCookie(name: string): void {
     if (typeof document === "undefined") return;
-    document.cookie = `${name}=; path=/; domain=${domain}; max-age=0; SameSite=Lax`;
+    document.cookie = `${name}=; path=/; domain=${domain}; max-age=0; SameSite=Lax; Secure`;
   }
 
   return {

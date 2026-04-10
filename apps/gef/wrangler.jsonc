@@ -10,5 +10,14 @@
   },
   "compatibility_flags": [
     "nodejs_compat"
-  ]
+  ],
+  "routes": [
+    { "pattern": "gef.sociosdoagro.com.br/*", "zone_name": "sociosdoagro.com.br" }
+  ],
+  "env": {
+    "dev": {
+      "name": "socios-gef-dev",
+      "routes": []
+    }
+  }
 }

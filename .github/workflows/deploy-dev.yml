@@ -54,7 +54,7 @@ jobs:
       - name: Deploy PLT → Cloudflare Workers (dev)
         if: steps.plt-check.outcome == 'failure'
         working-directory: apps/planejamento-tributario
-        run: npx wrangler deploy --name socios-plt-dev
+        run: npx wrangler deploy --env dev
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
@@ -77,7 +77,7 @@ jobs:
       - name: Deploy GEF → Cloudflare Workers (dev)
         if: steps.gef-check.outcome == 'failure'
         working-directory: apps/gef
-        run: npx wrangler deploy --config dist/wrangler.json --name socios-gef-dev
+        run: npx wrangler deploy --env dev
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
